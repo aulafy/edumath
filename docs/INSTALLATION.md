@@ -108,5 +108,6 @@ Leave the terminal window open while EduMath is in use. Open [http://127.0.0.1:5
 - **Voice takes time on first start:** models are downloaded and initialized locally. Typed input remains available.
 - **Windows script is blocked:** run `Set-ExecutionPolicy -Scope Process Bypass` in the same PowerShell window.
 - **School-managed computer:** ask the IT team to approve Docker Desktop or the listed prerequisites. EduMath binds to the local computer only by default.
+- **Local AI is unavailable:** load `qwen/qwen3.5-9b` in LM Studio and start its local server on port `1234`. EduMath falls back to deterministic messages while it is offline.
 
 For persistent problems, open a GitHub issue without including student names, recordings, database files, or other personal information.

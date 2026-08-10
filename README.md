@@ -53,6 +53,8 @@ For full local voice support or software development, follow the platform-specif
 - Optional Spanish Moonshine speech-to-text and Pocket TTS speech synthesis.
 - Optional OpenAI-compatible local LLM for short, non-authoritative wording only.
 
+The recommended local model is [Qwen3.5-9B in LM Studio](https://lmstudio.ai/models/qwen/qwen3.5-9b). Start the LM Studio local server on port `1234` before starting EduMath. Docker connects to it through `host.docker.internal`; the deterministic tutor remains available when the model is stopped.
+
 ## Safety Architecture
 
 The backend is authoritative. An LLM can phrase a short approved message, but it cannot select operands, calculate an answer, judge a child, change difficulty, advance the curriculum, or define a visual. Every generated lesson passes consistency checks before it reaches the learner.
