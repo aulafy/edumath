@@ -1,0 +1,4 @@
+fastapi>=0.115
+moonshine-voice==0.1.1
+python-multipart>=0.0.20
+uvicorn[standard]>=0.30

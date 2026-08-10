@@ -1,0 +1,15 @@
+theme: DINOSAURS
+version: "1"
+templates:
+  - id: dino-eggs-1
+    place: valle
+    object_singular: huevo
+    object_plural: huevos
+    character: Nara
+    text: "{character} ve {a} {object}. Luego encuentra {b} más. ¿Cuántos hay en total?"
+  - id: dino-leaves-1
+    place: bosque
+    object_singular: hoja
+    object_plural: hojas
+    character: Tiko
+    text: "{character} junta {a} {object} y después {b} más. ¿Cuántas hojas hay?"

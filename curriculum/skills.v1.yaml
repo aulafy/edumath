@@ -1,0 +1,73 @@
+skills:
+  - id: COUNT_TO_10
+    version: "1.0"
+    title: Contar hasta 10
+    prerequisites: []
+    allowed_representations: [TEN_FRAME, NUMBER_LINE]
+    strategies: [COUNT_ALL]
+    mastery_threshold: 0.85
+    minimum_evidence: {independent_correct: 3, distinct_problems: 4}
+    soft_lock: {max_consecutive_failures: 5}
+  - id: NUMBER_RECOGNITION_10
+    version: "1.0"
+    title: Reconocer números hasta 10
+    prerequisites: [COUNT_TO_10]
+    allowed_representations: [TEN_FRAME, NUMBER_LINE]
+    strategies: [COUNT_ALL]
+    mastery_threshold: 0.85
+    minimum_evidence: {independent_correct: 3, distinct_problems: 4}
+    soft_lock: {max_consecutive_failures: 5}
+  - id: COMPARE_10
+    version: "1.0"
+    title: Comparar hasta 10
+    prerequisites: [COUNT_TO_10]
+    allowed_representations: [TEN_FRAME, NUMBER_LINE]
+    strategies: [COUNT_ALL]
+    mastery_threshold: 0.85
+    minimum_evidence: {independent_correct: 3, distinct_problems: 4}
+    soft_lock: {max_consecutive_failures: 5}
+  - id: NUMBER_BONDS_5
+    version: "1.0"
+    title: Parejas que hacen 5
+    prerequisites: [COUNT_TO_10]
+    allowed_representations: [TEN_FRAME, PART_PART_WHOLE]
+    strategies: [NUMBER_BONDS]
+    mastery_threshold: 0.85
+    minimum_evidence: {independent_correct: 3, distinct_problems: 4}
+    soft_lock: {max_consecutive_failures: 5}
+  - id: NUMBER_BONDS_10
+    version: "1.0"
+    title: Parejas que hacen 10
+    prerequisites: [NUMBER_BONDS_5]
+    allowed_representations: [TEN_FRAME, PART_PART_WHOLE]
+    strategies: [NUMBER_BONDS]
+    mastery_threshold: 0.85
+    minimum_evidence: {independent_correct: 3, distinct_problems: 4}
+    soft_lock: {max_consecutive_failures: 5}
+  - id: ADD_OBJECTS_10
+    version: "1.0"
+    title: Sumar objetos hasta 10
+    prerequisites: [COUNT_TO_10]
+    allowed_representations: [TEN_FRAME, PART_PART_WHOLE]
+    strategies: [COUNT_ALL]
+    mastery_threshold: 0.85
+    minimum_evidence: {independent_correct: 3, distinct_problems: 4}
+    soft_lock: {max_consecutive_failures: 5}
+  - id: ADD_COUNT_ON_10
+    version: "1.0"
+    title: Suma contando hacia delante
+    prerequisites: [COUNT_TO_10, NUMBER_BONDS_5]
+    allowed_representations: [NUMBER_LINE, TEN_FRAME]
+    strategies: [COUNT_ON]
+    mastery_threshold: 0.85
+    minimum_evidence: {independent_correct: 3, distinct_problems: 4}
+    soft_lock: {max_consecutive_failures: 5}
+  - id: ADD_PART_WHOLE_10
+    version: "1.0"
+    title: Suma parte-parte-todo
+    prerequisites: [ADD_OBJECTS_10]
+    allowed_representations: [PART_PART_WHOLE, TEN_FRAME]
+    strategies: [NUMBER_BONDS, COUNT_ALL]
+    mastery_threshold: 0.85
+    minimum_evidence: {independent_correct: 3, distinct_problems: 4}
+    soft_lock: {max_consecutive_failures: 5}

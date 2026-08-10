@@ -1,0 +1,15 @@
+theme: SPACE
+version: "1"
+templates:
+  - id: space-stars-1
+    place: nave
+    object_singular: estrella
+    object_plural: estrellas
+    character: Luma
+    text: "{character} cuenta {a} {object}. Luego brillan {b} más. ¿Cuántas brillan ahora?"
+  - id: space-rocks-1
+    place: planeta
+    object_singular: roca
+    object_plural: rocas
+    character: Sol
+    text: "{character} recoge {a} {object} y suma {b} más. ¿Cuántas rocas tiene?"

@@ -1,0 +1,15 @@
+name: Backend CI
+on: [push, pull_request]
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: ruff check backend scripts services/voice/stt
+      - run: python scripts/validate_curriculum.py
+      - run: pytest backend/tests
+      - run: python scripts/run_scenarios.py

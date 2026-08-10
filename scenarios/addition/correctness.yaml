@@ -1,0 +1,10 @@
+id: SC_ADD_CORRECT_001
+version: "1"
+problem: {a: 5, b: 3}
+steps:
+  - child: {answer: "8"}
+    expect: {classification: CORRECT, correct: true}
+  - child: {answer: "ocho"}
+    expect: {classification: CORRECT, correct: true}
+  - child: {answer: "9"}
+    expect: {classification: INCORRECT, correct: false}

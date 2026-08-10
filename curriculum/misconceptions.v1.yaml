@@ -1,0 +1,7 @@
+misconceptions:
+  - id: ADD_COUNTS_FIRST_NUMBER_AGAIN
+    skills: [ADD_COUNT_ON_10]
+    pattern: {type: OFFSET_FROM_CORRECT, offset: 1}
+    remediation: {strategy: COUNT_ON, representation: NUMBER_LINE}
+    confidence_increment: 0.20
+    confidence_decay: 0.05

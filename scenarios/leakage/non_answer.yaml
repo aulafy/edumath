@@ -1,0 +1,6 @@
+id: SC_NO_LEAKAGE_001
+version: "1"
+problem: {a: 6, b: 3}
+steps:
+  - child: {answer: "no lo se"}
+    expect: {classification: NON_ANSWER, correct: false}

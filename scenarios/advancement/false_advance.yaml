@@ -1,0 +1,6 @@
+id: SC_FALSE_ADVANCE_001
+version: "1"
+problem: {a: 4, b: 2}
+steps:
+  - child: {answer: "6"}
+    expect: {classification: CORRECT, correct: true}

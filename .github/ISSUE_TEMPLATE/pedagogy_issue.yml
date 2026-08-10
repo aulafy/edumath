@@ -1,0 +1,33 @@
+name: Pedagogy issue
+description: Report a learning or curriculum concern
+body:
+  - type: input
+    id: skill
+    attributes: {label: Skill}
+  - type: input
+    id: age_band
+    attributes: {label: Age band}
+  - type: textarea
+    id: observed
+    attributes: {label: Observed behavior}
+  - type: textarea
+    id: expected
+    attributes: {label: Expected pedagogy}
+  - type: input
+    id: representation
+    attributes: {label: Representation}
+  - type: input
+    id: strategy
+    attributes: {label: Strategy}
+  - type: textarea
+    id: risk
+    attributes: {label: Risk to learner}
+  - type: textarea
+    id: proposed
+    attributes: {label: Proposed change}
+  - type: checkboxes
+    id: review
+    attributes:
+      label: Teacher review
+      options:
+        - label: teacher-review-required
