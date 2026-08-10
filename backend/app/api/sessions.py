@@ -1,4 +1,6 @@
-from app.db.models import SessionRow, StudentRow
+import json
+
+from app.db.models import AssignmentRow, LessonRow, SessionRow, StudentRow
 from app.db.session import get_db
 from app.session.controller import (
     AnswerRequest,
@@ -10,6 +12,7 @@ from app.session.controller import (
 from app.session.recovery import response_from_session
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/sessions")
@@ -18,6 +21,7 @@ router = APIRouter(prefix="/sessions")
 class SessionCreate(BaseModel):
     student_id: str
     theme: str = "DINOSAURS"
+    assignment_code: str | None = None
 
 
 @router.post("")
@@ -32,6 +36,21 @@ def post_session(data: SessionCreate, db: Session = Depends(get_db)):
                     "recoverable": False,
                 }
             },
+        )
+    if data.assignment_code:
+        assignment = db.scalar(
+            select(AssignmentRow).where(AssignmentRow.join_code == data.assignment_code.upper())
+        )
+        if not assignment or assignment.status != "OPEN":
+            raise HTTPException(status_code=404, detail="Open assignment not found.")
+        lesson = db.get(LessonRow, assignment.lesson_id)
+        return create_session(
+            db,
+            data.student_id,
+            lesson.theme,
+            assignment.id,
+            json.loads(lesson.skill_ids_json),
+            lesson.problem_count,
         )
     return create_session(db, data.student_id, data.theme)
 

@@ -76,6 +76,7 @@ make validate-curriculum  # Validate curriculum files
 
 - [Installation for schools and families](docs/INSTALLATION.md)
 - [Administrator guide](docs/ADMINISTRATOR_GUIDE.md)
+- [Spanish curriculum and classroom assignments](docs/SPAIN_CURRICULUM.md)
 - [Architecture and safety boundaries](ARCHITECTURE.md)
 - [Local voice architecture](docs/VOICE.md)
 - [Privacy](PRIVACY.md)

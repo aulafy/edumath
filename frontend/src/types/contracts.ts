@@ -44,3 +44,36 @@ export type TranscriptionResult = {
   confidence: number | null;
   provider: string;
 };
+export type CurriculumUnit = {
+  id: string;
+  stage: "PRIMARY" | "ESO";
+  grades: number[];
+  cycle: number | null;
+  title: string;
+  sense: string;
+  competency_refs: string[];
+  assessment_refs: string[];
+  basic_knowledge_refs: string[];
+  skill_ids: string[];
+  content_status: "READY" | "PLANNED";
+};
+export type Classroom = {
+  id: string;
+  teacher_key: string;
+  name: string;
+  stage: "PRIMARY" | "ESO";
+  grade: number;
+  autonomous_community: string;
+};
+export type Lesson = {
+  id: string;
+  classroom_id: string;
+  title: string;
+  instructions: string;
+  curriculum_unit_id: string;
+  skill_ids: string[];
+  problem_count: number;
+  theme: string;
+  pacing: string;
+};
+export type Assignment = { id: string; join_code: string; status: string; lesson: Lesson };

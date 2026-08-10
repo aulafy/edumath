@@ -4,7 +4,7 @@ from uuid import uuid4
 
 from app.consistency.gate import ConsistencyGate
 from app.curriculum.planner import Planner
-from app.db.models import AttemptRow, SessionRow
+from app.db.models import AttemptRow, SessionPlanRow, SessionRow
 from app.domain.problem import ProblemResponse
 from app.events.service import record_event
 from app.narrative.renderer import story_for_problem
@@ -32,9 +32,16 @@ class HintRequest(BaseModel):
     expected_revision: int
 
 
-def _new_problem(student_id: str, db: Session, theme: str = "DINOSAURS", attempt_count: int = 0):
+def _new_problem(
+    student_id: str,
+    db: Session,
+    theme: str = "DINOSAURS",
+    attempt_count: int = 0,
+    skill_ids: list[str] | None = None,
+):
     template_id = "dino-eggs-1" if theme == "DINOSAURS" else "space-stars-1"
-    decision = Planner().decide(student_id, attempt_count)
+    selected_skill = skill_ids[attempt_count % len(skill_ids)] if skill_ids else None
+    decision = Planner().decide(student_id, attempt_count, selected_skill)
     problem = ProblemGenerator().generate(decision, template_id)
     visual = make_visual(problem)
     _, rendered = story_for_problem(problem, theme)
@@ -53,8 +60,15 @@ def _new_problem(student_id: str, db: Session, theme: str = "DINOSAURS", attempt
     return problem, visual, rendered
 
 
-def create_session(db: Session, student_id: str, theme: str = "DINOSAURS") -> ProblemResponse:
-    problem, visual, rendered = _new_problem(student_id, db, theme)
+def create_session(
+    db: Session,
+    student_id: str,
+    theme: str = "DINOSAURS",
+    assignment_id: str | None = None,
+    skill_ids: list[str] | None = None,
+    problem_count: int = 8,
+) -> ProblemResponse:
+    problem, visual, rendered = _new_problem(student_id, db, theme, skill_ids=skill_ids)
     row = SessionRow(
         id=str(uuid4()),
         student_id=student_id,
@@ -70,6 +84,15 @@ def create_session(db: Session, student_id: str, theme: str = "DINOSAURS") -> Pr
         created_at=datetime.now(UTC).isoformat(),
     )
     db.add(row)
+    if assignment_id and skill_ids:
+        db.add(
+            SessionPlanRow(
+                session_id=row.id,
+                assignment_id=assignment_id,
+                skill_ids_json=json.dumps(skill_ids),
+                problem_count=problem_count,
+            )
+        )
     record_event(db, student_id, row.id, "SESSION_STARTED", {"theme": theme})
     record_event(db, student_id, row.id, "PROBLEM_PRESENTED", {"problem_id": problem.id})
     db.commit()
@@ -100,8 +123,10 @@ def submit_answer(db: Session, row: SessionRow, request: AnswerRequest) -> Probl
     row.attempt_number += 1
     if correct:
         row.tutor_message = "Bien pensado. Seguimos con otro reto."
+        plan = db.get(SessionPlanRow, row.id)
+        assigned_skills = json.loads(plan.skill_ids_json) if plan else None
         next_problem, visual, rendered = _new_problem(
-            row.student_id, db, row.theme, row.attempt_number
+            row.student_id, db, row.theme, row.attempt_number, assigned_skills
         )
         row.active_problem_json = next_problem.model_dump_json()
         row.active_visual_json = visual.model_dump_json()

@@ -1,0 +1,104 @@
+framework:
+  id: ES-LOMLOE-MATH-2022
+  version: "1.0"
+  jurisdiction: ES
+  title: LOMLOE Mathematics curriculum map
+  sources:
+    - id: BOE-A-2022-3296
+      stage: PRIMARY
+      title: Royal Decree 157/2022
+      url: https://www.boe.es/buscar/pdf/2022/BOE-A-2022-3296-consolidado.pdf
+    - id: BOE-A-2022-4975
+      stage: ESO
+      title: Royal Decree 217/2022
+      url: https://www.boe.es/buscar/pdf/2022/BOE-A-2022-4975-consolidado.pdf
+  note: Autonomous-community overlays must be selected for formal school deployment.
+units:
+  - id: ES-PRI-C1-NUM-ADD-10
+    stage: PRIMARY
+    grades: [1, 2]
+    cycle: 1
+    title: Sentido numérico y suma hasta 10
+    sense: NUMBER
+    competency_refs: [CE1, CE2, CE5, CE6]
+    assessment_refs: ["1.1", "2.1", "5.1", "6.1"]
+    basic_knowledge_refs: [A]
+    skill_ids: [ADD_OBJECTS_10, ADD_COUNT_ON_10, ADD_PART_WHOLE_10]
+    content_status: READY
+  - id: ES-PRI-C1-NUM-100
+    stage: PRIMARY
+    grades: [1, 2]
+    cycle: 1
+    title: Números naturales y operaciones hasta 100
+    sense: NUMBER
+    competency_refs: [CE1, CE2, CE5]
+    assessment_refs: ["1.1", "2.1", "5.1"]
+    basic_knowledge_refs: [A]
+    skill_ids: []
+    content_status: PLANNED
+  - id: ES-PRI-C2-NUM-MEASURE
+    stage: PRIMARY
+    grades: [3, 4]
+    cycle: 2
+    title: Operaciones, fracciones y medida
+    sense: NUMBER_AND_MEASUREMENT
+    competency_refs: [CE1, CE2, CE3, CE5]
+    assessment_refs: ["1.1", "2.1", "3.1", "5.1"]
+    basic_knowledge_refs: [A, B]
+    skill_ids: []
+    content_status: PLANNED
+  - id: ES-PRI-C3-PROP-GEO-DATA
+    stage: PRIMARY
+    grades: [5, 6]
+    cycle: 3
+    title: Proporcionalidad, geometría y datos
+    sense: MIXED
+    competency_refs: [CE1, CE2, CE3, CE4, CE5]
+    assessment_refs: ["1.1", "2.1", "3.1", "4.1", "5.1"]
+    basic_knowledge_refs: [A, B, C, D, E]
+    skill_ids: []
+    content_status: PLANNED
+  - id: ES-ESO-12-NUM-ALG
+    stage: ESO
+    grades: [1, 2]
+    cycle: null
+    title: Números, proporcionalidad e iniciación al álgebra
+    sense: NUMBER_AND_ALGEBRA
+    competency_refs: [CE1, CE2, CE5, CE6]
+    assessment_refs: ["1.1", "2.1", "5.1", "6.1"]
+    basic_knowledge_refs: [A, D]
+    skill_ids: []
+    content_status: PLANNED
+  - id: ES-ESO-12-GEO-DATA
+    stage: ESO
+    grades: [1, 2]
+    cycle: null
+    title: Geometría, medida, probabilidad y datos
+    sense: SPACE_AND_STOCHASTIC
+    competency_refs: [CE1, CE3, CE4, CE7]
+    assessment_refs: ["1.1", "3.1", "4.1", "7.1"]
+    basic_knowledge_refs: [B, C, E]
+    skill_ids: []
+    content_status: PLANNED
+  - id: ES-ESO-34-ALG-FUNCTIONS
+    stage: ESO
+    grades: [3, 4]
+    cycle: null
+    title: Álgebra, funciones y modelización matemática
+    sense: ALGEBRAIC
+    competency_refs: [CE1, CE2, CE4, CE6]
+    assessment_refs: ["1.1", "2.1", "4.1", "6.1"]
+    basic_knowledge_refs: [D]
+    skill_ids: []
+    content_status: PLANNED
+  - id: ES-ESO-34-GEO-STATS
+    stage: ESO
+    grades: [3, 4]
+    cycle: null
+    title: Geometría, estadística y probabilidad
+    sense: SPACE_AND_STOCHASTIC
+    competency_refs: [CE1, CE3, CE5, CE7]
+    assessment_refs: ["1.1", "3.1", "5.1", "7.1"]
+    basic_knowledge_refs: [B, C, E]
+    skill_ids: []
+    content_status: PLANNED

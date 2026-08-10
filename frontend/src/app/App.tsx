@@ -9,6 +9,7 @@ import {
   Sparkles,
   Star,
   Trophy,
+  School,
   UserPlus,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -16,6 +17,7 @@ import { api } from "../api/client";
 import { VisualRenderer } from "../components/VisualRenderer";
 import { ThemeScene } from "../components/ThemeScene";
 import { VoiceControls } from "../components/VoiceControls";
+import { TeacherDashboard } from "../components/TeacherDashboard";
 import type { ProblemResponse, Student } from "../types/contracts";
 
 export function App() {
@@ -27,6 +29,8 @@ export function App() {
   const [theme, setTheme] = useState("DINOSAURS");
   const [progress, setProgress] = useState<Record<string, unknown> | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [teacherMode, setTeacherMode] = useState(false);
+  const [assignmentCode, setAssignmentCode] = useState("");
 
   useEffect(() => {
     api.students().then(setStudents).catch(() => setStudents([]));
@@ -47,11 +51,15 @@ export function App() {
   async function start() {
     const active = student ?? students[0] ?? await api.createStudent(name);
     setStudent(active);
-    const next = await api.startSession(active.id, theme);
+    const code = assignmentCode.trim().toUpperCase();
+    if (code) await api.joinAssignment(code, active.id);
+    const next = await api.startSession(active.id, theme, code || undefined);
     localStorage.setItem("math-ai-session", next.session_id);
     setSession(next);
     setProgress(null);
   }
+
+  if (teacherMode) return <TeacherDashboard onClose={() => setTeacherMode(false)} />;
 
   async function submitValue(value: string) {
     if (!session) return;
@@ -133,6 +141,7 @@ export function App() {
         <h1>EduMath</h1>
         <Sparkles aria-hidden="true" />
       </header>
+      <button className="teacherEntry" onClick={() => setTeacherMode(true)}><School aria-hidden="true" />Panel docente</button>
       <section className="homeGrid">
         <div className="capsulePanel profileCapsule">
           <div className="capsuleTitle"><UserPlus aria-hidden="true" /><span>Mi perfil</span></div>
@@ -150,6 +159,7 @@ export function App() {
               <Orbit aria-hidden="true" /><span>Espacio</span>
             </button>
           </div>
+          <label className="assignmentJoin">Código de clase<input value={assignmentCode} maxLength={6} placeholder="ABC234" onChange={(event) => setAssignmentCode(event.target.value.toUpperCase())} /></label>
           <button className="startButton" onClick={start}><Play aria-hidden="true" />Comenzar</button>
         </div>
         <div className="capsulePanel progressCapsule">

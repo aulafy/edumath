@@ -34,6 +34,14 @@ The first start downloads the required software and can take several minutes. Wh
 
 Press `Ctrl+C` in the terminal to stop. Later starts use the same command and preserve data in the `data` folder. To update, download the latest release or run `git pull`, then repeat the command.
 
+If ports `8000` or `5173` are already occupied, choose alternatives before starting:
+
+```bash
+BACKEND_PORT=18000 FRONTEND_PORT=15173 docker compose up --build
+```
+
+Then open `http://127.0.0.1:15173`.
+
 ## Route B: Guided Local Setup
 
 ### Prerequisites
