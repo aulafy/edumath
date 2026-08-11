@@ -173,3 +173,35 @@ def test_timeline_rejects_duplicate_years() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_food_web_rejects_links_to_unknown_organisms() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update(
+        {
+            "type": "FOOD_WEB_LAB",
+            "content": {
+                "prompt": "Connect the food web.",
+                "habitat": "Pond",
+                "organisms": [
+                    {"id": "algae", "label": "Algae", "role": "PRODUCER"},
+                    {"id": "snail", "label": "Snail", "role": "CONSUMER"},
+                    {"id": "fish", "label": "Fish", "role": "CONSUMER"},
+                ],
+                "links": [
+                    {"source": "algae", "target": "snail"},
+                    {"source": "snail", "target": "heron"},
+                ],
+                "explanation": "Every link must use a declared organism.",
+            },
+        }
+    )
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

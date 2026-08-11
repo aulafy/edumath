@@ -339,6 +339,16 @@ def complete_module_activity(
         expected = [event["id"] for event in sorted(events, key=lambda event: event["year"])]
         if data.response != expected:
             raise HTTPException(status_code=422, detail="The submitted timeline order is not correct.")
+    if activity.type == "FOOD_WEB_LAB":
+        if not isinstance(data.response, list):
+            raise HTTPException(status_code=422, detail="The submitted food web is invalid.")
+        try:
+            submitted = {(link["source"], link["target"]) for link in data.response}
+        except (KeyError, TypeError):
+            raise HTTPException(status_code=422, detail="The submitted food web is invalid.")
+        expected = {(link["source"], link["target"]) for link in activity.content["links"]}
+        if len(submitted) != len(data.response) or submitted != expected:
+            raise HTTPException(status_code=422, detail="The submitted food web is not correct.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

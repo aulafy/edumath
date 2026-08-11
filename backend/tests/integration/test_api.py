@@ -14,6 +14,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "BALANCE_LAB": "org.edumath.tests.math-balance",
             "TILE_LAB": "org.edumath.tests.math-tiles",
             "TIMELINE": "org.edumath.tests.history-timeline",
+            "FOOD_WEB_LAB": "org.edumath.tests.science-food-web",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -107,6 +108,32 @@ def make_timeline_activity() -> dict:
                 {"id": "printing", "label": "Printing press", "year": 1450, "date_label": "c. 1450", "detail": "Movable type accelerates book production."},
             ],
             "explanation": "Writing came first, then the printing press, and later radio.",
+        },
+        "evidence": {},
+    }
+
+
+def make_food_web_activity() -> dict:
+    return {
+        "id": "forest-food-web",
+        "type": "FOOD_WEB_LAB",
+        "title": "Build a forest food web",
+        "instructions": "Connect food first and its consumer second.",
+        "content": {
+            "prompt": "Connect the forest organisms.",
+            "habitat": "Temperate forest",
+            "organisms": [
+                {"id": "oak", "label": "Oak", "role": "PRODUCER"},
+                {"id": "caterpillar", "label": "Caterpillar", "role": "CONSUMER"},
+                {"id": "bird", "label": "Bird", "role": "CONSUMER"},
+                {"id": "fungus", "label": "Fungus", "role": "DECOMPOSER"},
+            ],
+            "links": [
+                {"source": "oak", "target": "caterpillar"},
+                {"source": "caterpillar", "target": "bird"},
+                {"source": "oak", "target": "fungus"},
+            ],
+            "explanation": "Energy moves from food to consumers, while fungi break down remains.",
         },
         "evidence": {},
     }
@@ -413,3 +440,42 @@ def test_timeline_requires_chronological_order() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": correct})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["timeline-printing"]
+
+
+def test_food_web_requires_the_exact_directed_links() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms",
+            json={"name": "4A Science", "stage": "PRIMARY", "grade": 4},
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import",
+            headers=headers,
+            files={"package": ("food-web.edumath", make_package(make_food_web_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments",
+            headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["forest-food-web"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Luna"}).json()
+        client.post(
+            f"/api/modules/assignments/{assignment['join_code']}/join",
+            json={"student_id": student["id"]},
+        )
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/forest-food-web/complete"
+        reversed_link = [
+            {"source": "caterpillar", "target": "oak"},
+            {"source": "caterpillar", "target": "bird"},
+            {"source": "oak", "target": "fungus"},
+        ]
+        assert client.post(endpoint, json={"student_id": student["id"], "response": reversed_link}).status_code == 422
+        completed = client.post(
+            endpoint,
+            json={"student_id": student["id"], "response": make_food_web_activity()["content"]["links"]},
+        )
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["forest-food-web"]

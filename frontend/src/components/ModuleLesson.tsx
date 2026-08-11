@@ -1,4 +1,4 @@
-import { ArrowLeft, Check, ChevronLeft, ChevronRight, FlaskConical, ListChecks } from "lucide-react";
+import { ArrowLeft, Check, ChevronLeft, ChevronRight, FlaskConical, ListChecks, X } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { api } from "../api/client";
 import type { ModuleAssignment, Student } from "../types/contracts";
@@ -8,6 +8,7 @@ const LearningScene3D = lazy(() => import("./LearningScene3D").then((module) => 
 const BalanceLab3D = lazy(() => import("./BalanceLab3D").then((module) => ({ default: module.BalanceLab3D })));
 const TileLab3D = lazy(() => import("./TileLab3D").then((module) => ({ default: module.TileLab3D })));
 const TimePath3D = lazy(() => import("./TimePath3D").then((module) => ({ default: module.TimePath3D })));
+const FoodWebLab3D = lazy(() => import("./FoodWebLab3D").then((module) => ({ default: module.FoodWebLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -16,6 +17,9 @@ type TileCell = { row: number; col: number };
 type TileLab = { prompt: string; rows: number; cols: number; target_area: number; target_perimeter: number; example_cells: TileCell[]; explanation: string };
 type TimelineEvent = { id: string; label: string; year: number; date_label: string; detail: string };
 type Timeline = { prompt: string; era_label: string; events: TimelineEvent[]; explanation: string };
+type FoodWebOrganism = { id: string; label: string; role: "PRODUCER" | "CONSUMER" | "DECOMPOSER" };
+type FoodWebLink = { source: string; target: string };
+type FoodWebLab = { prompt: string; habitat: string; organisms: FoodWebOrganism[]; links: FoodWebLink[]; explanation: string };
 
 function tileMetrics(cells: TileCell[]) {
   const points = new Set(cells.map((cell) => `${cell.row}:${cell.col}`));
@@ -141,6 +145,34 @@ function TimelineExercise({ content, onSolved }: { content: Timeline; onSolved: 
   </div>;
 }
 
+function FoodWebExercise({ content, onSolved }: { content: FoodWebLab; onSolved: (response: FoodWebLink[]) => void }) {
+  const [links, setLinks] = useState<FoodWebLink[]>([]);
+  const [pending, setPending] = useState("");
+  const [checked, setChecked] = useState(false);
+  const edgeKey = (link: FoodWebLink) => `${link.source}:${link.target}`;
+  const expected = new Set(content.links.map(edgeKey));
+  const correct = links.length === content.links.length && links.every((link) => expected.has(edgeKey(link)));
+  const labels = new Map(content.organisms.map((organism) => [organism.id, organism.label]));
+  function choose(id: string) {
+    if (!pending) { setPending(id); setChecked(false); return; }
+    if (pending === id) { setPending(""); return; }
+    const candidate = { source: pending, target: id };
+    setLinks((current) => current.some((link) => edgeKey(link) === edgeKey(candidate)) ? current : [...current, candidate]);
+    setPending(""); setChecked(false);
+  }
+  return <div className="interactiveExercise foodWebExercise">
+    <strong>{content.prompt}</strong>
+    <Suspense fallback={<div className="foodWebScene loadingScene" aria-label="Preparando ecosistema 3D" />}>
+      <FoodWebLab3D organisms={content.organisms} links={links} pending={pending} />
+    </Suspense>
+    <div className="foodWebStatus"><span>{content.habitat}</span><strong>{pending ? `Ahora elige quién obtiene energía de ${labels.get(pending)}` : "Primero alimento, después consumidor"}</strong></div>
+    <div className="organismChoices">{content.organisms.map((organism) => <button key={organism.id} className={pending === organism.id ? "organismChoice selected" : "organismChoice"} aria-pressed={pending === organism.id} onClick={() => choose(organism.id)}><strong>{organism.label}</strong><small>{organism.role === "PRODUCER" ? "Productor" : organism.role === "DECOMPOSER" ? "Descomponedor" : "Consumidor"}</small></button>)}</div>
+    <div className="builtLinks" aria-live="polite">{links.length === 0 ? <span>Aún no hay conexiones</span> : links.map((link) => <span key={edgeKey(link)}>{labels.get(link.source)} → {labels.get(link.target)}<button className="iconButton" aria-label={`Eliminar conexión ${labels.get(link.source)} a ${labels.get(link.target)}`} title="Eliminar conexión" onClick={() => { setLinks((current) => current.filter((item) => edgeKey(item) !== edgeKey(link))); setChecked(false); }}><X /></button></span>)}</div>
+    <button disabled={links.length === 0} onClick={() => { setChecked(true); if (correct) onSolved(links); }}><Check /> Comprobar ecosistema</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Red completa! ${content.explanation}` : "La red aún no explica todas las relaciones. Revisa la dirección y las conexiones."}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -150,7 +182,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -182,6 +214,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "BALANCE_LAB" && <BalanceLabExercise key={activity.id} content={activity.content as BalanceLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "TILE_LAB" && <TileLabExercise key={activity.id} content={activity.content as TileLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "TIMELINE" && <TimelineExercise key={activity.id} content={activity.content as Timeline} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "FOOD_WEB_LAB" && <FoodWebExercise key={activity.id} content={activity.content as FoodWebLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

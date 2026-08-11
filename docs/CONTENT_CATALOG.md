@@ -12,11 +12,12 @@ EduMath keeps its editable learning-content source in `content/open_modules.v1.j
 | Primary | 3 | Mathematics | The balance station |
 | Primary | 4 | Mathematics | The mosaic workshop |
 | Primary | 5-6 | Knowledge of the Environment | Paths that changed the world |
+| Primary | 4-5 | Knowledge of the Environment | Ecosystems of connections |
 | Primary | 5 | Spanish Language and Literature | The word laboratory |
 | ESO | 1 | Geography and History | Journey through Prehistory |
 | ESO | 2 | Physics and Chemistry | Forces in motion |
 
-The hand-maintained catalog currently contains 27 activities. Model-generated Primary drafts live separately in `content/generated/primary/` and are counted by the coverage report. Closed questions, classification challenges, balance laboratories, mosaic workshops, and time paths are interactive and checked by the backend before completion is recorded. Selected modules also contain declarative WebGL scenes.
+The hand-maintained catalog currently contains 30 activities. Model-generated Primary drafts live separately in `content/generated/primary/` and are counted by the coverage report. Closed questions, classification challenges, balance laboratories, mosaic workshops, time paths, and food-web laboratories are interactive and checked by the backend before completion is recorded. Selected modules also contain declarative WebGL scenes.
 
 ## Model-assisted drafting
 

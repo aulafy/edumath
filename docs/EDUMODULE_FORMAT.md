@@ -50,9 +50,9 @@ assets/
 
 ## Activities
 
-Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructions`, `content`, and `evidence`. Version 1.0 supports `EXPLANATION`, `CLOSED_QUESTION`, `OPEN_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `TIMELINE`, `MAP`, `SIMULATION`, `GUIDED_EXPERIMENT`, `READING`, `WRITING`, and `ASSESSMENT`.
+Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructions`, `content`, and `evidence`. Version 1.0 supports `EXPLANATION`, `CLOSED_QUESTION`, `OPEN_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `FOOD_WEB_LAB`, `TIMELINE`, `MAP`, `SIMULATION`, `GUIDED_EXPERIMENT`, `READING`, `WRITING`, and `ASSESSMENT`.
 
-`CLOSED_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, and `TILE_LAB` are interactive in the learner runner. Their solutions are schema-validated on import and checked again by the backend before progress is recorded. The browser provides immediate feedback, but it is not authoritative.
+`CLOSED_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `FOOD_WEB_LAB`, and `TIMELINE` are interactive in the learner runner. Their solutions are schema-validated on import and checked again by the backend before progress is recorded. The browser provides immediate feedback, but it is not authoritative.
 
 `BALANCE_LAB` turns additive decomposition into direct manipulation. Its content declares a positive `left_value`, two to eight unique positive `weights`, one valid `example_solution`, and a short explanation. The learner may discover any non-repeating combination of the declared weights that reaches the target; the example is a validation witness, not the only accepted answer. Trusted EduMath code renders and grades the 3D balance.
 
@@ -95,6 +95,25 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
     { "id": "printing", "label": "Movable-type printing", "year": 1450, "date_label": "c. 1450", "detail": "Texts can be reproduced faster." }
   ],
   "explanation": "Writing came before printing and radio."
+}
+```
+
+`FOOD_WEB_LAB` represents energy flow as a directed graph. It declares three to seven organisms, their producer/consumer/decomposer role, and two to twelve links. Every organism must participate; self-links, duplicate links, and unknown organism IDs are rejected. A link points from food to the organism receiving energy. The learner builds the graph edge by edge, and the backend compares sets of directed links so submission order does not matter.
+
+```json
+{
+  "prompt": "Build the meadow food web.",
+  "habitat": "Temperate meadow",
+  "organisms": [
+    { "id": "grass", "label": "Grass", "role": "PRODUCER" },
+    { "id": "rabbit", "label": "Rabbit", "role": "CONSUMER" },
+    { "id": "fox", "label": "Fox", "role": "CONSUMER" }
+  ],
+  "links": [
+    { "source": "grass", "target": "rabbit" },
+    { "source": "rabbit", "target": "fox" }
+  ],
+  "explanation": "Energy moves from grass to rabbit and then to fox."
 }
 ```
 

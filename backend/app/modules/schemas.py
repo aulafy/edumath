@@ -198,6 +198,42 @@ class TimelineContent(BaseModel):
         return self
 
 
+class FoodWebOrganism(BaseModel):
+    id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=80)
+    label: str = Field(min_length=2, max_length=80)
+    role: Literal["PRODUCER", "CONSUMER", "DECOMPOSER"]
+
+
+class FoodWebLink(BaseModel):
+    source: str = Field(min_length=1, max_length=80)
+    target: str = Field(min_length=1, max_length=80)
+
+
+class FoodWebLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    habitat: str = Field(min_length=2, max_length=100)
+    organisms: list[FoodWebOrganism] = Field(min_length=3, max_length=7)
+    links: list[FoodWebLink] = Field(min_length=2, max_length=12)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_food_web(self):
+        organism_ids = [organism.id for organism in self.organisms]
+        if len(organism_ids) != len(set(organism_ids)):
+            raise ValueError("Food-web organism IDs must be unique.")
+        ids = set(organism_ids)
+        edges = {(link.source, link.target) for link in self.links}
+        if len(edges) != len(self.links):
+            raise ValueError("Food-web links must be unique.")
+        if any(link.source not in ids or link.target not in ids for link in self.links):
+            raise ValueError("Food-web links must reference declared organisms.")
+        if any(link.source == link.target for link in self.links):
+            raise ValueError("Food-web links cannot connect an organism to itself.")
+        if any(organism_id not in {node for edge in edges for node in edge} for organism_id in ids):
+            raise ValueError("Every food-web organism must participate in the network.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -207,6 +243,7 @@ class ModuleActivity(BaseModel):
         "CLASSIFICATION",
         "BALANCE_LAB",
         "TILE_LAB",
+        "FOOD_WEB_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -232,4 +269,6 @@ class ModuleActivity(BaseModel):
             TileLabContent.model_validate(self.content)
         elif self.type == "TIMELINE":
             TimelineContent.model_validate(self.content)
+        elif self.type == "FOOD_WEB_LAB":
+            FoodWebLabContent.model_validate(self.content)
         return self
