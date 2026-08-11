@@ -6,10 +6,29 @@ import { contentLabel, subjectLabel } from "../utils/labels";
 
 const LearningScene3D = lazy(() => import("./LearningScene3D").then((module) => ({ default: module.LearningScene3D })));
 const BalanceLab3D = lazy(() => import("./BalanceLab3D").then((module) => ({ default: module.BalanceLab3D })));
+const TileLab3D = lazy(() => import("./TileLab3D").then((module) => ({ default: module.TileLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
 type BalanceLab = { prompt: string; left_value: number; weights: number[]; example_solution: number[]; explanation: string };
+type TileCell = { row: number; col: number };
+type TileLab = { prompt: string; rows: number; cols: number; target_area: number; target_perimeter: number; example_cells: TileCell[]; explanation: string };
+
+function tileMetrics(cells: TileCell[]) {
+  const points = new Set(cells.map((cell) => `${cell.row}:${cell.col}`));
+  const perimeter = cells.reduce((total, cell) => total + [[1, 0], [-1, 0], [0, 1], [0, -1]].filter(([dr, dc]) => !points.has(`${cell.row + dr}:${cell.col + dc}`)).length, 0);
+  if (cells.length === 0) return { area: 0, perimeter: 0, connected: false };
+  const seen = new Set([`${cells[0].row}:${cells[0].col}`]);
+  const queue = [cells[0]];
+  while (queue.length) {
+    const cell = queue.shift()!;
+    for (const [dr, dc] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const key = `${cell.row + dr}:${cell.col + dc}`;
+      if (points.has(key) && !seen.has(key)) { seen.add(key); queue.push({ row: cell.row + dr, col: cell.col + dc }); }
+    }
+  }
+  return { area: cells.length, perimeter, connected: seen.size === cells.length };
+}
 
 function ContentValue({ value }: { value: unknown }) {
   if (Array.isArray(value)) return <ul>{value.map((item, index) => <li key={index}>{String(item)}</li>)}</ul>;
@@ -66,6 +85,33 @@ function BalanceLabExercise({ content, onSolved }: { content: BalanceLab; onSolv
   </div>;
 }
 
+function TileLabExercise({ content, onSolved }: { content: TileLab; onSolved: (response: TileCell[]) => void }) {
+  const [cells, setCells] = useState<TileCell[]>([]);
+  const [checked, setChecked] = useState(false);
+  const metrics = tileMetrics(cells);
+  const correct = metrics.connected && metrics.area === content.target_area && metrics.perimeter === content.target_perimeter;
+  function toggle(cell: TileCell) {
+    const key = `${cell.row}:${cell.col}`;
+    setCells((current) => current.some((item) => `${item.row}:${item.col}` === key) ? current.filter((item) => `${item.row}:${item.col}` !== key) : [...current, cell]);
+    setChecked(false);
+  }
+  const areaState = metrics.area === content.target_area ? "ready" : "";
+  const perimeterState = metrics.perimeter === content.target_perimeter ? "ready" : "";
+  return <div className="interactiveExercise tileExercise">
+    <strong>{content.prompt}</strong>
+    <Suspense fallback={<div className="tileLabScene loadingScene" aria-label="Preparando taller 3D" />}>
+      <TileLab3D rows={content.rows} cols={content.cols} cells={cells} onToggle={toggle} />
+    </Suspense>
+    <div className="geometryMeters" aria-live="polite">
+      <span className={areaState}><small>Área</small><strong>{metrics.area}/{content.target_area}</strong></span>
+      <span className={perimeterState}><small>Perímetro</small><strong>{metrics.perimeter}/{content.target_perimeter}</strong></span>
+      <span className={metrics.connected ? "ready" : ""}><small>Figura</small><strong>{metrics.connected ? "Unida" : "Separada"}</strong></span>
+    </div>
+    <button disabled={cells.length === 0} onClick={() => { setChecked(true); if (correct) onSolved(cells); }}><Check /> Comprobar mosaico</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Mosaico conseguido! ${content.explanation}` : !metrics.connected ? "Las piezas deben tocarse por un lado y formar una sola figura." : "Observa los dos medidores y cambia algunas casillas."}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -75,7 +121,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -105,6 +151,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "CLOSED_QUESTION" && <ClosedQuestionExercise key={activity.id} content={activity.content as ClosedQuestion} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "CLASSIFICATION" && <ClassificationExercise key={activity.id} content={activity.content as Classification} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "BALANCE_LAB" && <BalanceLabExercise key={activity.id} content={activity.content as BalanceLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "TILE_LAB" && <TileLabExercise key={activity.id} content={activity.content as TileLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

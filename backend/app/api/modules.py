@@ -14,6 +14,7 @@ from app.db.models import (
 )
 from app.db.session import get_db
 from app.modules.package import MAX_PACKAGE_BYTES, ModulePackageError, validate_module_package
+from app.modules.schemas import TileCell, tile_shape_metrics
 from fastapi import APIRouter, Depends, File, Header, HTTPException, UploadFile
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
@@ -36,7 +37,7 @@ class ModuleJoinRequest(BaseModel):
 
 class ActivityCompleteRequest(BaseModel):
     student_id: str
-    response: str | dict | list[int] | None = None
+    response: str | dict | list[int] | list[dict] | None = None
 
 
 def _require_known_teacher(db: Session, teacher_key: str | None) -> None:
@@ -317,6 +318,22 @@ def complete_module_activity(
             or sum(data.response) != activity.content["left_value"]
         ):
             raise HTTPException(status_code=422, detail="The submitted weights do not balance.")
+    if activity.type == "TILE_LAB":
+        try:
+            cells = [TileCell.model_validate(cell) for cell in data.response]
+        except (TypeError, ValueError):
+            raise HTTPException(status_code=422, detail="The submitted tile shape is invalid.")
+        points = {(cell.row, cell.col) for cell in cells}
+        area, perimeter, connected = tile_shape_metrics(cells)
+        content = activity.content
+        if (
+            len(points) != len(cells)
+            or any(cell.row >= content["rows"] or cell.col >= content["cols"] for cell in cells)
+            or not connected
+            or area != content["target_area"]
+            or perimeter != content["target_perimeter"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted tiles do not match the target.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

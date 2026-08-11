@@ -123,6 +123,56 @@ class BalanceLabContent(BaseModel):
         return self
 
 
+class TileCell(BaseModel):
+    row: int = Field(ge=0, le=5)
+    col: int = Field(ge=0, le=5)
+
+
+def tile_shape_metrics(cells: list[TileCell]) -> tuple[int, int, bool]:
+    points = {(cell.row, cell.col) for cell in cells}
+    if not points:
+        return 0, 0, False
+    perimeter = sum(
+        (row + dr, col + dc) not in points
+        for row, col in points
+        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1))
+    )
+    visited = {next(iter(points))}
+    frontier = list(visited)
+    while frontier:
+        row, col = frontier.pop()
+        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            neighbor = (row + dr, col + dc)
+            if neighbor in points and neighbor not in visited:
+                visited.add(neighbor)
+                frontier.append(neighbor)
+    return len(points), perimeter, visited == points
+
+
+class TileLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    rows: int = Field(ge=2, le=6)
+    cols: int = Field(ge=2, le=6)
+    target_area: int = Field(ge=1, le=36)
+    target_perimeter: int = Field(ge=4, le=72)
+    example_cells: list[TileCell] = Field(min_length=1, max_length=36)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_tiles(self):
+        points = {(cell.row, cell.col) for cell in self.example_cells}
+        if len(points) != len(self.example_cells):
+            raise ValueError("Tile-lab example cells must be unique.")
+        if any(cell.row >= self.rows or cell.col >= self.cols for cell in self.example_cells):
+            raise ValueError("Tile-lab example cells must be inside the grid.")
+        area, perimeter, connected = tile_shape_metrics(self.example_cells)
+        if not connected:
+            raise ValueError("The example tile shape must be connected by its sides.")
+        if area != self.target_area or perimeter != self.target_perimeter:
+            raise ValueError("The example tile shape must match the target area and perimeter.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -131,6 +181,7 @@ class ModuleActivity(BaseModel):
         "OPEN_QUESTION",
         "CLASSIFICATION",
         "BALANCE_LAB",
+        "TILE_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -152,4 +203,6 @@ class ModuleActivity(BaseModel):
             ClassificationContent.model_validate(self.content)
         elif self.type == "BALANCE_LAB":
             BalanceLabContent.model_validate(self.content)
+        elif self.type == "TILE_LAB":
+            TileLabContent.model_validate(self.content)
         return self

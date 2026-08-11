@@ -50,9 +50,9 @@ assets/
 
 ## Activities
 
-Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructions`, `content`, and `evidence`. Version 1.0 supports `EXPLANATION`, `CLOSED_QUESTION`, `OPEN_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TIMELINE`, `MAP`, `SIMULATION`, `GUIDED_EXPERIMENT`, `READING`, `WRITING`, and `ASSESSMENT`.
+Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructions`, `content`, and `evidence`. Version 1.0 supports `EXPLANATION`, `CLOSED_QUESTION`, `OPEN_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `TIMELINE`, `MAP`, `SIMULATION`, `GUIDED_EXPERIMENT`, `READING`, `WRITING`, and `ASSESSMENT`.
 
-`CLOSED_QUESTION`, `CLASSIFICATION`, and `BALANCE_LAB` are interactive in the learner runner. Their solutions are schema-validated on import and checked again by the backend before progress is recorded. The browser provides immediate feedback, but it is not authoritative.
+`CLOSED_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, and `TILE_LAB` are interactive in the learner runner. Their solutions are schema-validated on import and checked again by the backend before progress is recorded. The browser provides immediate feedback, but it is not authoritative.
 
 `BALANCE_LAB` turns additive decomposition into direct manipulation. Its content declares a positive `left_value`, two to eight unique positive `weights`, one valid `example_solution`, and a short explanation. The learner may discover any non-repeating combination of the declared weights that reaches the target; the example is a validation witness, not the only accepted answer. Trusted EduMath code renders and grades the 3D balance.
 
@@ -63,6 +63,23 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
   "weights": [2, 3, 4, 5, 7],
   "example_solution": [5, 7],
   "explanation": "5 + 7 = 12, so both sides are equal."
+}
+```
+
+`TILE_LAB` asks learners to construct a side-connected shape on a grid. The content declares grid dimensions, target area and perimeter, and one `example_cells` witness proving that the challenge can be solved. The witness is not exposed as the required answer: any in-bounds shape with unique cells, one connected component, and the requested measurements is accepted. This supports genuine exploration, including translations, rotations, reflections, and alternative shapes.
+
+```json
+{
+  "prompt": "Build one shape with area 6 and perimeter 10.",
+  "rows": 4,
+  "cols": 4,
+  "target_area": 6,
+  "target_perimeter": 10,
+  "example_cells": [
+    { "row": 0, "col": 0 }, { "row": 0, "col": 1 }, { "row": 0, "col": 2 },
+    { "row": 1, "col": 0 }, { "row": 1, "col": 1 }, { "row": 1, "col": 2 }
+  ],
+  "explanation": "A two by three rectangle has area 6 and perimeter 10."
 }
 ```
 

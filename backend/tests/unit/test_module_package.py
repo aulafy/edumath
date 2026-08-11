@@ -113,3 +113,35 @@ def test_balance_lab_requires_a_valid_example_solution() -> None:
             )
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_tile_lab_rejects_a_disconnected_example_shape() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update(
+        {
+            "type": "TILE_LAB",
+            "content": {
+                "prompt": "Build one connected shape.",
+                "rows": 4,
+                "cols": 4,
+                "target_area": 4,
+                "target_perimeter": 8,
+                "example_cells": [
+                    {"row": 0, "col": 0}, {"row": 0, "col": 1},
+                    {"row": 3, "col": 2}, {"row": 3, "col": 3},
+                ],
+                "explanation": "The tiles must all touch through their sides.",
+            },
+        }
+    )
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(
+                name, json.dumps(activity) if name.endswith("observe.json") else content
+            )
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

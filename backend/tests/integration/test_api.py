@@ -10,11 +10,10 @@ def make_package(custom_activity: dict | None = None) -> bytes:
     manifest = {
         "format": "EDUMODULE",
         "format_version": "1.0",
-        "id": (
-            "org.edumath.tests.math-balance"
-            if custom_activity
-            else "org.edumath.tests.science-plants"
-        ),
+        "id": {
+            "BALANCE_LAB": "org.edumath.tests.math-balance",
+            "TILE_LAB": "org.edumath.tests.math-tiles",
+        }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
         "summary": "A guided Primary Science investigation about plant growth.",
@@ -64,6 +63,29 @@ def make_balance_activity() -> dict:
             "weights": [2, 3, 5, 7],
             "example_solution": [5, 7],
             "explanation": "Five plus seven equals twelve.",
+        },
+        "evidence": {},
+    }
+
+
+def make_tile_activity() -> dict:
+    return {
+        "id": "tile-rectangle",
+        "type": "TILE_LAB",
+        "title": "Build a rectangle",
+        "instructions": "Join tiles to match the target area and perimeter.",
+        "content": {
+            "prompt": "Build a shape with area 6 and perimeter 10.",
+            "rows": 4,
+            "cols": 4,
+            "target_area": 6,
+            "target_perimeter": 10,
+            "example_cells": [
+                {"row": 0, "col": 0}, {"row": 0, "col": 1},
+                {"row": 0, "col": 2}, {"row": 1, "col": 0},
+                {"row": 1, "col": 1}, {"row": 1, "col": 2},
+            ],
+            "explanation": "A two by three rectangle has area six and perimeter ten.",
         },
         "evidence": {},
     }
@@ -296,3 +318,44 @@ def test_balance_lab_is_verified_by_the_server() -> None:
         )
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["balance-twelve"]
+
+
+def test_tile_lab_checks_shape_area_perimeter_and_connectivity() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms",
+            json={"name": "3B Mathematics", "stage": "PRIMARY", "grade": 3},
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import",
+            headers=headers,
+            files={"package": ("tiles.edumath", make_package(make_tile_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments",
+            headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["tile-rectangle"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Izan"}).json()
+        client.post(
+            f"/api/modules/assignments/{assignment['join_code']}/join",
+            json={"student_id": student["id"]},
+        )
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/tile-rectangle/complete"
+        disconnected = [
+            {"row": 0, "col": 0}, {"row": 0, "col": 1}, {"row": 0, "col": 2},
+            {"row": 3, "col": 0}, {"row": 3, "col": 1}, {"row": 3, "col": 2},
+        ]
+        assert client.post(endpoint, json={"student_id": student["id"], "response": disconnected}).status_code == 422
+        rectangle = [
+            {"row": 2, "col": 1}, {"row": 2, "col": 2}, {"row": 2, "col": 3},
+            {"row": 3, "col": 1}, {"row": 3, "col": 2}, {"row": 3, "col": 3},
+        ]
+        completed = client.post(
+            endpoint, json={"student_id": student["id"], "response": rectangle}
+        )
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["tile-rectangle"]
