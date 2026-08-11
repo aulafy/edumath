@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.physical-education-c3-organizacion-de-la-actividad-fisica",
+  "title": "Organización de la actividad física",
+  "summary": "Los estudiantes aprenderán a planificar y desarrollar actividades físicas de forma segura, identificando los espacios adecuados, los materiales necesarios y las normas de convivencia para el juego y el deporte.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Competencia en conciencia y expresión culturales",
+    "Competencia en comunicación lingüística",
+    "Competencia personal, social y de aprender a aprender"
+  ],
+  "assessment_criteria": [
+    "El alumnado identifica los elementos básicos necesarios para organizar una actividad física (espacio, participantes, normas).",
+    "El alumnado propone una secuencia lógica de acciones para el desarrollo de un juego o ejercicio.",
+    "El alumnado respeta las normas de seguridad y convivencia durante la planificación y ejecución de la actividad."
+  ],
+  "basic_knowledge": [
+    "Conceptos de espacio, tiempo y materiales en la actividad física.",
+    "Normas de seguridad y respeto al compañero.",
+    "Secuenciación de acciones para el desarrollo de una actividad."
+  ],
+  "activities": [
+    {
+      "id": "actividad-1-identificacion-elementos",
+      "type": "CLOSED_QUESTION",
+      "title": "Elementos necesarios para organizar una actividad",
+      "instructions": "Lee la situación y selecciona los elementos necesarios para organizarla con seguridad.",
+      "content": {
+        "prompt": "Antes de empezar un juego de equipo con balón, ¿qué debe preparar el grupo?",
+        "options": [
+        "Reglas claras, espacio seguro y material revisado",
+        "Empezar sin explicar nada y decidir después",
+          "Material caro y un marcador electrónico"
+        ],
+        "correct_option": "Reglas claras, espacio seguro y material revisado",
+        "explanation": "Una actividad organizada necesita reglas comprensibles, un espacio sin peligros y material adecuado. No requiere equipamiento caro ni una figura arbitral."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "actividad-2-secuencia-juego",
+      "type": "CLOSED_QUESTION",
+      "title": "Orden lógico de las acciones",
+      "instructions": "Elige la secuencia que prepara una actividad física de forma ordenada.",
+      "content": {
+        "prompt": "¿Qué orden ayuda a preparar una actividad en el patio o gimnasio?",
+        "options": [
+          "1. Explicar las normas, 2. Colocar los materiales, 3. Empezar la actividad",
+          "1. Empezar la actividad, 2. Colocar los materiales, 3. Explicar las normas",
+          "1. Colocar los materiales, 2. Empezar la actividad, 3. Explicar las normas"
+        ],
+        "correct_option": "1. Explicar las normas, 2. Colocar los materiales, 3. Empezar la actividad",
+        "explanation": "El orden lógico es primero explicar las normas de seguridad y respeto, luego colocar los materiales en el lugar adecuado y finalmente empezar la actividad."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "actividad-3-categorias-normas",
+      "type": "CLASSIFICATION",
+      "title": "Clasificación de normas de seguridad",
+      "instructions": "Lee cada norma de seguridad y clasifícalas en la categoría correcta según el tipo de riesgo que previenen.",
+      "content": {
+        "prompt": "Clasifica las siguientes normas de seguridad en las categorías: 'Espacio', 'Material' o 'Comportamiento'.",
+        "categories": [
+          "Espacio",
+          "Material",
+          "Comportamiento"
+        ],
+        "items": [
+          {
+            "label": "No correr cerca de las escaleras",
+            "category": "Espacio"
+          },
+          {
+            "label": "Usar los materiales solo en el lugar indicado",
+            "category": "Material"
+          },
+          {
+            "label": "Pedir permiso antes de usar un equipo",
+            "category": "Comportamiento"
+          },
+          {
+            "label": "No empujar a los compañeros",
+            "category": "Comportamiento"
+          }
+        ],
+        "explanation": "Las normas de espacio protegen contra accidentes en zonas peligrosas, las de material aseguran el uso correcto del equipamiento y las de comportamiento regulan la convivencia y el respeto entre compañeros."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Organización de la actividad física",
+  "generation_provider": "LM_STUDIO_QWEN"
+}

@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.art-education-c3-recepcion-y-analisis",
+  "title": "Miramos y analizamos obras de arte",
+  "summary": "Observamos imágenes, sonidos y creaciones artísticas para describir lo que vemos y oímos, reconocer elementos básicos y expresar con respeto lo que nos transmiten.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "ART_EDUCATION",
+  "competencies": [
+    "Observar con atención obras visuales y musicales y describir sus elementos con vocabulario sencillo.",
+    "Reconocer materiales, técnicas y recursos expresivos básicos en creaciones artísticas.",
+    "Expresar ideas y emociones sobre una obra de forma respetuosa y fundamentada.",
+    "Relacionar lo observado con el contexto cultural o la intención comunicativa de la obra."
+  ],
+  "assessment_criteria": [
+    "Describe con claridad elementos visibles o sonoros de una obra (color, forma, línea, textura, ritmo, timbre o dinámica).",
+    "Identifica materiales, técnicas o recursos expresivos presentes en una creación artística.",
+    "Explica de forma sencilla qué transmite una obra y justifica su opinión con detalles observados.",
+    "Compara dos obras o fragmentos y señala semejanzas y diferencias relevantes."
+  ],
+  "basic_knowledge": [
+    "Elementos del lenguaje visual: color, forma, línea, textura, composición y tamaño.",
+    "Elementos del lenguaje musical: ritmo, melodía, timbre, intensidad y tempo.",
+    "Técnicas y materiales habituales en artes plásticas y en la música.",
+    "Intención comunicativa y emociones que puede transmitir una obra.",
+    "Respeto hacia las creaciones propias y ajenas al observar y comentar."
+  ],
+  "activities": [
+    {
+      "id": "colores-y-formas-en-la-obra",
+      "type": "CLOSED_QUESTION",
+      "title": "Colores y formas en la obra",
+      "instructions": "Lee la pregunta y elige la opción correcta.",
+      "content": {
+        "prompt": "En un cuadro vemos un círculo grande de color rojo en el centro y un fondo azul liso. ¿Qué elementos del lenguaje visual destacan más?",
+        "options": [
+          "Color y forma",
+          "Ritmo y tempo",
+          "Timbre y intensidad"
+        ],
+        "correct_option": "Color y forma",
+        "explanation": "El círculo es una forma y el rojo y el azul son colores. Ritmo, tempo, timbre e intensidad pertenecen al lenguaje musical."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-elementos-visuales-y-musicales",
+      "type": "CLASSIFICATION",
+      "title": "¿Es visual o musical?",
+      "instructions": "Clasifica cada elemento según pertenezca al lenguaje visual o al lenguaje musical.",
+      "content": {
+        "prompt": "Coloca cada elemento en la categoría correcta.",
+        "categories": [
+          "Lenguaje visual",
+          "Lenguaje musical"
+        ],
+        "items": [
+          {
+            "label": "Textura",
+            "category": "Lenguaje visual"
+          },
+          {
+            "label": "Timbre",
+            "category": "Lenguaje musical"
+          },
+          {
+            "label": "Línea",
+            "category": "Lenguaje visual"
+          },
+          {
+            "label": "Tempo",
+            "category": "Lenguaje musical"
+          }
+        ],
+        "explanation": "Textura y línea se observan en imágenes; timbre y tempo se perciben en la música."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "intencion-de-la-obra",
+      "type": "CLOSED_QUESTION",
+      "title": "Elementos que escuchamos",
+      "instructions": "Identifica los elementos musicales descritos.",
+      "content": {
+        "prompt": "Una canción suena suave, lenta y con instrumentos graves. ¿Qué elementos musicales se describen?",
+        "options": [
+          "Dinámica, tempo y altura",
+          "Color, forma y textura",
+          "Línea, volumen y perspectiva"
+        ],
+        "correct_option": "Dinámica, tempo y altura",
+        "explanation": "Suave describe la dinámica, lenta describe el tempo y grave describe la altura del sonido."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Recepción y análisis",
+  "generation_provider": "GROK_CLI"
+}

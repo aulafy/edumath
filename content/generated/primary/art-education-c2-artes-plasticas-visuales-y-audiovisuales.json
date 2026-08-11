@@ -1,0 +1,104 @@
+{
+  "id": "org.edumath.primary.art-education-c2-artes-plasticas-visuales-y-audiovisuales",
+  "title": "Artes plásticas, visuales y audiovisuales",
+  "summary": "Exploramos el lenguaje visual: color, forma, línea y textura; creamos con materiales sencillos y reconocemos imágenes fijas y en movimiento.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "ART_EDUCATION",
+  "competencies": [
+    "Observar y describir imágenes con el vocabulario básico del lenguaje visual.",
+    "Usar técnicas y materiales plásticos de forma segura y creativa.",
+    "Reconocer diferencias entre imagen fija e imagen en movimiento.",
+    "Expresar ideas y emociones a través de producciones plásticas y visuales."
+  ],
+  "assessment_criteria": [
+    "Identifica y nombra elementos del lenguaje visual en obras e imágenes cotidianas.",
+    "Aplica técnicas plásticas sencillas con cuidado y orden.",
+    "Clasifica imágenes según sean fijas o audiovisuales.",
+    "Explica con palabras simples qué quiere comunicar su trabajo artístico."
+  ],
+  "basic_knowledge": [
+    "Elementos del lenguaje visual: línea, forma, color, textura y composición.",
+    "Técnicas plásticas básicas: dibujo, pintura, collage y modelado.",
+    "Materiales y herramientas habituales del aula de plástica y su uso responsable.",
+    "Imagen fija e imagen en movimiento: fotografía, dibujo, cómic, vídeo y animación.",
+    "Proceso creativo: observar, imaginar, hacer y valorar el resultado."
+  ],
+  "activities": [
+    {
+      "id": "colores-primarios-secundarios",
+      "type": "CLOSED_QUESTION",
+      "title": "Colores primarios y secundarios",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "¿Qué color se obtiene al mezclar amarillo y azul?",
+        "options": [
+          "Verde",
+          "Naranja",
+          "Rojo"
+        ],
+        "correct_option": "Verde",
+        "explanation": "El amarillo y el azul son colores primarios. Al mezclarlos se obtiene el verde, que es un color secundario."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "elementos-lenguaje-visual",
+      "type": "CLASSIFICATION",
+      "title": "Elementos del lenguaje visual",
+      "instructions": "Clasifica cada elemento en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica cada ejemplo según el elemento del lenguaje visual que representa.",
+        "categories": [
+          "Color",
+          "Forma",
+          "Textura"
+        ],
+        "items": [
+          {
+            "label": "Rojo intenso",
+            "category": "Color"
+          },
+          {
+            "label": "Círculo",
+            "category": "Forma"
+          },
+          {
+            "label": "Superficie rugosa",
+            "category": "Textura"
+          },
+          {
+            "label": "Azul claro",
+            "category": "Color"
+          }
+        ],
+        "explanation": "El color describe el tono; la forma es el contorno o figura; la textura es cómo se siente o parece la superficie."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "imagen-fija-o-movimiento",
+      "type": "CLOSED_QUESTION",
+      "title": "Imagen fija o en movimiento",
+      "instructions": "Elige la opción que sea una imagen en movimiento.",
+      "content": {
+        "prompt": "¿Cuál de estas opciones es una imagen en movimiento?",
+        "options": [
+          "Un dibujo en papel",
+          "Un vídeo de animación",
+          "Una fotografía impresa"
+        ],
+        "correct_option": "Un vídeo de animación",
+        "explanation": "La fotografía y el dibujo son imágenes fijas. El vídeo de animación muestra imágenes que cambian con el tiempo."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Artes plásticas, visuales y audiovisuales",
+  "generation_provider": "GROK_CLI"
+}

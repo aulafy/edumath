@@ -1,0 +1,99 @@
+{
+  "id": "org.edumath.primary.physical-education-c3-manifestaciones-de-la-cultura-motriz",
+  "title": "Manifestaciones de la cultura motriz",
+  "summary": "Reconocemos juegos, danzas y deportes como parte de la cultura, valoramos el respeto y el juego limpio y elegimos formas seguras y justas de participar.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Identificar juegos, danzas y deportes como manifestaciones culturales de la motricidad.",
+    "Valorar el respeto, la inclusión y el juego limpio en actividades motrices compartidas.",
+    "Tomar decisiones seguras y justas al participar en juegos y prácticas de la cultura motriz."
+  ],
+  "assessment_criteria": [
+    "Reconoce distintas manifestaciones de la cultura motriz y las relaciona con su sentido social y cultural.",
+    "Explica actitudes de respeto, cooperación y juego limpio en situaciones de juego o práctica motriz.",
+    "Elige opciones seguras y responsables al participar o proponer actividades de la cultura motriz."
+  ],
+  "basic_knowledge": [
+    "Juegos tradicionales, danzas y deportes como expresiones de la cultura motriz.",
+    "Normas, roles y valores de respeto, inclusión y juego limpio.",
+    "Decisiones seguras y justas en la participación motriz colectiva."
+  ],
+  "activities": [
+    {
+      "id": "cultura-motriz-que-es",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué es la cultura motriz?",
+      "instructions": "Lee con atención y elige la respuesta más adecuada.",
+      "content": {
+        "prompt": "¿Qué son las manifestaciones de la cultura motriz?",
+        "options": [
+          "Juegos, danzas y deportes que forman parte de la cultura de las personas.",
+          "Solo ejercicios para mejorar la fuerza en el patio.",
+          "Actividades que se hacen siempre en silencio y sin reglas."
+        ],
+        "correct_option": "Juegos, danzas y deportes que forman parte de la cultura de las personas.",
+        "explanation": "La cultura motriz incluye juegos, danzas, deportes y otras prácticas corporales con sentido cultural y social."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "juego-limpio-o-no",
+      "type": "CLASSIFICATION",
+      "title": "Juego limpio o no limpio",
+      "instructions": "Clasifica cada situación según muestre juego limpio o no.",
+      "content": {
+        "prompt": "Clasifica estas situaciones de un juego de patio.",
+        "categories": [
+          "Juego limpio",
+          "No es juego limpio"
+        ],
+        "items": [
+          {
+            "label": "Aceptar el resultado sin insultar al equipo rival.",
+            "category": "Juego limpio"
+          },
+          {
+            "label": "Cambiar las reglas a mitad del juego sin avisar.",
+            "category": "No es juego limpio"
+          },
+          {
+            "label": "Ayudar a un compañero o compañera a entender la norma.",
+            "category": "Juego limpio"
+          },
+          {
+            "label": "Reírse de quien se equivoca al moverse.",
+            "category": "No es juego limpio"
+          }
+        ],
+        "explanation": "El juego limpio se basa en el respeto, la honestidad y la cooperación; burlarse o engañar no lo es."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "decision-segura-en-juego",
+      "type": "CLOSED_QUESTION",
+      "title": "Decisión segura en un juego",
+      "instructions": "Elige la opción más segura y respetuosa.",
+      "content": {
+        "prompt": "En un juego tradicional en el patio, un compañero se cansa y pide parar. ¿Qué es lo más adecuado?",
+        "options": [
+          "Respetar su decisión y proponer un descanso o un rol más calmado.",
+          "Obligarle a seguir para no parar el juego.",
+          "Empujarle para que se mueva más rápido."
+        ],
+        "correct_option": "Respetar su decisión y proponer un descanso o un rol más calmado.",
+        "explanation": "En la cultura motriz importa el bienestar y el respeto: escuchar al grupo y adaptar la participación es una decisión segura y justa."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Manifestaciones de la cultura motriz",
+  "generation_provider": "GROK_CLI"
+}

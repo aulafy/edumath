@@ -40,6 +40,13 @@ def targets() -> list[dict]:
 
 
 def prompt(target: dict) -> str:
+    safety = (
+        "For Physical Education, use knowledge checks and safe decision scenarios only. "
+        "Do not prescribe intense exercise, medical advice, body-weight goals, unsupervised stunts, "
+        "or activities requiring equipment."
+        if target["subject"] == "PHYSICAL_EDUCATION"
+        else ""
+    )
     return f"""Return ONLY one compact valid JSON object, no markdown.
 Draft a Spanish Primary curriculum learning module aligned with Real Decreto 157/2022.
 Area: {target["area_title"]}. Subject code (use exactly): {target["subject"]}.
@@ -51,6 +58,7 @@ CLOSED_QUESTION content: prompt, options (exactly 3 unique strings), correct_opt
 CLASSIFICATION content: prompt, categories (2 or 3 unique strings), items (exactly 4 objects with label and declared category), explanation.
 Each activity fields: id (lowercase kebab-case), type, title, instructions, content, evidence={{}}.
 Avoid personal data, unsafe physical instructions, stereotypes, trick questions, and ambiguous distractors.
+{safety}
 Do not invent legal criterion numbers. Use plain-language curriculum descriptions."""
 
 
@@ -166,6 +174,9 @@ def main() -> None:
                 else generate_grok(prompt(target))
             )
             module = validate(draft, target)
+            module["generation_provider"] = (
+                "LM_STUDIO_QWEN" if provider == "lmstudio" else "GROK_CLI"
+            )
         except (
             ValueError,
             KeyError,

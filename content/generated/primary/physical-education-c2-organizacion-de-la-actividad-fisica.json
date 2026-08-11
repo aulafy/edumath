@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.physical-education-c2-organizacion-de-la-actividad-fisica",
+  "title": "Organizamos la actividad física con seguridad",
+  "summary": "Aprendemos a planificar, preparar y organizar juegos y actividades físicas de forma segura, respetuosa y ordenada.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Organizar de forma sencilla la propia actividad física y la de un grupo pequeño.",
+    "Aplicar normas básicas de seguridad y respeto al participar y al decidir cómo jugar.",
+    "Reconocer la importancia de preparar el cuerpo y el espacio antes de empezar."
+  ],
+  "assessment_criteria": [
+    "Describe con claridad los pasos básicos para organizar una actividad física sencilla.",
+    "Elige decisiones seguras al preparar el juego, el espacio y la participación.",
+    "Identifica normas de respeto, turnos y cooperación en la organización de la actividad."
+  ],
+  "basic_knowledge": [
+    "Pasos para organizar una actividad: preparar el espacio, acordar reglas, repartir turnos y roles.",
+    "Preparación previa: calentar con movimientos suaves y comprobar que el espacio es seguro.",
+    "Normas de seguridad y convivencia: no empujar, respetar turnos, escuchar al grupo y parar si hay peligro.",
+    "Final de la actividad: recoger el material imaginario o el espacio y volver a la calma."
+  ],
+  "activities": [
+    {
+      "id": "pasos-antes-de-jugar",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué hacemos antes de empezar?",
+      "instructions": "Lee la pregunta y elige la mejor opción.",
+      "content": {
+        "prompt": "Antes de empezar un juego en el patio, ¿qué conviene hacer primero?",
+        "options": [
+          "Empujar para coger el mejor sitio",
+          "Acordar reglas y mirar que el espacio sea seguro",
+          "Correr muy fuerte sin mirar a nadie"
+        ],
+        "correct_option": "Acordar reglas y mirar que el espacio sea seguro",
+        "explanation": "Organizar bien la actividad empieza por reglas claras y un espacio seguro para todos."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "seguro-o-poco-seguro",
+      "type": "CLASSIFICATION",
+      "title": "Decisiones seguras al organizar",
+      "instructions": "Clasifica cada idea según sea una decisión segura o poco segura.",
+      "content": {
+        "prompt": "Clasifica estas decisiones al organizar una actividad física.",
+        "categories": [
+          "Decisión segura",
+          "Decisión poco segura"
+        ],
+        "items": [
+          {
+            "label": "Dejar un pasillo libre para no chocar",
+            "category": "Decisión segura"
+          },
+          {
+            "label": "Ignorar a quien pide un turno",
+            "category": "Decisión poco segura"
+          },
+          {
+            "label": "Explicar las reglas antes de empezar",
+            "category": "Decisión segura"
+          },
+          {
+            "label": "Empujar para llegar primero a la meta",
+            "category": "Decisión poco segura"
+          }
+        ],
+        "explanation": "Una buena organización cuida la seguridad y el respeto: se explican reglas, se dejan espacios libres y se respetan los turnos."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "roles-en-el-juego",
+      "type": "CLOSED_QUESTION",
+      "title": "Roles y turnos en el grupo",
+      "instructions": "Elige la opción que mejor organiza el juego.",
+      "content": {
+        "prompt": "En un juego por equipos, ¿qué ayuda a organizarlo mejor?",
+        "options": [
+          "Repartir roles y turnos de forma justa",
+          "Que solo mande una persona sin escuchar",
+          "Empezar sin decir quién hace cada cosa"
+        ],
+        "correct_option": "Repartir roles y turnos de forma justa",
+        "explanation": "Repartir roles y turnos con justicia ayuda a que el grupo juegue de forma ordenada y respetuosa."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Organización de la actividad física",
+  "generation_provider": "GROK_CLI"
+}

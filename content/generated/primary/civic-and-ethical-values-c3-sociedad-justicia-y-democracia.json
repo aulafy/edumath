@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.civic-and-ethical-values-c3-sociedad-justicia-y-democracia",
+  "title": "Sociedad, justicia y democracia",
+  "summary": "Módulo para 5.º y 6.º sobre convivencia democrática: normas justas, derechos y deberes, igualdad y participación cívica en la escuela y en la sociedad.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "CIVIC_AND_ETHICAL_VALUES",
+  "competencies": [
+    "Reconocer normas y valores que favorecen una convivencia justa y respetuosa.",
+    "Identificar derechos y deberes en la vida escolar y social.",
+    "Valorar la igualdad, el diálogo y la participación en decisiones colectivas.",
+    "Distinguir acciones justas de acciones injustas en situaciones cercanas."
+  ],
+  "assessment_criteria": [
+    "Explica con palabras sencillas por qué las normas ayudan a vivir en paz y con respeto.",
+    "Relaciona derechos y deberes en ejemplos de la escuela y la comunidad.",
+    "Propone o elige formas de participar de manera democrática y solidaria.",
+    "Identifica situaciones de desigualdad o discriminación y propone respuestas respetuosas."
+  ],
+  "basic_knowledge": [
+    "Normas de convivencia y su sentido de justicia.",
+    "Derechos y deberes de las personas en la escuela y en la sociedad.",
+    "Igualdad, no discriminación y respeto a la diversidad.",
+    "Diálogo, escucha y toma de decisiones en grupo.",
+    "Participación cívica, solidaridad y cuidado del bien común."
+  ],
+  "activities": [
+    {
+      "id": "normas-justas-eleccion",
+      "type": "CLOSED_QUESTION",
+      "title": "Elegir una norma justa",
+      "instructions": "Lee la situación y elige la norma más justa para el grupo.",
+      "content": {
+        "prompt": "En el recreo, varios alumnos quieren usar el mismo balón. ¿Qué norma es más justa?",
+        "options": [
+          "Quien llegue primero se queda con el balón todo el recreo.",
+          "Se turnan para jugar y respetan el tiempo de cada grupo.",
+          "Solo pueden jugar los del mismo equipo de fútbol."
+        ],
+        "correct_option": "Se turnan para jugar y respetan el tiempo de cada grupo.",
+        "explanation": "Una norma justa busca que todas las personas puedan participar y sean tratadas con el mismo respeto."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "derechos-y-deberes",
+      "type": "CLASSIFICATION",
+      "title": "Clasificar derechos y deberes",
+      "instructions": "Clasifica cada idea como derecho o deber.",
+      "content": {
+        "prompt": "Clasifica estas ideas de la vida escolar: ¿es un derecho o un deber?",
+        "categories": [
+          "Derecho",
+          "Deber"
+        ],
+        "items": [
+          {
+            "label": "Ser tratado con respeto por compañeros y docentes",
+            "category": "Derecho"
+          },
+          {
+            "label": "Cuidar el material de la clase",
+            "category": "Deber"
+          },
+          {
+            "label": "Expresar opiniones con educación",
+            "category": "Derecho"
+          },
+          {
+            "label": "Escuchar cuando otra persona habla",
+            "category": "Deber"
+          }
+        ],
+        "explanation": "Los derechos protegen a las personas; los deberes son responsabilidades que ayudan a que esos derechos se cumplan para todos."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "participacion-democratica",
+      "type": "CLOSED_QUESTION",
+      "title": "Participar de forma democrática",
+      "instructions": "Elige la forma más democrática de decidir en el aula.",
+      "content": {
+        "prompt": "La clase debe elegir el tema del mural. ¿Qué forma es más democrática?",
+        "options": [
+          "Votar tras escuchar varias propuestas y aceptar el resultado.",
+          "Que decida solo quien tiene mejor nota.",
+          "Que decida el grupo más grande sin oír a los demás."
+        ],
+        "correct_option": "Votar tras escuchar varias propuestas y aceptar el resultado.",
+        "explanation": "La democracia se basa en escuchar, proponer y decidir entre todos con igualdad y respeto."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sociedad, justicia y democracia",
+  "generation_provider": "GROK_CLI"
+}

@@ -1,0 +1,105 @@
+{
+  "id": "org.edumath.primary.foreign-language-english-c2-comunicacion",
+  "title": "Comunicación en inglés: saludos, presentaciones y mensajes simples",
+  "summary": "Módulo del segundo ciclo de Primaria para comprender y producir mensajes orales y escritos muy sencillos en inglés en situaciones cotidianas del aula y de la vida diaria.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "FOREIGN_LANGUAGE_ENGLISH",
+  "competencies": [
+    "Comprender mensajes orales y escritos muy breves en inglés sobre temas familiares.",
+    "Producir expresiones y frases simples para saludar, presentarse y pedir o dar información básica.",
+    "Participar en intercambios cortos en inglés con cortesía y claridad.",
+    "Reconocer vocabulario y estructuras de uso frecuente en contextos de comunicación cotidiana."
+  ],
+  "assessment_criteria": [
+    "Identifica el sentido global de mensajes orales y escritos muy simples en inglés.",
+    "Usa saludos, despedidas y presentaciones adecuadas a la situación.",
+    "Selecciona vocabulario y frases básicas para pedir y dar información sencilla.",
+    "Clasifica expresiones según su función comunicativa (saludar, pedir, responder).",
+    "Muestra comprensión de instrucciones y preguntas habituales del aula en inglés."
+  ],
+  "basic_knowledge": [
+    "Saludos y despedidas: hello, hi, good morning, goodbye, see you.",
+    "Presentaciones: My name is…, I am…, How are you?, I am fine.",
+    "Preguntas y respuestas simples: What is your name?, How old are you?, Where is…?",
+    "Instrucciones del aula: listen, look, sit down, open your book, raise your hand.",
+    "Vocabulario cotidiano: colores, números, objetos del aula, familia, comida básica.",
+    "Fórmulas de cortesía: please, thank you, sorry, you’re welcome."
+  ],
+  "activities": [
+    {
+      "id": "saludos-correctos",
+      "type": "CLOSED_QUESTION",
+      "title": "Elige el saludo correcto",
+      "instructions": "Lee la situación y marca la expresión en inglés más adecuada.",
+      "content": {
+        "prompt": "Es por la mañana y entras en clase. ¿Qué dices?",
+        "options": [
+          "Good morning",
+          "Good night",
+          "Happy birthday"
+        ],
+        "correct_option": "Good morning",
+        "explanation": "Good morning se usa para saludar por la mañana. Good night es para despedirse por la noche y Happy birthday es para un cumpleaños."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "funcion-de-frases",
+      "type": "CLASSIFICATION",
+      "title": "Clasifica las frases",
+      "instructions": "Arrastra cada frase a la categoría que mejor describe su uso.",
+      "content": {
+        "prompt": "Clasifica estas frases en inglés según su función.",
+        "categories": [
+          "Saludar o despedirse",
+          "Pedir o dar información"
+        ],
+        "items": [
+          {
+            "label": "Hello!",
+            "category": "Saludar o despedirse"
+          },
+          {
+            "label": "My name is Ana.",
+            "category": "Pedir o dar información"
+          },
+          {
+            "label": "Goodbye!",
+            "category": "Saludar o despedirse"
+          },
+          {
+            "label": "How old are you?",
+            "category": "Pedir o dar información"
+          }
+        ],
+        "explanation": "Hello y Goodbye sirven para saludar o despedirse. My name is… y How old are you? sirven para dar o pedir información personal básica."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "respuesta-a-how-are-you",
+      "type": "CLOSED_QUESTION",
+      "title": "Responde a How are you?",
+      "instructions": "Elige la respuesta correcta a la pregunta.",
+      "content": {
+        "prompt": "Alguien te dice: How are you? ¿Qué respondes?",
+        "options": [
+          "I am fine, thank you",
+          "My name is blue",
+          "Open your book"
+        ],
+        "correct_option": "I am fine, thank you",
+        "explanation": "How are you? pregunta cómo estás. La respuesta habitual es I am fine, thank you. Las otras opciones no responden a esa pregunta."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Comunicación",
+  "generation_provider": "GROK_CLI"
+}

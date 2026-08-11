@@ -1,0 +1,104 @@
+{
+  "id": "org.edumath.primary.physical-education-c2-vida-activa-y-saludable",
+  "title": "Vida activa y saludable",
+  "summary": "Módulo del ciclo 2 de Primaria sobre hábitos de actividad física diaria, descanso, hidratación, higiene y decisiones seguras para cuidar el cuerpo en el día a día.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Adoptar hábitos de actividad física regular, descanso e higiene que favorezcan la salud.",
+    "Reconocer y elegir conductas seguras y saludables antes, durante y después de moverse.",
+    "Valorar el cuidado del cuerpo y el bienestar personal y colectivo en la vida diaria."
+  ],
+  "assessment_criteria": [
+    "Identifica hábitos diarios que ayudan a mantener un estilo de vida activo y saludable.",
+    "Distingue entre decisiones seguras y poco seguras al participar en juegos y actividades físicas.",
+    "Explica de forma sencilla por qué el descanso, la hidratación y la higiene son importantes para el cuerpo.",
+    "Propone acciones cotidianas para moverse más y cuidar la salud sin riesgos."
+  ],
+  "basic_knowledge": [
+    "Actividad física diaria: moverse a menudo, jugar de forma activa y reducir el sedentarismo.",
+    "Descanso y sueño suficiente para recuperarse y sentirse con energía.",
+    "Hidratación y alimentación equilibrada como apoyo a una vida activa.",
+    "Higiene personal y del material o del espacio tras la actividad.",
+    "Posturas cómodas y seguras al sentarse, caminar o recoger objetos.",
+    "Decisiones seguras: calzado adecuado, espacio libre de peligros y avisar a un adulto si algo duele.",
+    "Bienestar emocional: disfrutar del movimiento y respetar el ritmo propio y el de los demás."
+  ],
+  "activities": [
+    {
+      "id": "habitos-saludables-diarios",
+      "type": "CLOSED_QUESTION",
+      "title": "Elige el hábito saludable",
+      "instructions": "Lee la pregunta y marca la opción que mejor cuida tu salud.",
+      "content": {
+        "prompt": "¿Qué acción ayuda más a llevar una vida activa y saludable?",
+        "options": [
+          "Jugar al aire libre un rato cada día",
+          "Pasar toda la tarde sentado sin moverse",
+          "Omitir el desayuno para tener más tiempo"
+        ],
+        "correct_option": "Jugar al aire libre un rato cada día",
+        "explanation": "Moverse cada día, aunque sea un rato, ayuda al cuerpo y al bienestar. Sentarse siempre o saltarse comidas no son hábitos saludables."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "seguro-o-poco-seguro",
+      "type": "CLASSIFICATION",
+      "title": "Seguro o poco seguro",
+      "instructions": "Clasifica cada situación según sea segura o poco segura para hacer actividad física.",
+      "content": {
+        "prompt": "Clasifica cada situación como «Seguro» o «Poco seguro».",
+        "categories": [
+          "Seguro",
+          "Poco seguro"
+        ],
+        "items": [
+          {
+            "label": "Beber agua cuando se tiene sed tras jugar",
+            "category": "Seguro"
+          },
+          {
+            "label": "Avisar a un adulto si duele una rodilla",
+            "category": "Seguro"
+          },
+          {
+            "label": "Correr por un pasillo con mochilas en el suelo",
+            "category": "Poco seguro"
+          },
+          {
+            "label": "Jugar en un espacio limpio y sin obstáculos",
+            "category": "Seguro"
+          }
+        ],
+        "explanation": "Es seguro hidratarse, avisar si hay dolor y usar un espacio libre de peligros. Correr entre obstáculos puede causar caídas y no es seguro."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "despues-de-moverse",
+      "type": "CLOSED_QUESTION",
+      "title": "Después de moverse",
+      "instructions": "Elige la mejor decisión al terminar de jugar o hacer actividad física.",
+      "content": {
+        "prompt": "¿Qué es lo más adecuado después de una actividad física en el colegio?",
+        "options": [
+          "Lavarse las manos y descansar un poco",
+          "Seguir corriendo sin parar aunque se esté cansado",
+          "No beber agua para no interrumpir el juego"
+        ],
+        "correct_option": "Lavarse las manos y descansar un poco",
+        "explanation": "Tras moverse, la higiene y un breve descanso ayudan al cuerpo. Forzar el cansancio o evitar beber agua no son decisiones saludables."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Vida activa y saludable",
+  "generation_provider": "GROK_CLI"
+}

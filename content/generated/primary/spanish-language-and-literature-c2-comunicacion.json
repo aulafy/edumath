@@ -1,0 +1,104 @@
+{
+  "id": "org.edumath.primary.spanish-language-and-literature-c2-comunicacion",
+  "title": "Comunicamos con claridad",
+  "summary": "Módulo del ciclo 2 sobre cómo escuchar, hablar y entender mensajes en situaciones cotidianas de la escuela y la vida diaria.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "SPANISH_LANGUAGE_AND_LITERATURE",
+  "competencies": [
+    "Comprender mensajes orales y escritos sencillos en situaciones cotidianas.",
+    "Expresar ideas de forma clara, ordenada y respetuosa.",
+    "Reconocer el propósito de un mensaje: informar, pedir o saludar.",
+    "Participar en diálogos cortos con atención y turnos de palabra."
+  ],
+  "assessment_criteria": [
+    "Identifica la idea principal de un mensaje oral o escrito breve.",
+    "Distingue si un mensaje informa, pide algo o saluda.",
+    "Elige expresiones adecuadas y educadas según la situación.",
+    "Ordena ideas simples para que el mensaje se entienda."
+  ],
+  "basic_knowledge": [
+    "Situaciones de comunicación en la escuela y en casa.",
+    "Elementos básicos del intercambio: emisor, receptor y mensaje.",
+    "Propósitos del mensaje: informar, pedir y saludar.",
+    "Normas sencillas de la conversación: escuchar, respetar el turno y hablar con claridad.",
+    "Vocabulario cotidiano para diálogos cortos."
+  ],
+  "activities": [
+    {
+      "id": "proposito-del-mensaje",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Para qué sirve el mensaje?",
+      "instructions": "Lee el mensaje y elige su propósito.",
+      "content": {
+        "prompt": "Un compañero dice: «¿Me prestas el lápiz, por favor?» ¿Cuál es el propósito de este mensaje?",
+        "options": [
+          "Pedir algo",
+          "Informar una noticia",
+          "Saludar a alguien"
+        ],
+        "correct_option": "Pedir algo",
+        "explanation": "El mensaje pide un lápiz, así que su propósito es pedir algo."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-mensajes",
+      "type": "CLASSIFICATION",
+      "title": "Clasifica los mensajes",
+      "instructions": "Lee cada mensaje y colócalo en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica cada mensaje según su propósito.",
+        "categories": [
+          "Informar",
+          "Pedir",
+          "Saludar"
+        ],
+        "items": [
+          {
+            "label": "Mañana hay excursión al museo.",
+            "category": "Informar"
+          },
+          {
+            "label": "¿Puedes cerrar la ventana?",
+            "category": "Pedir"
+          },
+          {
+            "label": "¡Buenos días, clase!",
+            "category": "Saludar"
+          },
+          {
+            "label": "Hoy toca educación física.",
+            "category": "Informar"
+          }
+        ],
+        "explanation": "Informar da datos, pedir solicita algo y saludar inicia el contacto de forma educada."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "buen-dialogo",
+      "type": "CLOSED_QUESTION",
+      "title": "Un buen diálogo",
+      "instructions": "Elige la mejor forma de hablar en clase.",
+      "content": {
+        "prompt": "Quieres hablar en asamblea. ¿Qué es lo más adecuado?",
+        "options": [
+          "Esperar tu turno y hablar con claridad",
+          "Interrumpir y gritar tu idea",
+          "Hablar sin mirar a nadie"
+        ],
+        "correct_option": "Esperar tu turno y hablar con claridad",
+        "explanation": "En un buen diálogo se respeta el turno y se habla con claridad para que todos entiendan."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Comunicación",
+  "generation_provider": "GROK_CLI"
+}

@@ -1,0 +1,102 @@
+{
+  "id": "org.edumath.primary.foreign-language-english-c2-plurilinguismo",
+  "title": "Plurilingüismo: mi lengua y el inglés",
+  "summary": "El alumnado observa cómo se relacionan el español y el inglés, valora la diversidad de lenguas y usa lo que ya sabe de una lengua para entender mejor la otra.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "FOREIGN_LANGUAGE_ENGLISH",
+  "competencies": [
+    "Reconocer que existen muchas lenguas y que todas tienen valor.",
+    "Comparar palabras y sonidos del español y del inglés para encontrar parecidos y diferencias.",
+    "Usar lo que se sabe de la lengua propia para comprender mejor mensajes sencillos en inglés.",
+    "Mostrar respeto e interés por las personas que hablan distintas lenguas."
+  ],
+  "assessment_criteria": [
+    "Identifica de forma sencilla que el español y el inglés son lenguas distintas y que pueden compartir palabras parecidas.",
+    "Relaciona palabras o expresiones cercanas en español e inglés en contextos muy familiares.",
+    "Explica, con ayuda, un parecido o una diferencia básica entre su lengua y el inglés.",
+    "Participa con respeto en actividades sobre la diversidad lingüística del aula y del entorno."
+  ],
+  "basic_knowledge": [
+    "Diversidad de lenguas en el aula, la familia y el entorno.",
+    "Palabras parecidas en español e inglés (cognados sencillos) y falsos parecidos muy evidentes.",
+    "Transferencia positiva: usar conocimientos de una lengua para comprender la otra.",
+    "Actitudes de respeto, curiosidad y valoración del plurilingüismo."
+  ],
+  "activities": [
+    {
+      "id": "idiomas-del-mundo",
+      "type": "CLOSED_QUESTION",
+      "title": "Muchas lenguas",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "¿Es verdad que en el mundo se hablan muchas lenguas diferentes?",
+        "options": [
+          "Sí, se hablan muchas lenguas.",
+          "No, solo se habla inglés.",
+          "No, solo se habla español."
+        ],
+        "correct_option": "Sí, se hablan muchas lenguas.",
+        "explanation": "En el mundo hay muchas lenguas. El español y el inglés son dos de ellas, y todas merecen respeto."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "palabras-parecidas",
+      "type": "CLASSIFICATION",
+      "title": "¿Se parecen o no?",
+      "instructions": "Clasifica cada par de palabras según si se parecen en español e inglés o no.",
+      "content": {
+        "prompt": "Clasifica estos pares: ¿las palabras se parecen en las dos lenguas o no se parecen?",
+        "categories": [
+          "Se parecen",
+          "No se parecen"
+        ],
+        "items": [
+          {
+            "label": "animal / animal",
+            "category": "Se parecen"
+          },
+          {
+            "label": "familia / family",
+            "category": "Se parecen"
+          },
+          {
+            "label": "mesa / table",
+            "category": "No se parecen"
+          },
+          {
+            "label": "perro / dog",
+            "category": "No se parecen"
+          }
+        ],
+        "explanation": "Algunas palabras se parecen (animal, family) y nos ayudan a entender el inglés. Otras son muy distintas (table, dog)."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "usar-lo-que-se",
+      "type": "CLOSED_QUESTION",
+      "title": "Usar lo que ya sé",
+      "instructions": "Elige la mejor idea para entender una palabra nueva en inglés.",
+      "content": {
+        "prompt": "Ves la palabra «hotel» en inglés. ¿Qué puedes hacer para entenderla mejor?",
+        "options": [
+          "Pensar si se parece a una palabra en español.",
+          "Olvidar el español y no usarlo nunca.",
+          "Decir que es imposible entender nada."
+        ],
+        "correct_option": "Pensar si se parece a una palabra en español.",
+        "explanation": "Si una palabra en inglés se parece a una en español, como «hotel», podemos usarla para comprender más fácil."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Plurilingüismo",
+  "generation_provider": "GROK_CLI"
+}

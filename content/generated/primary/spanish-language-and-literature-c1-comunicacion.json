@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.spanish-language-and-literature-c1-comunicacion",
+  "title": "Comunicación: escuchar, hablar y entender",
+  "summary": "Módulo del primer ciclo de Primaria para practicar la escucha atenta, el uso de saludos y turnos de palabra, y la distinción entre mensajes orales y escritos en situaciones cercanas al aula.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "SPANISH_LANGUAGE_AND_LITERATURE",
+  "competencies": [
+    "Escuchar con atención mensajes orales breves y sencillos del entorno escolar.",
+    "Expresarse de forma clara con saludos, despedidas y frases cortas.",
+    "Reconocer la utilidad de la comunicación oral y escrita en la vida diaria.",
+    "Participar en conversaciones respetando el turno de palabra."
+  ],
+  "assessment_criteria": [
+    "Comprende el sentido general de mensajes orales cortos y familiares.",
+    "Usa fórmulas de cortesía adecuadas en situaciones cotidianas.",
+    "Distingue si un mensaje se transmite de forma oral o escrita.",
+    "Participa en diálogos sencillos respetando las normas de conversación."
+  ],
+  "basic_knowledge": [
+    "Situaciones de comunicación en el aula y en la vida diaria.",
+    "Elementos básicos de la comunicación: quien habla, quien escucha y el mensaje.",
+    "Saludos, despedidas y fórmulas de cortesía.",
+    "Turno de palabra y escucha atenta.",
+    "Mensajes orales y mensajes escritos."
+  ],
+  "activities": [
+    {
+      "id": "saludo-adecuado",
+      "type": "CLOSED_QUESTION",
+      "title": "El saludo correcto",
+      "instructions": "Lee la situación y elige la mejor respuesta.",
+      "content": {
+        "prompt": "Llegas al colegio por la mañana y ves a tu maestra. ¿Qué es lo más adecuado decir?",
+        "options": [
+          "¡Buenos días!",
+          "¡Adiós!",
+          "¡Hasta mañana!"
+        ],
+        "correct_option": "¡Buenos días!",
+        "explanation": "Por la mañana, al llegar, usamos un saludo como «Buenos días»."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "oral-o-escrito",
+      "type": "CLASSIFICATION",
+      "title": "¿Oral o escrito?",
+      "instructions": "Clasifica cada mensaje según se diga con la voz o se lea con los ojos.",
+      "content": {
+        "prompt": "Clasifica cada ejemplo en oral o escrito.",
+        "categories": [
+          "Oral",
+          "Escrito"
+        ],
+        "items": [
+          {
+            "label": "Contar un cuento en voz alta",
+            "category": "Oral"
+          },
+          {
+            "label": "Leer un cartel de la clase",
+            "category": "Escrito"
+          },
+          {
+            "label": "Hablar con un compañero",
+            "category": "Oral"
+          },
+          {
+            "label": "Escribir una nota en el cuaderno",
+            "category": "Escrito"
+          }
+        ],
+        "explanation": "Lo oral se dice y se escucha; lo escrito se lee y se escribe."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "turno-de-palabra",
+      "type": "CLOSED_QUESTION",
+      "title": "Respetar el turno",
+      "instructions": "Elige la conducta más correcta en una conversación.",
+      "content": {
+        "prompt": "En clase, un compañero está hablando. ¿Qué debes hacer?",
+        "options": [
+          "Escuchar y esperar mi turno",
+          "Gritar para que me oigan",
+          "Interrumpir sin parar"
+        ],
+        "correct_option": "Escuchar y esperar mi turno",
+        "explanation": "En una conversación escuchamos a quien habla y esperamos nuestro turno."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Comunicación",
+  "generation_provider": "GROK_CLI"
+}

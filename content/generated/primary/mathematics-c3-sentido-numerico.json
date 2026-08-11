@@ -1,0 +1,105 @@
+{
+  "id": "org.edumath.primary.mathematics-c3-sentido-numerico",
+  "title": "Sentido numérico en el tercer ciclo",
+  "summary": "Módulo para comprender, comparar y usar números naturales, fracciones, decimales y porcentajes en situaciones cercanas, con estimación y cálculo razonado.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Interpretar y representar números naturales, fracciones, decimales y porcentajes en contextos cotidianos.",
+    "Comparar y ordenar cantidades usando criterios claros y justificados.",
+    "Elegir y aplicar estrategias de cálculo y estimación para resolver problemas numéricos sencillos.",
+    "Explicar con palabras propias el significado de una cantidad y el resultado de una operación."
+  ],
+  "assessment_criteria": [
+    "Identifica y usa números naturales, fracciones, decimales y porcentajes en situaciones de la vida diaria.",
+    "Compara y ordena números de distintas formas y justifica la relación entre ellos.",
+    "Estima resultados y comprueba si una respuesta es razonable.",
+    "Resuelve problemas numéricos eligiendo la operación o estrategia adecuada.",
+    "Comunica de forma clara el proceso y el sentido del resultado."
+  ],
+  "basic_knowledge": [
+    "Lectura, escritura y valor posicional de números naturales grandes.",
+    "Fracciones y decimales como partes de la unidad y de una cantidad.",
+    "Equivalencias entre fracciones, decimales y porcentajes sencillos.",
+    "Comparación y ordenación de números.",
+    "Estimación, redondeo y cálculo mental con sentido.",
+    "Uso de números en medidas, precios, datos y problemas cercanos."
+  ],
+  "activities": [
+    {
+      "id": "comparar-decimales-precios",
+      "type": "CLOSED_QUESTION",
+      "title": "Comparar precios con decimales",
+      "instructions": "Lee la pregunta y elige la opción correcta.",
+      "content": {
+        "prompt": "En la tienda, un cuaderno cuesta 1,25 €, una goma 1,5 € y un lápiz 1,05 €. ¿Cuál es el más caro?",
+        "options": [
+          "El cuaderno (1,25 €)",
+          "La goma (1,5 €)",
+          "El lápiz (1,05 €)"
+        ],
+        "correct_option": "La goma (1,5 €)",
+        "explanation": "1,5 es lo mismo que 1,50. Como 1,50 es mayor que 1,25 y 1,05, la goma es la más cara."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-fracciones-decimales",
+      "type": "CLASSIFICATION",
+      "title": "Fracciones y decimales equivalentes",
+      "instructions": "Clasifica cada cantidad en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica cada expresión según represente un medio o tres cuartos.",
+        "categories": [
+          "Equivale a 1/2",
+          "Equivale a 3/4"
+        ],
+        "items": [
+          {
+            "label": "0,5",
+            "category": "Equivale a 1/2"
+          },
+          {
+            "label": "50%",
+            "category": "Equivale a 1/2"
+          },
+          {
+            "label": "0,75",
+            "category": "Equivale a 3/4"
+          },
+          {
+            "label": "75%",
+            "category": "Equivale a 3/4"
+          }
+        ],
+        "explanation": "1/2 es la mitad: 0,5 y 50%. 3/4 son tres partes de cuatro: 0,75 y 75%."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "estimar-suma-razonable",
+      "type": "CLOSED_QUESTION",
+      "title": "Elegir una estimación razonable",
+      "instructions": "Piensa en un cálculo aproximado y elige la mejor respuesta.",
+      "content": {
+        "prompt": "Quieres sumar 198 + 203 + 199. ¿Qué estimación es más razonable?",
+        "options": [
+          "Unos 400",
+          "Unos 600",
+          "Unos 900"
+        ],
+        "correct_option": "Unos 600",
+        "explanation": "Cada número es cercano a 200. 200 + 200 + 200 = 600, así que el resultado ronda los 600."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido numérico",
+  "generation_provider": "GROK_CLI"
+}

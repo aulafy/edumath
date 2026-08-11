@@ -1,0 +1,102 @@
+{
+  "id": "org.edumath.primary.mathematics-c1-sentido-de-la-medida",
+  "title": "Medimos y comparamos",
+  "summary": "Módulo de 1.º y 2.º de Primaria para reconocer magnitudes, comparar longitudes, masas y capacidades, y usar unidades no convencionales y sencillas en situaciones cotidianas.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Reconocer y comparar magnitudes de la vida diaria: longitud, masa, capacidad y tiempo.",
+    "Usar unidades no convencionales y unidades simples para medir y estimar.",
+    "Explicar de forma oral por qué un objeto es más largo, más pesado o cabe más que otro."
+  ],
+  "assessment_criteria": [
+    "Identifica qué se puede medir en objetos y situaciones cercanas.",
+    "Compara longitudes, masas o capacidades usando lenguaje de mayor, menor o igual.",
+    "Elige una unidad adecuada y realiza mediciones sencillas con material manipulativo.",
+    "Estima de forma razonable el tamaño, el peso o la capacidad de objetos cotidianos."
+  ],
+  "basic_knowledge": [
+    "Atributos medibles: largo, alto, pesado, cabida y duración.",
+    "Comparación directa e indirecta de magnitudes.",
+    "Unidades no convencionales (pasos, palmos, vasos) y unidades sencillas del entorno.",
+    "Medición y estimación en contextos escolares y de la vida diaria.",
+    "Relación entre la unidad elegida y el resultado de la medida."
+  ],
+  "activities": [
+    {
+      "id": "comparar-longitudes-lapices",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Cuál es más largo?",
+      "instructions": "Mira las tres opciones y elige la respuesta correcta.",
+      "content": {
+        "prompt": "Ana tiene un lápiz corto, un lápiz mediano y un lápiz largo. ¿Cuál es el más largo?",
+        "options": [
+          "El lápiz corto",
+          "El lápiz mediano",
+          "El lápiz largo"
+        ],
+        "correct_option": "El lápiz largo",
+        "explanation": "El lápiz largo mide más que los otros dos; por eso es el más largo."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-que-se-mide",
+      "type": "CLASSIFICATION",
+      "title": "¿Qué medimos?",
+      "instructions": "Clasifica cada objeto según lo que se mide de él: longitud o capacidad.",
+      "content": {
+        "prompt": "Coloca cada objeto en la categoría correcta.",
+        "categories": [
+          "Longitud",
+          "Capacidad"
+        ],
+        "items": [
+          {
+            "label": "Una cuerda",
+            "category": "Longitud"
+          },
+          {
+            "label": "Una botella de agua",
+            "category": "Capacidad"
+          },
+          {
+            "label": "Una regla",
+            "category": "Longitud"
+          },
+          {
+            "label": "Un vaso de zumo",
+            "category": "Capacidad"
+          }
+        ],
+        "explanation": "La longitud mide lo largo o lo alto. La capacidad mide cuánto cabe dentro de un recipiente."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "elegir-unidad-mesa",
+      "type": "CLOSED_QUESTION",
+      "title": "Elegir cómo medir",
+      "instructions": "Piensa qué conviene usar para medir y elige una opción.",
+      "content": {
+        "prompt": "Queremos saber aproximadamente cuánto mide el largo de la mesa de clase. ¿Qué es lo más adecuado?",
+        "options": [
+          "Contar los pasos de un lado a otro de la mesa",
+          "Contar los minutos del recreo",
+          "Contar cuántos vasos de agua caben en una jarra"
+        ],
+        "correct_option": "Contar los pasos de un lado a otro de la mesa",
+        "explanation": "Los pasos sirven para medir longitudes. Los minutos miden tiempo y los vasos miden capacidad."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido de la medida",
+  "generation_provider": "GROK_CLI"
+}

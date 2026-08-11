@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.physical-education-c1-manifestaciones-de-la-cultura-motriz",
+  "title": "Juegos y bailes de nuestra cultura",
+  "summary": "Módulo para 1.º y 2.º de Primaria sobre manifestaciones de la cultura motriz: juegos tradicionales, bailes sencillos y formas de moverse de distintas culturas, con respeto y seguridad.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Reconocer juegos y bailes como parte de la cultura motriz.",
+    "Identificar normas básicas de respeto y seguridad en juegos y danzas.",
+    "Valorar la diversidad de manifestaciones motrices cercanas al alumnado."
+  ],
+  "assessment_criteria": [
+    "Identifica juegos tradicionales y bailes sencillos de su entorno.",
+    "Explica con palabras simples por qué hay que respetar turnos y normas.",
+    "Relaciona distintas manifestaciones motrices con la cultura y el juego compartido."
+  ],
+  "basic_knowledge": [
+    "Juegos tradicionales y populares del entorno cercano.",
+    "Bailes y danzas sencillas como expresión cultural.",
+    "Normas de respeto, cooperación y seguridad en actividades motrices culturales.",
+    "Diversidad de formas de jugar y bailar en distintas culturas."
+  ],
+  "activities": [
+    {
+      "id": "juegos-tradicionales-que-es",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué es un juego tradicional?",
+      "instructions": "Lee con atención y elige la respuesta correcta.",
+      "content": {
+        "prompt": "Un juego tradicional es un juego que…",
+        "options": [
+          "Se ha jugado durante mucho tiempo en un lugar y se enseña de unas personas a otras.",
+          "Solo se puede jugar con un ordenador.",
+          "Es solo para adultos y no se puede compartir."
+        ],
+        "correct_option": "Se ha jugado durante mucho tiempo en un lugar y se enseña de unas personas a otras.",
+        "explanation": "Los juegos tradicionales forman parte de la cultura motriz: se aprenden en la familia, en el patio o en la escuela y se transmiten de generación en generación."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "respeto-en-el-baile",
+      "type": "CLOSED_QUESTION",
+      "title": "Respeto en el baile",
+      "instructions": "Elige la opción más segura y respetuosa.",
+      "content": {
+        "prompt": "En un baile de clase, ¿qué debes hacer si no conoces bien los pasos?",
+        "options": [
+          "Observar, pedir ayuda con amabilidad y moverte con cuidado sin empujar.",
+          "Empujar a quien va delante para ir más rápido.",
+          "Correr por el aula para llegar al centro antes que nadie."
+        ],
+        "correct_option": "Observar, pedir ayuda con amabilidad y moverte con cuidado sin empujar.",
+        "explanation": "En las danzas y bailes es importante respetar el espacio de los demás, ir con calma y pedir ayuda si hace falta."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-juegos-y-bailes",
+      "type": "CLASSIFICATION",
+      "title": "¿Juego o baile?",
+      "instructions": "Clasifica cada ejemplo en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica cada manifestación de la cultura motriz.",
+        "categories": [
+          "Juego tradicional",
+          "Baile o danza"
+        ],
+        "items": [
+          {
+            "label": "La rayuela",
+            "category": "Juego tradicional"
+          },
+          {
+            "label": "El corro de la patata",
+            "category": "Juego tradicional"
+          },
+          {
+            "label": "Una sardana sencilla en el patio",
+            "category": "Baile o danza"
+          },
+          {
+            "label": "Un baile popular con pasos lentos y en grupo",
+            "category": "Baile o danza"
+          }
+        ],
+        "explanation": "Algunas manifestaciones son juegos tradicionales y otras son bailes o danzas. Las dos forman parte de la cultura motriz y se practican con respeto y seguridad."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Manifestaciones de la cultura motriz",
+  "generation_provider": "GROK_CLI"
+}

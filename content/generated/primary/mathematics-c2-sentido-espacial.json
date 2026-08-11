@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.mathematics-c2-sentido-espacial",
+  "title": "Figuras y posición en el plano",
+  "summary": "Módulo del segundo ciclo de Primaria sobre sentido espacial: reconocer figuras planas, describir posiciones y clasificar formas según sus propiedades.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Reconocer y describir figuras planas sencillas y sus elementos.",
+    "Usar el lenguaje de la posición y la orientación en el plano.",
+    "Clasificar formas geométricas según criterios claros y observables."
+  ],
+  "assessment_criteria": [
+    "Identifica triángulos, cuadrados, rectángulos y círculos en dibujos y objetos del entorno.",
+    "Describe la posición de un objeto respecto a otro con palabras como encima, debajo, a la izquierda o a la derecha.",
+    "Agrupa figuras según el número de lados o si tienen lados rectos o curvos."
+  ],
+  "basic_knowledge": [
+    "Figuras planas: triángulo, cuadrado, rectángulo y círculo.",
+    "Elementos básicos: lados y vértices.",
+    "Posición relativa: encima, debajo, izquierda, derecha, dentro y fuera.",
+    "Clasificación de figuras por número de lados y forma de los lados."
+  ],
+  "activities": [
+    {
+      "id": "figuras-planas-basicas",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué figura es?",
+      "instructions": "Lee la pregunta y elige la opción correcta.",
+      "content": {
+        "prompt": "Una figura tiene 3 lados rectos y 3 vértices. ¿Qué figura es?",
+        "options": [
+          "Triángulo",
+          "Cuadrado",
+          "Círculo"
+        ],
+        "correct_option": "Triángulo",
+        "explanation": "El triángulo es la figura plana con 3 lados y 3 vértices."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "posicion-relativa-plano",
+      "type": "CLOSED_QUESTION",
+      "title": "Dónde está el lápiz",
+      "instructions": "Mira la situación y elige la respuesta correcta.",
+      "content": {
+        "prompt": "El lápiz está a la derecha del cuaderno y el borrador está encima del cuaderno. ¿Dónde está el lápiz?",
+        "options": [
+          "A la derecha del cuaderno",
+          "Debajo del cuaderno",
+          "Dentro del cuaderno"
+        ],
+        "correct_option": "A la derecha del cuaderno",
+        "explanation": "La posición del lápiz se describe respecto al cuaderno: está a su derecha."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-figuras-lados",
+      "type": "CLASSIFICATION",
+      "title": "Clasifica las figuras",
+      "instructions": "Coloca cada figura en la categoría correcta según el número de lados.",
+      "content": {
+        "prompt": "Clasifica cada figura según tenga 3 lados o 4 lados.",
+        "categories": [
+          "3 lados",
+          "4 lados"
+        ],
+        "items": [
+          {
+            "label": "Triángulo equilátero",
+            "category": "3 lados"
+          },
+          {
+            "label": "Cuadrado",
+            "category": "4 lados"
+          },
+          {
+            "label": "Rectángulo",
+            "category": "4 lados"
+          },
+          {
+            "label": "Triángulo rectángulo",
+            "category": "3 lados"
+          }
+        ],
+        "explanation": "Las figuras con 3 lados son triángulos. Las que tienen 4 lados, como el cuadrado y el rectángulo, van en la otra categoría."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido espacial",
+  "generation_provider": "GROK_CLI"
+}

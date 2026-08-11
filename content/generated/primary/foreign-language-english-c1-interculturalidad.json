@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.foreign-language-english-c1-interculturalidad",
+  "title": "Culturas en inglés: saludos y costumbres",
+  "summary": "El alumnado descubre saludos, fiestas y objetos cotidianos de países de habla inglesa y los compara con los suyos, con respeto y curiosidad.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "FOREIGN_LANGUAGE_ENGLISH",
+  "competencies": [
+    "Mostrar interés y respeto por otras culturas al usar el inglés.",
+    "Reconocer saludos, fiestas y objetos sencillos de países de habla inglesa.",
+    "Comparar de forma simple costumbres propias y de otras culturas."
+  ],
+  "assessment_criteria": [
+    "Identifica saludos y expresiones básicas de cortesía de países de habla inglesa.",
+    "Relaciona fiestas u objetos cotidianos con contextos culturales sencillos.",
+    "Muestra actitud de respeto y curiosidad hacia la diversidad cultural."
+  ],
+  "basic_knowledge": [
+    "Saludos y fórmulas de cortesía en inglés (hello, good morning, thank you).",
+    "Fiestas y costumbres sencillas de países de habla inglesa (por ejemplo, Halloween, Christmas).",
+    "Objetos y símbolos culturales cotidianos (bandera, comida típica, juguete).",
+    "Actitudes de respeto, curiosidad y apertura hacia otras culturas."
+  ],
+  "activities": [
+    {
+      "id": "saludo-hello-hola",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Cómo se saluda en inglés?",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "Un niño de Inglaterra te ve y te dice «Hello». ¿Qué está haciendo?",
+        "options": [
+          "Te está saludando",
+          "Te está pidiendo comida",
+          "Te está diciendo adiós"
+        ],
+        "correct_option": "Te está saludando",
+        "explanation": "«Hello» es un saludo en inglés. Es como decir «Hola»."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "fiestas-cultura-clasificar",
+      "type": "CLASSIFICATION",
+      "title": "Fiestas de aquí y de allí",
+      "instructions": "Clasifica cada fiesta en su grupo.",
+      "content": {
+        "prompt": "Pon cada fiesta en el grupo correcto.",
+        "categories": [
+          "Fiesta de países de habla inglesa",
+          "Fiesta de España"
+        ],
+        "items": [
+          {
+            "label": "Halloween",
+            "category": "Fiesta de países de habla inglesa"
+          },
+          {
+            "label": "Christmas",
+            "category": "Fiesta de países de habla inglesa"
+          },
+          {
+            "label": "Reyes Magos",
+            "category": "Fiesta de España"
+          },
+          {
+            "label": "Semana Santa",
+            "category": "Fiesta de España"
+          }
+        ],
+        "explanation": "Halloween y Christmas son fiestas muy conocidas en países de habla inglesa. Reyes Magos y Semana Santa son fiestas importantes en España."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "respeto-otras-culturas",
+      "type": "CLOSED_QUESTION",
+      "title": "Respetamos otras culturas",
+      "instructions": "Elige la mejor forma de actuar.",
+      "content": {
+        "prompt": "En clase hay un dibujo de una bandera de otro país. ¿Qué es mejor hacer?",
+        "options": [
+          "Mirarlo con respeto y preguntar con educación",
+          "Romper el dibujo",
+          "Reírse de la bandera"
+        ],
+        "correct_option": "Mirarlo con respeto y preguntar con educación",
+        "explanation": "Respetamos las banderas y costumbres de otros países. Podemos preguntar con educación para aprender."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Interculturalidad",
+  "generation_provider": "GROK_CLI"
+}

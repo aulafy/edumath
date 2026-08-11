@@ -1,0 +1,101 @@
+{
+  "id": "org.edumath.primary.physical-education-c3-vida-activa-y-saludable",
+  "title": "Vida activa y saludable",
+  "summary": "Reconoces hábitos diarios que cuidan tu cuerpo: moverte con regularidad, descansar, hidratarte y elegir juegos seguros.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Adoptar un estilo de vida activo reconociendo beneficios del movimiento regular para la salud.",
+    "Tomar decisiones seguras en el juego y la actividad física diaria.",
+    "Valorar el descanso, la hidratación y la higiene como parte de una vida saludable."
+  ],
+  "assessment_criteria": [
+    "Identifica hábitos que favorecen una vida activa y saludable.",
+    "Diferencia conductas seguras e inseguras en situaciones de juego o movimiento.",
+    "Explica, con lenguaje sencillo, por qué el descanso y la hidratación son importantes."
+  ],
+  "basic_knowledge": [
+    "Beneficios de moverse a menudo en la vida diaria.",
+    "Higiene personal después del ejercicio o el juego.",
+    "Importancia del descanso y del sueño.",
+    "Hidratación y hábitos saludables básicos.",
+    "Decisiones seguras para evitar riesgos innecesarios al jugar."
+  ],
+  "activities": [
+    {
+      "id": "habitos-vida-activa",
+      "type": "CLOSED_QUESTION",
+      "title": "Un hábito de vida activa",
+      "instructions": "Lee la pregunta y elige la opción más adecuada.",
+      "content": {
+        "prompt": "¿Qué hábito ayuda a llevar una vida más activa y saludable?",
+        "options": [
+          "Jugar o caminar un rato casi todos los días",
+          "Pasar todo el día sentado sin moverse",
+          "Omitir el descanso para hacer más tareas"
+        ],
+        "correct_option": "Jugar o caminar un rato casi todos los días",
+        "explanation": "Moverse con regularidad, aunque sea con juegos o caminatas, ayuda a cuidar el cuerpo y sentirse mejor."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "seguro-o-arriesgado",
+      "type": "CLASSIFICATION",
+      "title": "Seguro o arriesgado",
+      "instructions": "Clasifica cada situación según si es una decisión segura o arriesgada al jugar.",
+      "content": {
+        "prompt": "Clasifica cada situación en «Decisión segura» o «Decisión arriesgada».",
+        "categories": [
+          "Decisión segura",
+          "Decisión arriesgada"
+        ],
+        "items": [
+          {
+            "label": "Avisar a un adulto si te sientes mareado al jugar",
+            "category": "Decisión segura"
+          },
+          {
+            "label": "Beber agua cuando tienes sed durante el recreo",
+            "category": "Decisión segura"
+          },
+          {
+            "label": "Intentar un salto difícil sin supervisión",
+            "category": "Decisión arriesgada"
+          },
+          {
+            "label": "Empujar a alguien para ganar un juego",
+            "category": "Decisión arriesgada"
+          }
+        ],
+        "explanation": "Las decisiones seguras cuidan tu bienestar y el de los demás; las arriesgadas pueden causar daños o conflictos."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "descanso-e-hidratacion",
+      "type": "CLOSED_QUESTION",
+      "title": "Descanso e hidratación",
+      "instructions": "Elige la respuesta correcta.",
+      "content": {
+        "prompt": "Después de un rato de juego activo, ¿qué es lo más adecuado?",
+        "options": [
+          "Beber agua y descansar un poco si lo necesitas",
+          "Seguir sin parar aunque estés muy cansado",
+          "Evitar beber agua para no interrumpir el juego"
+        ],
+        "correct_option": "Beber agua y descansar un poco si lo necesitas",
+        "explanation": "La hidratación y el descanso ayudan a recuperarte y a cuidar tu salud después de moverte."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Vida activa y saludable",
+  "generation_provider": "GROK_CLI"
+}

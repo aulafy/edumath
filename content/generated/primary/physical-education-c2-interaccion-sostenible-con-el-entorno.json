@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.physical-education-c2-interaccion-sostenible-con-el-entorno",
+  "title": "Cuidamos el entorno al movernos",
+  "summary": "Módulo del segundo ciclo de Primaria sobre cómo practicar actividad física al aire libre con respeto al medio, uso responsable de espacios y desplazamientos activos seguros.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Participar en actividades motrices en el entorno natural y urbano con respeto y cuidado.",
+    "Tomar decisiones sencillas que favorezcan un uso sostenible y seguro de los espacios.",
+    "Reconocer formas de moverse de manera activa y respetuosa con el entorno y con las demás personas."
+  ],
+  "assessment_criteria": [
+    "Identifica acciones de cuidado del entorno durante la actividad física al aire libre.",
+    "Clasifica conductas responsables e irresponsables en parques, patios y caminos.",
+    "Explica con lenguaje sencillo por qué conviene cuidar el espacio compartido al jugar y desplazarse."
+  ],
+  "basic_knowledge": [
+    "Normas básicas de respeto al entorno natural y urbano en la práctica motriz.",
+    "Uso responsable de espacios comunes: patio, parque y caminos cercanos.",
+    "Desplazamientos activos seguros: caminar y usar la bici con precaución y respeto.",
+    "Cuidado de materiales y del lugar de juego sin dañar plantas, animales ni instalaciones."
+  ],
+  "activities": [
+    {
+      "id": "cuidar-parque-al-jugar",
+      "type": "CLOSED_QUESTION",
+      "title": "Jugar sin dañar el parque",
+      "instructions": "Lee la pregunta y elige la mejor respuesta.",
+      "content": {
+        "prompt": "Estás jugando en el parque. ¿Qué haces para cuidar el entorno?",
+        "options": [
+          "Dejas la basura en una papelera",
+          "Rompes ramas para hacer un juego",
+          "Pisas las flores del parterre"
+        ],
+        "correct_option": "Dejas la basura en una papelera",
+        "explanation": "Recoger y tirar la basura en su sitio ayuda a mantener limpio el parque para todas las personas y seres vivos."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "acciones-entorno-responsable",
+      "type": "CLASSIFICATION",
+      "title": "¿Cuida o no cuida el entorno?",
+      "instructions": "Clasifica cada acción según si cuida o no el entorno.",
+      "content": {
+        "prompt": "Clasifica estas acciones de actividad al aire libre.",
+        "categories": [
+          "Cuida el entorno",
+          "No cuida el entorno"
+        ],
+        "items": [
+          {
+            "label": "Usar el camino marcado para no pisar el césped nuevo",
+            "category": "Cuida el entorno"
+          },
+          {
+            "label": "Dejar envases de zumo en el suelo del patio",
+            "category": "No cuida el entorno"
+          },
+          {
+            "label": "Recoger el material al terminar el juego",
+            "category": "Cuida el entorno"
+          },
+          {
+            "label": "Pintar en los bancos o en las paredes del parque",
+            "category": "No cuida el entorno"
+          }
+        ],
+        "explanation": "Cuidar el entorno es usar bien los caminos, recoger el material y no ensuciar ni dañar espacios compartidos."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "desplazamiento-activo-seguro",
+      "type": "CLOSED_QUESTION",
+      "title": "Ir al cole de forma activa y segura",
+      "instructions": "Elige la opción más segura y respetuosa.",
+      "content": {
+        "prompt": "Vas andando al colegio con un adulto. ¿Qué es lo más seguro y respetuoso?",
+        "options": [
+          "Cruzar por el paso de peatones mirando a ambos lados",
+          "Cruzar en medio de la calle porque hay prisa",
+          "Correr entre los coches aparcados sin mirar"
+        ],
+        "correct_option": "Cruzar por el paso de peatones mirando a ambos lados",
+        "explanation": "Caminar es un desplazamiento activo saludable. Cruzar por el paso de peatones y mirar a ambos lados protege a todas las personas."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Interacción sostenible con el entorno",
+  "generation_provider": "GROK_CLI"
+}

@@ -1,0 +1,104 @@
+{
+  "id": "org.edumath.primary.spanish-language-and-literature-c3-comunicacion",
+  "title": "Comunicación oral y escrita",
+  "summary": "Módulo de ciclo 3 para comprender mensajes, reconocer la intención comunicativa y clasificar textos y situaciones de comunicación de la vida escolar y cotidiana.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "SPANISH_LANGUAGE_AND_LITERATURE",
+  "competencies": [
+    "Comprender mensajes orales y escritos de la vida cotidiana y escolar.",
+    "Reconocer la intención comunicativa de un texto o de una situación.",
+    "Distinguir tipos de textos y usos adecuados del lenguaje.",
+    "Participar en intercambios comunicativos con claridad y respeto."
+  ],
+  "assessment_criteria": [
+    "Identifica la idea principal y la intención de mensajes orales y escritos sencillos.",
+    "Clasifica textos y situaciones según su finalidad comunicativa.",
+    "Elige el tipo de mensaje o el registro más adecuado para un propósito dado.",
+    "Explica con sus palabras por qué un mensaje es informativo, persuasivo o expresivo."
+  ],
+  "basic_knowledge": [
+    "Elementos de la comunicación: emisor, receptor, mensaje y canal.",
+    "Intenciones comunicativas: informar, pedir, expresar opiniones o emociones, convencer.",
+    "Tipos de textos habituales: narrativo, instructivo, informativo y argumentativo sencillo.",
+    "Situaciones de comunicación oral y escrita en el aula y fuera de ella.",
+    "Cortesía y claridad en el intercambio de mensajes."
+  ],
+  "activities": [
+    {
+      "id": "intencion-del-mensaje",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué pretende el mensaje?",
+      "instructions": "Lee el mensaje y elige la intención comunicativa correcta.",
+      "content": {
+        "prompt": "Un cartel en el pasillo del colegio dice: «Mañana a las 10 h hay reunión de familias en el salón de actos». ¿Qué pretende este mensaje?",
+        "options": [
+          "Informar de un hecho",
+          "Contar una historia inventada",
+          "Pedir una disculpa"
+        ],
+        "correct_option": "Informar de un hecho",
+        "explanation": "El cartel comunica un dato concreto (día, hora y lugar). Su finalidad es informar, no narrar ni pedir perdón."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-textos-por-finalidad",
+      "type": "CLASSIFICATION",
+      "title": "Clasifica textos por su finalidad",
+      "instructions": "Arrastra cada texto a la categoría que mejor describe su finalidad.",
+      "content": {
+        "prompt": "Clasifica cada ejemplo según lo que busca conseguir.",
+        "categories": [
+          "Informar",
+          "Instruir",
+          "Convencer"
+        ],
+        "items": [
+          {
+            "label": "«La biblioteca abre de lunes a viernes de 9 a 14 h.»",
+            "category": "Informar"
+          },
+          {
+            "label": "«Primero lava las manos. Luego corta la fruta en trozos.»",
+            "category": "Instruir"
+          },
+          {
+            "label": "«Ven a la feria del libro: hay descuentos y talleres gratis.»",
+            "category": "Convencer"
+          },
+          {
+            "label": "«El tren de las 8:15 llegará con 10 minutos de retraso.»",
+            "category": "Informar"
+          }
+        ],
+        "explanation": "Los textos informativos dan datos; los instructivos indican pasos; los que intentan convencer buscan influir en la decisión del receptor."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "emisor-receptor-mensaje",
+      "type": "CLOSED_QUESTION",
+      "title": "Elementos de la comunicación",
+      "instructions": "Lee la situación y elige la respuesta correcta.",
+      "content": {
+        "prompt": "Ana escribe un correo a su maestra para explicar por qué faltó a clase. En esta situación, ¿quién es el receptor del mensaje?",
+        "options": [
+          "La maestra",
+          "Ana",
+          "El correo electrónico"
+        ],
+        "correct_option": "La maestra",
+        "explanation": "Ana es la emisora porque escribe el mensaje; la maestra es la receptora porque lo recibe; el correo es el canal, no una persona."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Comunicación",
+  "generation_provider": "GROK_CLI"
+}

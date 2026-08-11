@@ -93,6 +93,7 @@ export type EducationalModule = {
   imported_at: string;
   review_status: "AI_DRAFT" | "COMMUNITY_DRAFT" | "EDUCATOR_REVIEWED";
   curriculum_strand: string | null;
+  generation_provider: "LM_STUDIO_QWEN" | "GROK_CLI" | null;
 };
 export type ModuleActivity = {
   id: string;

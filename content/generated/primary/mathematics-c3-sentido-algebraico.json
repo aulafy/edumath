@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.mathematics-c3-sentido-algebraico",
+  "title": "Sentido algebraico: patrones, igualdades y relaciones",
+  "summary": "Módulo de Matemáticas para 5.º y 6.º que ayuda a reconocer patrones, usar igualdades y modelar relaciones sencillas con lenguaje algebraico inicial.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Identificar y continuar patrones numéricos y geométricos de forma razonada.",
+    "Comprender y usar el signo igual como equivalencia entre cantidades.",
+    "Representar relaciones sencillas con tablas, expresiones y símbolos.",
+    "Explicar con claridad cómo se resuelve un problema usando propiedades y regularidades."
+  ],
+  "assessment_criteria": [
+    "Reconoce, describe y completa patrones numéricos o geométricos con criterio.",
+    "Utiliza igualdades y desigualdades para comparar y relacionar cantidades.",
+    "Modela situaciones sencillas con expresiones o símbolos y comprueba si son correctas.",
+    "Justifica el resultado de una relación o patrón con un razonamiento breve y claro."
+  ],
+  "basic_knowledge": [
+    "Patrones y regularidades en secuencias numéricas y figuras.",
+    "Igualdad y equivalencia: el signo igual como balance.",
+    "Relaciones entre magnitudes y su representación con tablas o expresiones.",
+    "Propiedades de las operaciones para transformar expresiones de forma equivalente.",
+    "Modelización de situaciones cotidianas con lenguaje algebraico inicial."
+  ],
+  "activities": [
+    {
+      "id": "patron-numerico-cerrado",
+      "type": "CLOSED_QUESTION",
+      "title": "Completa el patrón numérico",
+      "instructions": "Lee la secuencia y elige el número que sigue.",
+      "content": {
+        "prompt": "Observa la secuencia: 4, 8, 12, 16, ___. ¿Qué número va a continuación?",
+        "options": [
+          "18",
+          "20",
+          "24"
+        ],
+        "correct_option": "20",
+        "explanation": "Cada número suma 4 al anterior: 16 + 4 = 20."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "igualdad-o-desigualdad",
+      "type": "CLASSIFICATION",
+      "title": "Igualdad o desigualdad",
+      "instructions": "Clasifica cada expresión según sea una igualdad o una desigualdad.",
+      "content": {
+        "prompt": "Clasifica cada expresión en «Igualdad» o «Desigualdad».",
+        "categories": [
+          "Igualdad",
+          "Desigualdad"
+        ],
+        "items": [
+          {
+            "label": "7 + 5 = 12",
+            "category": "Igualdad"
+          },
+          {
+            "label": "9 − 3 < 8",
+            "category": "Desigualdad"
+          },
+          {
+            "label": "4 × 3 = 6 × 2",
+            "category": "Igualdad"
+          },
+          {
+            "label": "15 > 10 + 2",
+            "category": "Desigualdad"
+          }
+        ],
+        "explanation": "Una igualdad usa «=» y indica el mismo valor a ambos lados. Una desigualdad usa «<» o «>» y compara cantidades distintas."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "expresion-equivalente",
+      "type": "CLOSED_QUESTION",
+      "title": "Expresión equivalente",
+      "instructions": "Elige la expresión que vale lo mismo que la dada.",
+      "content": {
+        "prompt": "¿Cuál de estas expresiones es equivalente a 3 × (4 + 2)?",
+        "options": [
+          "3 × 4 + 2",
+          "3 × 6",
+          "4 + 2 × 3"
+        ],
+        "correct_option": "3 × 6",
+        "explanation": "Primero se resuelve el paréntesis: 4 + 2 = 6. Luego 3 × 6 = 18. Esa es la expresión equivalente."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido algebraico",
+  "generation_provider": "GROK_CLI"
+}

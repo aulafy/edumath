@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.foreign-language-english-c1-plurilinguismo",
+  "title": "Plurilingüismo: mi lengua y el inglés",
+  "summary": "Módulo de 1.º ciclo de Primaria para reconocer el inglés y la lengua propia, comparar palabras sencillas y usar estrategias básicas de aprendizaje plurilingüe.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "FOREIGN_LANGUAGE_ENGLISH",
+  "competencies": [
+    "Reconocer que se pueden usar varias lenguas para comunicarse.",
+    "Comparar de forma muy simple palabras o sonidos del inglés y de la lengua propia.",
+    "Usar estrategias básicas (gestos, imágenes, palabras conocidas) para entender y aprender inglés."
+  ],
+  "assessment_criteria": [
+    "Identifica el inglés y la lengua propia en situaciones sencillas de aula.",
+    "Relaciona palabras o sonidos parecidos entre el inglés y otra lengua que conoce.",
+    "Aplica una estrategia simple (imagen, gesto o palabra conocida) para comprender o recordar vocabulario básico."
+  ],
+  "basic_knowledge": [
+    "Las lenguas del aula y del entorno: inglés y lengua o lenguas propias.",
+    "Palabras y sonidos parecidos o diferentes entre lenguas.",
+    "Estrategias sencillas de aprendizaje: mirar imágenes, imitar, repetir, pedir ayuda.",
+    "Actitud de respeto hacia la diversidad lingüística."
+  ],
+  "activities": [
+    {
+      "id": "idiomas-en-clase",
+      "type": "CLASSIFICATION",
+      "title": "¿Inglés o mi lengua?",
+      "instructions": "Clasifica cada palabra en la lengua correcta.",
+      "content": {
+        "prompt": "Clasifica cada palabra: ¿es inglés o es español?",
+        "categories": [
+          "Inglés",
+          "Español"
+        ],
+        "items": [
+          {
+            "label": "hello",
+            "category": "Inglés"
+          },
+          {
+            "label": "hola",
+            "category": "Español"
+          },
+          {
+            "label": "cat",
+            "category": "Inglés"
+          },
+          {
+            "label": "perro",
+            "category": "Español"
+          }
+        ],
+        "explanation": "Hello y cat son palabras en inglés. Hola y perro son palabras en español."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "palabra-parecida",
+      "type": "CLOSED_QUESTION",
+      "title": "Palabras que se parecen",
+      "instructions": "Elige la palabra en inglés que se parece a la palabra en español.",
+      "content": {
+        "prompt": "¿Qué palabra en inglés se parece a «animal»?",
+        "options": [
+          "animal",
+          "table",
+          "blue"
+        ],
+        "correct_option": "animal",
+        "explanation": "Animal se escribe igual en inglés y en español, por eso es fácil de reconocer."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "estrategia-para-entender",
+      "type": "CLOSED_QUESTION",
+      "title": "Cómo entiendo mejor",
+      "instructions": "Elige la mejor forma de entender una palabra nueva en inglés.",
+      "content": {
+        "prompt": "Si no entiendes una palabra en inglés, ¿qué puedes hacer?",
+        "options": [
+          "Mirar la imagen",
+          "Cerrar el libro",
+          "Gritar más alto"
+        ],
+        "correct_option": "Mirar la imagen",
+        "explanation": "Mirar la imagen es una estrategia útil para comprender y recordar palabras nuevas en otra lengua."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Plurilingüismo",
+  "generation_provider": "GROK_CLI"
+}

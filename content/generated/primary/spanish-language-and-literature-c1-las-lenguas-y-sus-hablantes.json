@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.spanish-language-and-literature-c1-las-lenguas-y-sus-hablantes",
+  "title": "Las lenguas y sus hablantes",
+  "summary": "Módulo introductorio para 1.º y 2.º de Primaria sobre la diversidad de lenguas, el respeto a quienes hablan de formas distintas y el uso de la lengua en la vida diaria.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "SPANISH_LANGUAGE_AND_LITERATURE",
+  "competencies": [
+    "Reconocer que existen distintas lenguas y formas de hablar.",
+    "Valorar y respetar la diversidad lingüística de la clase y del entorno.",
+    "Identificar usos sencillos de la lengua en situaciones cotidianas."
+  ],
+  "assessment_criteria": [
+    "Identifica que las personas pueden hablar lenguas distintas.",
+    "Muestra respeto hacia compañeros y compañeras que hablan de otra forma o en otra lengua.",
+    "Reconoce situaciones en las que se usa la lengua para saludar, pedir o contar algo."
+  ],
+  "basic_knowledge": [
+    "Existencia de distintas lenguas en el aula, la familia y el entorno.",
+    "Respeto hacia todas las formas de hablar y hacia quienes las usan.",
+    "La lengua como medio para comunicarse en la vida diaria.",
+    "Primeras nociones sobre la variedad de hablas sin juicios de valor."
+  ],
+  "activities": [
+    {
+      "id": "idiomas-del-entorno",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Cuántas lenguas hay?",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "En el colegio y en casa, ¿qué es verdad?",
+        "options": [
+          "Solo existe una lengua en el mundo.",
+          "Hay personas que hablan lenguas distintas.",
+          "Las lenguas no sirven para hablar."
+        ],
+        "correct_option": "Hay personas que hablan lenguas distintas.",
+        "explanation": "En el mundo y cerca de nosotros hay muchas lenguas. Algunas personas hablan una y otras hablan varias."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "respeto-al-hablar",
+      "type": "CLASSIFICATION",
+      "title": "Respeto al hablar",
+      "instructions": "Clasifica cada frase según si muestra respeto o no.",
+      "content": {
+        "prompt": "Clasifica cada frase: ¿muestra respeto o no?",
+        "categories": [
+          "Muestra respeto",
+          "No muestra respeto"
+        ],
+        "items": [
+          {
+            "label": "Escucho con atención cuando alguien habla otra lengua.",
+            "category": "Muestra respeto"
+          },
+          {
+            "label": "Me río de cómo habla un compañero.",
+            "category": "No muestra respeto"
+          },
+          {
+            "label": "Pido que me expliquen una palabra que no entiendo.",
+            "category": "Muestra respeto"
+          },
+          {
+            "label": "Digo que su forma de hablar es tonta.",
+            "category": "No muestra respeto"
+          }
+        ],
+        "explanation": "Respetar es escuchar y valorar cómo habla cada persona, sin reírse ni insultar."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "para-que-usamos-la-lengua",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Para qué usamos la lengua?",
+      "instructions": "Elige para qué usamos la lengua en el día a día.",
+      "content": {
+        "prompt": "¿Para qué usamos la lengua cada día?",
+        "options": [
+          "Solo para escribir números.",
+          "Para saludar, pedir y contar cosas.",
+          "Para no hablar con nadie."
+        ],
+        "correct_option": "Para saludar, pedir y contar cosas.",
+        "explanation": "La lengua nos ayuda a comunicarnos: saludamos, pedimos ayuda y contamos lo que nos pasa."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Las lenguas y sus hablantes",
+  "generation_provider": "GROK_CLI"
+}

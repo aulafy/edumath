@@ -1,0 +1,101 @@
+{
+  "id": "org.edumath.primary.physical-education-c1-organizacion-de-la-actividad-fisica",
+  "title": "Organización de la actividad física",
+  "summary": "Módulo para 1.º y 2.º de Primaria sobre cómo preparar, ordenar y participar con seguridad en juegos y actividades motrices en el patio o el aula.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Participar en juegos y actividades motrices siguiendo normas sencillas de seguridad y convivencia.",
+    "Organizar de forma básica la participación: escuchar instrucciones, respetar turnos y usar el espacio con cuidado.",
+    "Reconocer hábitos simples de preparación y cuidado del cuerpo antes, durante y después de moverse."
+  ],
+  "assessment_criteria": [
+    "Identifica acciones seguras e inseguras al preparar o realizar una actividad física en el colegio.",
+    "Ordena o clasifica pasos básicos para organizarse antes de jugar o moverse.",
+    "Explica con palabras sencillas por qué conviene escuchar, respetar turnos y cuidar el espacio y el material."
+  ],
+  "basic_knowledge": [
+    "Preparación sencilla para la actividad: ropa cómoda, atención a las indicaciones y espacio libre de obstáculos.",
+    "Normas básicas de organización: turnos, filas o grupos, y señales del docente.",
+    "Uso seguro del espacio y del material del patio o del aula.",
+    "Hábitos de cuidado: calentar con movimientos suaves, hidratarse cuando lo indiquen y descansar si se necesita.",
+    "Convivencia en el juego: respetar a los compañeros y detenerse cuando digan «parar»."
+  ],
+  "activities": [
+    {
+      "id": "antes-de-jugar",
+      "type": "CLOSED_QUESTION",
+      "title": "Antes de empezar a jugar",
+      "instructions": "Lee la pregunta y elige la mejor respuesta.",
+      "content": {
+        "prompt": "¿Qué debes hacer antes de empezar un juego en el patio?",
+        "options": [
+          "Escuchar las normas y mirar que el espacio esté libre",
+          "Empujar para salir el primero",
+          "Correr sin mirar a nadie"
+        ],
+        "correct_option": "Escuchar las normas y mirar que el espacio esté libre",
+        "explanation": "Antes de jugar, escuchamos las normas y comprobamos que el espacio sea seguro para todos."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "seguro-o-no-seguro",
+      "type": "CLASSIFICATION",
+      "title": "¿Es seguro o no es seguro?",
+      "instructions": "Clasifica cada acción en «Seguro» o «No es seguro».",
+      "content": {
+        "prompt": "Clasifica estas acciones de educación física.",
+        "categories": [
+          "Seguro",
+          "No es seguro"
+        ],
+        "items": [
+          {
+            "label": "Esperar el turno para coger un aro",
+            "category": "Seguro"
+          },
+          {
+            "label": "Empujar a un compañero para pasar",
+            "category": "No es seguro"
+          },
+          {
+            "label": "Detenerse cuando el maestro dice «parar»",
+            "category": "Seguro"
+          },
+          {
+            "label": "Tirar un material por encima de la cabeza de alguien",
+            "category": "No es seguro"
+          }
+        ],
+        "explanation": "Las acciones seguras respetan turnos, normas y a los demás; las inseguras pueden hacer daño."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "orden-de-la-sesion",
+      "type": "CLOSED_QUESTION",
+      "title": "El orden de la sesión",
+      "instructions": "Elige la opción que muestra un buen orden.",
+      "content": {
+        "prompt": "¿Cuál es un buen orden para una clase de educación física?",
+        "options": [
+          "Escuchar, moverse con cuidado y recoger el material",
+          "Recoger el material y luego no escuchar",
+          "Empezar a correr sin normas ni espacio libre"
+        ],
+        "correct_option": "Escuchar, moverse con cuidado y recoger el material",
+        "explanation": "Primero escuchamos, luego participamos con cuidado y al final ayudamos a recoger."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Organización de la actividad física",
+  "generation_provider": "GROK_CLI"
+}

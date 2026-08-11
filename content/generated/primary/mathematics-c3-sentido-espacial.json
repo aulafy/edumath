@@ -1,0 +1,104 @@
+{
+  "id": "org.edumath.primary.mathematics-c3-sentido-espacial",
+  "title": "Figuras, posición y movimiento en el plano y el espacio",
+  "summary": "Módulo de sentido espacial para 5.º y 6.º: reconocer figuras planas y cuerpos, describir posiciones y movimientos, y clasificar según propiedades geométricas sencillas.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Identificar y describir figuras planas y cuerpos geométricos a partir de sus elementos y propiedades.",
+    "Usar el lenguaje geométrico para situar objetos y explicar movimientos y transformaciones sencillas.",
+    "Clasificar figuras y cuerpos según criterios claros (lados, vértices, caras, aristas).",
+    "Resolver situaciones del entorno interpretando croquis, mapas y representaciones del plano y del espacio."
+  ],
+  "assessment_criteria": [
+    "Reconoce y nombra figuras planas y cuerpos geométricos habituales en contextos cotidianos y escolares.",
+    "Describe con precisión la posición relativa de objetos usando referencias espaciales.",
+    "Clasifica figuras y cuerpos aplicando criterios geométricos adecuados y los justifica de forma sencilla.",
+    "Identifica movimientos en el plano (traslación, giro, simetría) y sus efectos sobre una figura."
+  ],
+  "basic_knowledge": [
+    "Elementos de las figuras planas: lados, vértices, ángulos; polígonos regulares e irregulares.",
+    "Cuerpos geométricos: caras, aristas y vértices; prismas, pirámides, cilindros, conos y esferas.",
+    "Posición y orientación en el plano y el espacio; coordenadas y croquis sencillos.",
+    "Transformaciones geométricas elementales: traslaciones, giros y simetrías.",
+    "Relaciones de igualdad, semejanza y composición de figuras en situaciones cercanas."
+  ],
+  "activities": [
+    {
+      "id": "clasificar-figuras-planas",
+      "type": "CLASSIFICATION",
+      "title": "Clasifica las figuras planas",
+      "instructions": "Lee cada figura y colócala en la categoría correcta según el número de lados.",
+      "content": {
+        "prompt": "Clasifica cada figura plana según cuántos lados tiene.",
+        "categories": [
+          "3 lados",
+          "4 lados",
+          "Más de 4 lados"
+        ],
+        "items": [
+          {
+            "label": "Triángulo equilátero",
+            "category": "3 lados"
+          },
+          {
+            "label": "Cuadrado",
+            "category": "4 lados"
+          },
+          {
+            "label": "Pentágono regular",
+            "category": "Más de 4 lados"
+          },
+          {
+            "label": "Rectángulo",
+            "category": "4 lados"
+          }
+        ],
+        "explanation": "Un triángulo tiene 3 lados; el cuadrado y el rectángulo tienen 4; el pentágono tiene 5, es decir, más de 4."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "cuerpos-caras-planas",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué cuerpo tiene todas las caras planas?",
+      "instructions": "Elige la única opción correcta.",
+      "content": {
+        "prompt": "¿Cuál de estos cuerpos geométricos tiene todas sus caras planas?",
+        "options": [
+          "Cilindro",
+          "Esfera",
+          "Cubo"
+        ],
+        "correct_option": "Cubo",
+        "explanation": "El cubo es un poliedro: sus seis caras son cuadrados planos. El cilindro tiene caras curvas y la esfera es toda curva."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "simetria-y-movimiento",
+      "type": "CLOSED_QUESTION",
+      "title": "Reconoce la simetría",
+      "instructions": "Observa la descripción y elige la respuesta correcta.",
+      "content": {
+        "prompt": "Si doblas un papel por la mitad y las dos partes coinciden exactamente, ¿qué tipo de transformación geométrica has usado?",
+        "options": [
+          "Traslación",
+          "Simetría axial",
+          "Giro de 90°"
+        ],
+        "correct_option": "Simetría axial",
+        "explanation": "Al doblar por un eje y que las mitades coincidan, se produce una simetría axial (reflexión respecto a esa línea)."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido espacial",
+  "generation_provider": "GROK_CLI"
+}

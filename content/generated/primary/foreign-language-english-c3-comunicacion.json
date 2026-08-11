@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.foreign-language-english-c3-comunicacion",
+  "title": "Comunicación en inglés: comprender, interactuar y expresarse",
+  "summary": "Módulo del tercer ciclo de Primaria para practicar la comunicación en inglés: saludos y presentaciones, comprensión de mensajes sencillos y clasificación de usos orales y escritos en situaciones cotidianas del aula.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "FOREIGN_LANGUAGE_ENGLISH",
+  "competencies": [
+    "Comprender mensajes orales y escritos sencillos en inglés sobre temas cercanos a la vida diaria.",
+    "Participar en intercambios comunicativos breves con cortesía y claridad.",
+    "Expresar ideas básicas de forma oral y escrita usando vocabulario y estructuras conocidas.",
+    "Seleccionar el tipo de comunicación (oral o escrita) adecuado a la situación."
+  ],
+  "assessment_criteria": [
+    "Identifica la intención comunicativa de mensajes sencillos en inglés (saludar, pedir, responder, informar).",
+    "Elige respuestas adecuadas en diálogos cortos de la vida escolar y familiar.",
+    "Clasifica ejemplos de comunicación oral y escrita según su uso.",
+    "Utiliza expresiones de cortesía y fórmulas habituales en intercambios básicos."
+  ],
+  "basic_knowledge": [
+    "Fórmulas de saludo, presentación, despedida y cortesía en inglés.",
+    "Preguntas y respuestas sencillas en diálogos del aula y la vida diaria.",
+    "Comprensión de mensajes cortos: instrucciones, anuncios y notas.",
+    "Diferencia entre comunicación oral (hablar y escuchar) y escrita (leer y escribir).",
+    "Vocabulario de rutinas escolares, familia, tiempo libre y necesidades básicas."
+  ],
+  "activities": [
+    {
+      "id": "saludo-cortesia-dialogo",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué dices al llegar al colegio?",
+      "instructions": "Lee la situación y elige la respuesta más adecuada en inglés.",
+      "content": {
+        "prompt": "Llegas a clase por la mañana y ves a tu profesor. ¿Qué dices?",
+        "options": [
+          "Good morning! How are you?",
+          "Good night! See you tomorrow.",
+          "Happy birthday! Here is a gift."
+        ],
+        "correct_option": "Good morning! How are you?",
+        "explanation": "Por la mañana, al llegar, usamos un saludo diurno como “Good morning” y una pregunta de cortesía."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "intencion-mensaje-corto",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Cuál es la intención del mensaje?",
+      "instructions": "Lee el mensaje y elige qué quiere hacer la persona.",
+      "content": {
+        "prompt": "Mensaje: “Can you open the window, please?” ¿Qué quiere la persona?",
+        "options": [
+          "Pedir ayuda o un favor.",
+          "Contar un cuento largo.",
+          "Despedirse al final del día."
+        ],
+        "correct_option": "Pedir ayuda o un favor.",
+        "explanation": "“Can you…, please?” se usa para pedir algo de forma educada."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "oral-escrito-clasificacion",
+      "type": "CLASSIFICATION",
+      "title": "¿Es comunicación oral o escrita?",
+      "instructions": "Clasifica cada ejemplo según si se usa hablando y escuchando, o leyendo y escribiendo.",
+      "content": {
+        "prompt": "Clasifica estos ejemplos de comunicación en inglés.",
+        "categories": [
+          "Comunicación oral",
+          "Comunicación escrita"
+        ],
+        "items": [
+          {
+            "label": "Hablar con un compañero en un diálogo de clase",
+            "category": "Comunicación oral"
+          },
+          {
+            "label": "Escribir una nota corta en el cuaderno",
+            "category": "Comunicación escrita"
+          },
+          {
+            "label": "Escuchar las instrucciones del profesor",
+            "category": "Comunicación oral"
+          },
+          {
+            "label": "Leer un cartel del aula en inglés",
+            "category": "Comunicación escrita"
+          }
+        ],
+        "explanation": "La comunicación oral se basa en hablar y escuchar; la escrita, en leer y escribir mensajes."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Comunicación",
+  "generation_provider": "GROK_CLI"
+}

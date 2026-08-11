@@ -1,0 +1,102 @@
+{
+  "id": "org.edumath.primary.physical-education-c2-manifestaciones-de-la-cultura-motriz",
+  "title": "Juegos, bailes y deportes de nuestra cultura",
+  "summary": "En este módulo el alumnado de 3.º y 4.º reconoce manifestaciones de la cultura motriz (juegos tradicionales, bailes y deportes), valora su sentido cultural y social y practica decisiones seguras y respetuosas al participar en ellas.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Identificar manifestaciones de la cultura motriz presentes en el entorno y en otras culturas.",
+    "Reconocer el valor cultural, social y lúdico de juegos, bailes y deportes.",
+    "Participar con respeto, inclusión y seguridad en actividades motrices de carácter cultural.",
+    "Explicar con palabras sencillas por qué un juego o baile forma parte de la cultura motriz."
+  ],
+  "assessment_criteria": [
+    "Reconoce ejemplos de juegos tradicionales, bailes y deportes como parte de la cultura motriz.",
+    "Diferencia actividades motrices con sentido cultural de otras actividades cotidianas.",
+    "Elige comportamientos seguros, respetuosos e inclusivos al participar en juegos o bailes de grupo.",
+    "Explica de forma sencilla el disfrute y la relación social que aportan estas manifestaciones."
+  ],
+  "basic_knowledge": [
+    "Manifestaciones de la cultura motriz: juegos tradicionales y populares, bailes y danzas, y deportes como fenómeno cultural.",
+    "La cultura motriz como medio de disfrute, comunicación y relación social.",
+    "Respeto a la diversidad de prácticas motrices del propio entorno y de otras culturas.",
+    "Participación segura, cooperativa y no discriminatoria en actividades motrices culturales."
+  ],
+  "activities": [
+    {
+      "id": "juego-tradicional-o-no",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué es un juego tradicional?",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "¿Cuál de estas opciones es un ejemplo de juego tradicional de la cultura motriz?",
+        "options": [
+          "La rayuela o el pañuelo",
+          "Hacer los deberes en silencio",
+          "Ver la televisión sentado"
+        ],
+        "correct_option": "La rayuela o el pañuelo",
+        "explanation": "Los juegos tradicionales, como la rayuela o el pañuelo, se transmiten de generación en generación y forman parte de la cultura motriz."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasifica-cultura-motriz",
+      "type": "CLASSIFICATION",
+      "title": "Clasifica manifestaciones motrices",
+      "instructions": "Clasifica cada ejemplo en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica cada actividad según sea una manifestación de la cultura motriz o no lo sea.",
+        "categories": [
+          "Cultura motriz",
+          "No es cultura motriz"
+        ],
+        "items": [
+          {
+            "label": "Bailar una danza popular del pueblo",
+            "category": "Cultura motriz"
+          },
+          {
+            "label": "Jugar a la comba en el patio",
+            "category": "Cultura motriz"
+          },
+          {
+            "label": "Guardar el material en la taquilla",
+            "category": "No es cultura motriz"
+          },
+          {
+            "label": "Ver un partido de un deporte local",
+            "category": "Cultura motriz"
+          }
+        ],
+        "explanation": "Bailes, juegos tradicionales y deportes son cultura motriz. Guardar material es una tarea cotidiana, no una manifestación cultural motriz."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "participar-con-respeto",
+      "type": "CLOSED_QUESTION",
+      "title": "Participar con seguridad y respeto",
+      "instructions": "Elige la mejor decisión en esta situación.",
+      "content": {
+        "prompt": "En un baile o juego tradicional del grupo, ¿qué es lo más adecuado?",
+        "options": [
+          "Respetar turnos e incluir a quien quiera participar",
+          "Empujar para ir primero aunque moleste",
+          "Reírse de quien no conozca el baile"
+        ],
+        "correct_option": "Respetar turnos e incluir a quien quiera participar",
+        "explanation": "En las manifestaciones de la cultura motriz se participa con respeto, turnos claros e inclusión, sin empujar ni burlarse."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Manifestaciones de la cultura motriz",
+  "generation_provider": "GROK_CLI"
+}

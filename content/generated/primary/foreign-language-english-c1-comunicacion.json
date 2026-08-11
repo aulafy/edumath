@@ -1,0 +1,102 @@
+{
+  "id": "org.edumath.primary.foreign-language-english-c1-comunicacion",
+  "title": "Comunicación en inglés: saludos, colores y objetos",
+  "summary": "Módulo de primer ciclo para iniciar la comunicación en inglés con saludos, colores y objetos del aula mediante comprensión y clasificación sencillas.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "FOREIGN_LANGUAGE_ENGLISH",
+  "competencies": [
+    "Comprender mensajes orales y visuales muy sencillos en inglés sobre situaciones cotidianas del aula.",
+    "Identificar y usar vocabulario básico de saludos, colores y objetos cercanos.",
+    "Participar en intercambios comunicativos muy breves con apoyo visual y modelo del docente."
+  ],
+  "assessment_criteria": [
+    "Reconoce saludos y expresiones de cortesía muy frecuentes en inglés.",
+    "Asocia palabras sencillas en inglés con imágenes u objetos del entorno.",
+    "Clasifica vocabulario básico según categorías claras (colores, objetos, acciones de saludo).",
+    "Muestra comprensión de consignas orales o visuales muy cortas sin necesidad de producir textos largos."
+  ],
+  "basic_knowledge": [
+    "Saludos y despedidas: hello, goodbye, good morning.",
+    "Colores básicos: red, blue, yellow, green.",
+    "Objetos del aula: pencil, book, chair, bag.",
+    "Expresiones de cortesía: please, thank you.",
+    "Estrategias: apoyo en imágenes, repetición y respuesta de elección."
+  ],
+  "activities": [
+    {
+      "id": "saludo-hello-goodbye",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Cómo se dice hola?",
+      "instructions": "Lee o escucha la pregunta y elige la palabra correcta.",
+      "content": {
+        "prompt": "¿Qué palabra usamos para saludar en inglés?",
+        "options": [
+          "hello",
+          "book",
+          "chair"
+        ],
+        "correct_option": "hello",
+        "explanation": "Hello se usa para saludar. Book y chair son objetos del aula."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "colores-basicos-clasificacion",
+      "type": "CLASSIFICATION",
+      "title": "Colores y objetos",
+      "instructions": "Coloca cada palabra en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica estas palabras en colores o en objetos del aula.",
+        "categories": [
+          "colores",
+          "objetos del aula"
+        ],
+        "items": [
+          {
+            "label": "red",
+            "category": "colores"
+          },
+          {
+            "label": "blue",
+            "category": "colores"
+          },
+          {
+            "label": "pencil",
+            "category": "objetos del aula"
+          },
+          {
+            "label": "book",
+            "category": "objetos del aula"
+          }
+        ],
+        "explanation": "Red y blue son colores. Pencil y book son objetos del aula."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "goodbye-o-please",
+      "type": "CLOSED_QUESTION",
+      "title": "Despedida en inglés",
+      "instructions": "Elige la palabra que usamos al despedirnos.",
+      "content": {
+        "prompt": "¿Qué palabra usamos para decir adiós en inglés?",
+        "options": [
+          "goodbye",
+          "yellow",
+          "bag"
+        ],
+        "correct_option": "goodbye",
+        "explanation": "Goodbye se usa para despedirse. Yellow es un color y bag es un objeto."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Comunicación",
+  "generation_provider": "GROK_CLI"
+}

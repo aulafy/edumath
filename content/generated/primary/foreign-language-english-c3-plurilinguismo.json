@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.foreign-language-english-c3-plurilinguismo",
+  "title": "Plurilingüismo: mis lenguas y el inglés",
+  "summary": "El alumnado de 5.º y 6.º reconoce similitudes entre lenguas, valora la diversidad lingüística y usa estrategias simples para comprender y comunicar en inglés y en otras lenguas.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "FOREIGN_LANGUAGE_ENGLISH",
+  "competencies": [
+    "Reconocer y valorar la diversidad de lenguas y culturas del entorno y del aula.",
+    "Relacionar palabras y estructuras del inglés con las de otras lenguas conocidas.",
+    "Usar estrategias plurilingües sencillas para comprender y hacerse entender."
+  ],
+  "assessment_criteria": [
+    "Identifica semejanzas y diferencias entre el inglés y otras lenguas que conoce.",
+    "Muestra respeto e interés hacia las lenguas y culturas presentes en el aula y en su entorno.",
+    "Aplica estrategias básicas de comunicación plurilingüe, como comparar palabras o apoyarse en lo que ya sabe de otras lenguas."
+  ],
+  "basic_knowledge": [
+    "Similitudes y diferencias entre el inglés, el castellano y otras lenguas del alumnado.",
+    "Estrategias plurilingües: comparación de palabras, cognados y apoyo en el contexto.",
+    "Valoración positiva de la diversidad lingüística y cultural.",
+    "Uso de varias lenguas para comprender mensajes y participar en intercambios sencillos."
+  ],
+  "activities": [
+    {
+      "id": "cognados-ingles-castellano",
+      "type": "CLOSED_QUESTION",
+      "title": "Palabras parecidas",
+      "instructions": "Lee la pregunta y elige la opción correcta.",
+      "content": {
+        "prompt": "¿Qué palabra en inglés se parece mucho a «animal» en castellano?",
+        "options": [
+          "animal",
+          "window",
+          "bread"
+        ],
+        "correct_option": "animal",
+        "explanation": "«Animal» se escribe igual en inglés y en castellano. Son cognados: palabras parecidas que ayudan a comprender."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "estrategias-para-entender",
+      "type": "CLASSIFICATION",
+      "title": "Cómo entiendo mejor",
+      "instructions": "Clasifica cada acción según si ayuda o no a entender un mensaje en inglés.",
+      "content": {
+        "prompt": "Clasifica cada estrategia: ¿ayuda a comprender o no ayuda?",
+        "categories": [
+          "Ayuda a comprender",
+          "No ayuda"
+        ],
+        "items": [
+          {
+            "label": "Comparar con palabras de mi lengua",
+            "category": "Ayuda a comprender"
+          },
+          {
+            "label": "Mirar dibujos o gestos del hablante",
+            "category": "Ayuda a comprender"
+          },
+          {
+            "label": "Dejar de escuchar al oír una palabra nueva",
+            "category": "No ayuda"
+          },
+          {
+            "label": "Usar lo que ya sé de otras lenguas",
+            "category": "Ayuda a comprender"
+          }
+        ],
+        "explanation": "Comparar lenguas, observar el contexto y usar lo que ya sabes te ayuda. Abandonar al oír algo nuevo no ayuda."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "respeto-diversidad-linguistica",
+      "type": "CLOSED_QUESTION",
+      "title": "Muchas lenguas, mucho valor",
+      "instructions": "Elige la respuesta que muestra respeto por las lenguas.",
+      "content": {
+        "prompt": "En clase hay compañeros y compañeras que hablan distintas lenguas en casa. ¿Qué actitud es la más adecuada?",
+        "options": [
+          "Valorar y respetar todas las lenguas del aula",
+          "Bromear sobre las lenguas que no entiendo",
+          "Pensar que solo el inglés es importante"
+        ],
+        "correct_option": "Valorar y respetar todas las lenguas del aula",
+        "explanation": "Todas las lenguas tienen valor. Respetarlas ayuda a convivir y a aprender mejor como personas plurilingües."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Plurilingüismo",
+  "generation_provider": "GROK_CLI"
+}

@@ -1,0 +1,107 @@
+{
+  "id": "org.edumath.primary.art-education-c2-musica-y-artes-escenicas",
+  "title": "Música y artes escénicas en el segundo ciclo",
+  "summary": "Módulo de Educación Artística para 3.º y 4.º de Primaria. El alumnado explora el sonido, el ritmo, la voz, el cuerpo y la escena con actividades sencillas de escucha, clasificación e interpretación.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "ART_EDUCATION",
+  "competencies": [
+    "Escuchar con atención sonidos, músicas y silencios del entorno y de obras sencillas.",
+    "Reconocer elementos básicos de la música: pulso, ritmo, tempo y dinámica.",
+    "Usar la voz, el cuerpo y objetos sonoros de forma expresiva y respetuosa.",
+    "Participar en juegos teatrales y escénicos con turnos, roles y lenguaje corporal.",
+    "Valorar la música y las artes escénicas como forma de comunicación y disfrute cultural."
+  ],
+  "assessment_criteria": [
+    "Identifica sonidos, silencios y cualidades básicas del sonido en ejemplos cercanos.",
+    "Distingue pulso y ritmo en canciones o patrones sencillos.",
+    "Clasifica instrumentos o fuentes sonoras según criterios claros (por ejemplo, cómo se tocan o de dónde viene el sonido).",
+    "Reconoce gestos, posturas y acciones propias de la expresión corporal y el teatro.",
+    "Explica con palabras sencillas por qué una música o escena transmite una emoción o idea."
+  ],
+  "basic_knowledge": [
+    "El sonido y el silencio; altura, duración, intensidad y timbre de forma introductoria.",
+    "Pulso, ritmo y tempo en canciones y juegos rítmicos.",
+    "La voz hablada y cantada; canciones al unísono y juegos de eco.",
+    "Instrumentos escolares y del entorno: de percusión, de viento y de cuerda a nivel básico.",
+    "El cuerpo como medio de expresión: gestos, desplazamiento y mímica.",
+    "Elementos sencillos de la escena: personaje, acción, espacio y público.",
+    "Respeto en la escucha, el ensayo y la actuación colectiva."
+  ],
+  "activities": [
+    {
+      "id": "sonido-o-silencio",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Hay sonido o silencio?",
+      "instructions": "Lee la situación y elige la respuesta correcta.",
+      "content": {
+        "prompt": "En el aula todos están callados y no se oye nada. ¿Qué hay?",
+        "options": [
+          "Sonido fuerte",
+          "Silencio",
+          "Un ritmo rápido"
+        ],
+        "correct_option": "Silencio",
+        "explanation": "Cuando no se oye ningún sonido, hay silencio. El silencio también forma parte de la música."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "como-se-toca",
+      "type": "CLASSIFICATION",
+      "title": "¿Cómo se hace sonar?",
+      "instructions": "Clasifica cada instrumento según cómo se hace sonar.",
+      "content": {
+        "prompt": "Coloca cada instrumento en la categoría correcta.",
+        "categories": [
+          "Se golpea",
+          "Se sopla"
+        ],
+        "items": [
+          {
+            "label": "Tambor",
+            "category": "Se golpea"
+          },
+          {
+            "label": "Flauta dulce",
+            "category": "Se sopla"
+          },
+          {
+            "label": "Caja china",
+            "category": "Se golpea"
+          },
+          {
+            "label": "Trompeta",
+            "category": "Se sopla"
+          }
+        ],
+        "explanation": "Los instrumentos de percusión se golpean o se sacuden. Los de viento suenan cuando soplamos aire."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "gesto-teatral",
+      "type": "CLOSED_QUESTION",
+      "title": "Un gesto de teatro",
+      "instructions": "Elige la opción que mejor describe la expresión corporal.",
+      "content": {
+        "prompt": "Una actriz abre mucho los brazos y sonríe para mostrar alegría. ¿Qué está usando?",
+        "options": [
+          "Solo la voz cantada",
+          "El cuerpo y el gesto",
+          "Un instrumento de cuerda"
+        ],
+        "correct_option": "El cuerpo y el gesto",
+        "explanation": "En las artes escénicas usamos el cuerpo, la cara y los gestos para contar emociones e ideas al público."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Música y artes escénicas",
+  "generation_provider": "GROK_CLI"
+}

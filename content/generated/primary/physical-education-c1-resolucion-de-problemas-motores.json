@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.physical-education-c1-resolucion-de-problemas-motores",
+  "title": "Resolución de problemas motores",
+  "summary": "Módulo para 1.º y 2.º de Primaria sobre cómo observar, pensar y elegir acciones motoras seguras para resolver retos sencillos de movimiento en juegos y situaciones de clase.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Observar un reto motor sencillo y describir qué se pide.",
+    "Probar ideas de movimiento seguras para alcanzar un objetivo.",
+    "Elegir la acción más adecuada según el espacio, los compañeros y las normas.",
+    "Respetar turnos y cuidar la seguridad propia y ajena al resolver un problema motor."
+  ],
+  "assessment_criteria": [
+    "Identifica el objetivo de un reto motor sencillo con ayuda del maestro o maestra.",
+    "Propone al menos una solución de movimiento segura y posible en el aula o patio.",
+    "Explica con palabras simples por qué una acción ayuda o no a resolver el reto.",
+    "Actúa con cuidado, respeta el espacio de los demás y sigue las normas del juego."
+  ],
+  "basic_knowledge": [
+    "Qué es un problema motor: una situación en la que hay que moverse para lograr un objetivo.",
+    "Elementos básicos: cuerpo, espacio, tiempo, objetos imaginados o de clase y compañeros.",
+    "Estrategias sencillas: observar, pensar, probar con cuidado y ajustar.",
+    "Decisiones seguras: no empujar, no correr sin mirar, esperar el turno y avisar si hay peligro.",
+    "Cooperación: ayudar, escuchar y celebrar el esfuerzo del grupo."
+  ],
+  "activities": [
+    {
+      "id": "que-es-un-reto-motor",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué es un reto motor?",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "En Educación Física, un reto motor es…",
+        "options": [
+          "Una situación en la que hay que moverse para lograr un objetivo.",
+          "Un dibujo solo para colorear en silencio.",
+          "Una lista de deberes de matemáticas."
+        ],
+        "correct_option": "Una situación en la que hay que moverse para lograr un objetivo.",
+        "explanation": "Un reto motor pide usar el cuerpo y el movimiento de forma segura para alcanzar una meta sencilla."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "acciones-seguras-o-no",
+      "type": "CLASSIFICATION",
+      "title": "Acciones seguras al resolver un reto",
+      "instructions": "Clasifica cada acción como segura o no segura.",
+      "content": {
+        "prompt": "Cuando resuelves un problema motor en clase, ¿la acción es segura o no segura?",
+        "categories": [
+          "Segura",
+          "No segura"
+        ],
+        "items": [
+          {
+            "label": "Mirar alrededor antes de moverse",
+            "category": "Segura"
+          },
+          {
+            "label": "Empujar a un compañero para llegar primero",
+            "category": "No segura"
+          },
+          {
+            "label": "Esperar el turno y respetar el espacio",
+            "category": "Segura"
+          },
+          {
+            "label": "Correr sin mirar hacia los demás",
+            "category": "No segura"
+          }
+        ],
+        "explanation": "Resolver un reto motor implica moverse con cuidado: observar, respetar turnos y no empujar."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "elegir-mejor-solucion",
+      "type": "CLOSED_QUESTION",
+      "title": "Elegir la mejor solución",
+      "instructions": "Piensa en el reto y elige la opción más adecuada y segura.",
+      "content": {
+        "prompt": "El reto es cruzar un espacio sin tocar a nadie. ¿Qué haces?",
+        "options": [
+          "Avanzar despacio, mirar y dejar paso a los compañeros.",
+          "Cerrar los ojos y correr muy rápido.",
+          "Empujar para abrir camino."
+        ],
+        "correct_option": "Avanzar despacio, mirar y dejar paso a los compañeros.",
+        "explanation": "La mejor solución es segura: observar el espacio, controlar la velocidad y respetar a los demás."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Resolución de problemas motores",
+  "generation_provider": "GROK_CLI"
+}

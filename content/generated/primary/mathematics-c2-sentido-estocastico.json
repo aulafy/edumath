@@ -1,0 +1,102 @@
+{
+  "id": "org.edumath.primary.mathematics-c2-sentido-estocastico",
+  "title": "Datos y azar en la vida diaria",
+  "summary": "Módulo de 3.º y 4.º de Primaria para organizar datos sencillos, leer gráficos básicos y distinguir situaciones seguras, posibles e imposibles.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Organizar e interpretar datos cercanos con tablas y gráficos sencillos.",
+    "Reconocer la incertidumbre en situaciones cotidianas y valorar si un resultado es seguro, posible o imposible.",
+    "Comunicar de forma clara ideas y conclusiones simples a partir de datos."
+  ],
+  "assessment_criteria": [
+    "Recoge y organiza datos de su entorno en tablas o listas claras.",
+    "Lee e interpreta pictogramas y gráficos de barras sencillos.",
+    "Clasifica sucesos cotidianos según su posibilidad de ocurrir.",
+    "Formula conclusiones simples comparando cantidades o frecuencias."
+  ],
+  "basic_knowledge": [
+    "Recogida y organización de datos cercanos.",
+    "Tablas, pictogramas y gráficos de barras sencillos.",
+    "Sucesos seguros, posibles e imposibles.",
+    "Comparación de frecuencias y conclusiones básicas a partir de datos."
+  ],
+  "activities": [
+    {
+      "id": "clasificar-sucesos-posibilidad",
+      "type": "CLASSIFICATION",
+      "title": "¿Seguro, posible o imposible?",
+      "instructions": "Lee cada situación y arrástrala a la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica cada situación según lo que puede pasar.",
+        "categories": [
+          "Seguro",
+          "Posible",
+          "Imposible"
+        ],
+        "items": [
+          {
+            "label": "Mañana saldrá el sol.",
+            "category": "Seguro"
+          },
+          {
+            "label": "Al tirar un dado sale un 4.",
+            "category": "Posible"
+          },
+          {
+            "label": "Un gato habla como una persona.",
+            "category": "Imposible"
+          },
+          {
+            "label": "Hoy lloverá o no lloverá.",
+            "category": "Posible"
+          }
+        ],
+        "explanation": "Seguro: siempre ocurre. Posible: a veces sí y a veces no. Imposible: no puede ocurrir."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "leer-grafico-barras-frutas",
+      "type": "CLOSED_QUESTION",
+      "title": "Leemos un gráfico de barras",
+      "instructions": "Lee el gráfico y elige la respuesta correcta.",
+      "content": {
+        "prompt": "En un gráfico de barras, la barra de manzanas llega a 8 y la de peras a 5. ¿Qué fruta eligieron más niños?",
+        "options": [
+          "Manzanas",
+          "Peras",
+          "Las dos por igual"
+        ],
+        "correct_option": "Manzanas",
+        "explanation": "La barra más alta marca la cantidad mayor. 8 es más que 5, así que ganaron las manzanas."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "mas-probable-bolsa-bolas",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué es más probable?",
+      "instructions": "Piensa con calma y elige la opción correcta.",
+      "content": {
+        "prompt": "En una bolsa hay 7 bolas rojas y 2 bolas azules. Si sacas una bola sin mirar, ¿de qué color es más probable que salga?",
+        "options": [
+          "Roja",
+          "Azul",
+          "Verde"
+        ],
+        "correct_option": "Roja",
+        "explanation": "Hay más bolas rojas que azules, así que es más fácil sacar una roja. No hay bolas verdes."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido estocástico",
+  "generation_provider": "GROK_CLI"
+}

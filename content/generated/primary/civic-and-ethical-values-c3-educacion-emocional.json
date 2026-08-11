@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.civic-and-ethical-values-c3-educacion-emocional",
+  "title": "Educación emocional: reconocer y cuidar nuestras emociones",
+  "summary": "Módulo para 5.º y 6.º que ayuda a identificar emociones, expresarlas con respeto y elegir formas seguras de gestionarlas en la vida diaria y en el grupo.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "CIVIC_AND_ETHICAL_VALUES",
+  "competencies": [
+    "Reconocer emociones propias y ajenas en situaciones cotidianas.",
+    "Expresar sentimientos con respeto hacia uno mismo y hacia los demás.",
+    "Elegir estrategias adecuadas para regular las emociones y resolver conflictos de forma pacífica.",
+    "Mostrar empatía y escucha activa en la convivencia del aula."
+  ],
+  "assessment_criteria": [
+    "Identifica emociones básicas y complejas en sí mismo y en otras personas a partir de situaciones concretas.",
+    "Explica con claridad y respeto cómo se siente y qué necesita.",
+    "Propone o aplica estrategias de regulación emocional adecuadas y seguras.",
+    "Actúa con empatía y colabora en un clima de respeto y cuidado mutuo."
+  ],
+  "basic_knowledge": [
+    "Identificación de emociones (alegría, tristeza, enfado, miedo, vergüenza, orgullo, calma).",
+    "Expresión emocional respetuosa: palabras, tono y lenguaje corporal.",
+    "Estrategias de regulación: respiración, pausa, pedir ayuda, hablar del problema.",
+    "Empatía y escucha activa en la convivencia.",
+    "Cuidado del bienestar personal y del grupo."
+  ],
+  "activities": [
+    {
+      "id": "emociones-situacion-cotidiana",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué emoción sientes?",
+      "instructions": "Lee la situación y elige la emoción que mejor encaja. Solo hay una respuesta correcta.",
+      "content": {
+        "prompt": "Has estudiado mucho para un examen y has sacado una buena nota. ¿Qué emoción es más probable que sientas?",
+        "options": [
+          "Orgullo",
+          "Miedo",
+          "Enfado"
+        ],
+        "correct_option": "Orgullo",
+        "explanation": "Cuando logras algo con esfuerzo, es habitual sentir orgullo. El miedo y el enfado no encajan con un resultado positivo esperado."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "formas-de-expresar-emociones",
+      "type": "CLASSIFICATION",
+      "title": "Expresar emociones con respeto",
+      "instructions": "Clasifica cada forma de expresar una emoción como respetuosa o no respetuosa.",
+      "content": {
+        "prompt": "Decide si cada forma de expresar emociones es respetuosa o no respetuosa.",
+        "categories": [
+          "Respetuosa",
+          "No respetuosa"
+        ],
+        "items": [
+          {
+            "label": "Decir: «Me siento triste y necesito un rato en calma»",
+            "category": "Respetuosa"
+          },
+          {
+            "label": "Gritar e insultar cuando algo no sale bien",
+            "category": "No respetuosa"
+          },
+          {
+            "label": "Pedir ayuda: «Estoy enfadado; ¿podemos hablar?»",
+            "category": "Respetuosa"
+          },
+          {
+            "label": "Empujar a alguien porque te has enfadado",
+            "category": "No respetuosa"
+          }
+        ],
+        "explanation": "Expresar lo que sientes con palabras claras y sin dañar a nadie es respetuoso. Insultar o agredir no lo es."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "estrategia-regulacion-emocional",
+      "type": "CLOSED_QUESTION",
+      "title": "Elegir una buena estrategia",
+      "instructions": "Elige la mejor forma de regular la emoción en la situación. Solo hay una respuesta correcta.",
+      "content": {
+        "prompt": "En el recreo discutes con un compañero y sientes mucho enfado. ¿Qué es lo más adecuado para calmarte y resolver el problema?",
+        "options": [
+          "Respirar hondo, pedir un momento y luego hablar con calma",
+          "Romper algo para que se te pase el enfado",
+          "Ignorar al compañero para siempre y no hablar del tema"
+        ],
+        "correct_option": "Respirar hondo, pedir un momento y luego hablar con calma",
+        "explanation": "Una pausa y la respiración ayudan a calmarte; después, hablar con calma permite resolver el conflicto. Romper objetos o cortar la relación no solucionan el problema de forma sana."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Educación emocional",
+  "generation_provider": "GROK_CLI"
+}

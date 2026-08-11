@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.mathematics-c2-sentido-algebraico",
+  "title": "Patrones y relaciones en matemáticas",
+  "summary": "Módulo del segundo ciclo de Primaria sobre sentido algebraico: reconocer patrones, completar series y clasificar relaciones de igualdad y desigualdad con un lenguaje claro y cercano al alumnado de 3.º.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Reconocer y describir patrones numéricos y de formas de manera sencilla.",
+    "Completar series siguiendo una regla clara y explicable.",
+    "Identificar relaciones de igualdad y desigualdad en situaciones cotidianas y matemáticas.",
+    "Expresar con palabras o ejemplos cortos cómo se relaciona un elemento con otro."
+  ],
+  "assessment_criteria": [
+    "Identifica patrones simples en números y figuras y los describe con sus propias palabras.",
+    "Completa series numéricas o de formas aplicando una regla regular.",
+    "Distingue situaciones de igualdad y de desigualdad con ejemplos concretos.",
+    "Explica de forma breve la relación o la regla que ha usado para resolver la actividad."
+  ],
+  "basic_knowledge": [
+    "Patrones y regularidades en números y formas.",
+    "Series y secuencias con una regla sencilla.",
+    "Igualdad y desigualdad como relaciones entre cantidades.",
+    "Modelos y representaciones simples de relaciones (dibujos, flechas, tablas muy básicas).",
+    "Uso del lenguaje matemático cotidiano: más que, menos que, igual que, sigue la serie."
+  ],
+  "activities": [
+    {
+      "id": "serie-numeros-de-2-en-2",
+      "type": "CLOSED_QUESTION",
+      "title": "Completa la serie de números",
+      "instructions": "Lee la serie. Elige el número que debe ir en el hueco.",
+      "content": {
+        "prompt": "Serie: 4, 6, 8, 10, __. ¿Qué número falta?",
+        "options": [
+          "11",
+          "12",
+          "14"
+        ],
+        "correct_option": "12",
+        "explanation": "La serie avanza de 2 en 2. Después de 10 va 12."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "igualdad-o-desigualdad",
+      "type": "CLASSIFICATION",
+      "title": "Igual o diferente",
+      "instructions": "Clasifica cada frase según diga que dos cantidades son iguales o que son diferentes.",
+      "content": {
+        "prompt": "Clasifica cada frase en Igualdad o Desigualdad.",
+        "categories": [
+          "Igualdad",
+          "Desigualdad"
+        ],
+        "items": [
+          {
+            "label": "3 + 2 es igual a 5",
+            "category": "Igualdad"
+          },
+          {
+            "label": "8 es mayor que 5",
+            "category": "Desigualdad"
+          },
+          {
+            "label": "4 monedas y 4 monedas son la misma cantidad",
+            "category": "Igualdad"
+          },
+          {
+            "label": "10 es menor que 12",
+            "category": "Desigualdad"
+          }
+        ],
+        "explanation": "Igualdad: las cantidades son las mismas. Desigualdad: una cantidad es mayor o menor que la otra."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "patron-de-formas",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué figura sigue?",
+      "instructions": "Mira el patrón de formas. Elige la figura que continúa la serie.",
+      "content": {
+        "prompt": "Patrón: círculo, cuadrado, círculo, cuadrado, círculo, __. ¿Qué figura sigue?",
+        "options": [
+          "círculo",
+          "cuadrado",
+          "triángulo"
+        ],
+        "correct_option": "cuadrado",
+        "explanation": "El patrón repite círculo y cuadrado. Después de un círculo va un cuadrado."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido algebraico",
+  "generation_provider": "GROK_CLI"
+}

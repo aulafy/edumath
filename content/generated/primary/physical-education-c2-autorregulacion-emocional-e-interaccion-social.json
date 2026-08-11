@@ -1,0 +1,102 @@
+{
+  "id": "org.edumath.primary.physical-education-c2-autorregulacion-emocional-e-interaccion-social",
+  "title": "Autorregulación emocional e interacción social",
+  "summary": "Módulo del ciclo 2 de Educación Física para reconocer emociones en el juego, cuidar el respeto y elegir conductas seguras y cooperativas en la actividad física.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Reconocer emociones propias y ajenas durante el juego y la actividad física.",
+    "Regular impulsos y aceptar normas para convivir de forma respetuosa.",
+    "Cooperar, dialogar y resolver pequeños conflictos de forma pacífica."
+  ],
+  "assessment_criteria": [
+    "Identifica emociones habituales en situaciones de juego y actividad física.",
+    "Propone o elige conductas de autocontrol ante la victoria, la derrota o un error.",
+    "Aplica normas de respeto, inclusión y cooperación en la interacción con el grupo.",
+    "Valora la seguridad y el cuidado mutuo en las decisiones durante la actividad."
+  ],
+  "basic_knowledge": [
+    "Emociones en el juego: alegría, frustración, nerviosismo y calma.",
+    "Estrategias sencillas de autorregulación: respirar, pedir un turno y pedir ayuda.",
+    "Normas de convivencia, fair play y aceptación de reglas.",
+    "Cooperación, empatía y resolución pacífica de desacuerdos.",
+    "Decisiones seguras y de respeto al propio cuerpo y al de los demás."
+  ],
+  "activities": [
+    {
+      "id": "emociones-en-el-juego",
+      "type": "CLOSED_QUESTION",
+      "title": "Emociones en el juego",
+      "instructions": "Lee la situación y elige la mejor respuesta.",
+      "content": {
+        "prompt": "Pierdes un partido de patio y te sientes enfadado o enfadada. ¿Qué es lo más adecuado?",
+        "options": [
+          "Respirar hondo y felicitar al otro equipo",
+          "Empujar a alguien por el resultado",
+          "Dejar de hablar con todo el grupo"
+        ],
+        "correct_option": "Respirar hondo y felicitar al otro equipo",
+        "explanation": "Aceptar el resultado y regular la emoción ayuda a seguir jugando con respeto."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "conductas-de-respeto",
+      "type": "CLASSIFICATION",
+      "title": "Conductas de respeto",
+      "instructions": "Clasifica cada conducta según sea respetuosa o no respetuosa.",
+      "content": {
+        "prompt": "Clasifica estas conductas en el juego.",
+        "categories": [
+          "Respetuosa",
+          "No respetuosa"
+        ],
+        "items": [
+          {
+            "label": "Esperar el turno para lanzar",
+            "category": "Respetuosa"
+          },
+          {
+            "label": "Burlarse si alguien se equivoca",
+            "category": "No respetuosa"
+          },
+          {
+            "label": "Invitar a quien se queda fuera",
+            "category": "Respetuosa"
+          },
+          {
+            "label": "Ignorar las reglas del juego",
+            "category": "No respetuosa"
+          }
+        ],
+        "explanation": "El respeto se nota al cumplir normas, cuidar a los demás e incluir a todo el grupo."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "decision-segura-en-grupo",
+      "type": "CLOSED_QUESTION",
+      "title": "Decisión segura en grupo",
+      "instructions": "Elige la opción más segura y cooperativa.",
+      "content": {
+        "prompt": "En un juego de equipo, dos compañeros discuten por el balón. ¿Qué haces?",
+        "options": [
+          "Proponer turnos y recordar la norma del juego",
+          "Quitar el balón a la fuerza para seguir",
+          "Animar a que discutan hasta que uno ceda"
+        ],
+        "correct_option": "Proponer turnos y recordar la norma del juego",
+        "explanation": "Dialogar y usar turnos resuelve el conflicto sin riesgo y mantiene el juego justo."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Autorregulación emocional e interacción social",
+  "generation_provider": "GROK_CLI"
+}

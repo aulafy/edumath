@@ -1,0 +1,99 @@
+{
+  "id": "org.edumath.primary.foreign-language-english-c3-interculturalidad",
+  "title": "Culturas del mundo de habla inglesa",
+  "summary": "Módulo de ciclo 3 para conocer costumbres, fiestas y formas de vida de países de habla inglesa, y practicar el respeto intercultural en inglés de forma sencilla.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "FOREIGN_LANGUAGE_ENGLISH",
+  "competencies": [
+    "Valorar la diversidad cultural de países de habla inglesa con curiosidad y respeto.",
+    "Identificar costumbres, fiestas y formas de saludo propias de distintas culturas anglófonas.",
+    "Usar el inglés para hablar de similitudes y diferencias culturales de manera sencilla y positiva."
+  ],
+  "assessment_criteria": [
+    "Reconoce elementos culturales básicos de países de habla inglesa (fiestas, comidas, saludos o costumbres).",
+    "Compara de forma simple costumbres propias y de otras culturas sin juicios negativos.",
+    "Muestra actitud de respeto e interés hacia la diversidad cultural en actividades orales y escritas."
+  ],
+  "basic_knowledge": [
+    "Aspectos socioculturales y sociolingüísticos básicos de países de habla inglesa: fiestas, comidas, saludos y rutinas.",
+    "Similitudes y diferencias culturales entre la propia realidad y la de comunidades anglófonas.",
+    "Estrategias sencillas para mostrar respeto e interés hacia otras culturas al comunicarse en inglés."
+  ],
+  "activities": [
+    {
+      "id": "fiestas-inglesas-closed",
+      "type": "CLOSED_QUESTION",
+      "title": "Fiestas en países de habla inglesa",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "¿En qué país es muy típica la fiesta de Thanksgiving?",
+        "options": [
+          "Estados Unidos",
+          "España",
+          "Japón"
+        ],
+        "correct_option": "Estados Unidos",
+        "explanation": "Thanksgiving es una fiesta muy conocida en Estados Unidos. En inglés se celebra con una comida especial en familia."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "saludos-y-costumbres-class",
+      "type": "CLASSIFICATION",
+      "title": "Saludos y costumbres",
+      "instructions": "Clasifica cada elemento según si es un saludo o una costumbre cultural.",
+      "content": {
+        "prompt": "Clasifica cada ejemplo en la categoría correcta.",
+        "categories": [
+          "Saludo",
+          "Costumbre"
+        ],
+        "items": [
+          {
+            "label": "Hello!",
+            "category": "Saludo"
+          },
+          {
+            "label": "Good morning!",
+            "category": "Saludo"
+          },
+          {
+            "label": "Queueing (hacer fila con paciencia)",
+            "category": "Costumbre"
+          },
+          {
+            "label": "Afternoon tea en el Reino Unido",
+            "category": "Costumbre"
+          }
+        ],
+        "explanation": "Hello y Good morning son saludos. Hacer fila y el afternoon tea son costumbres culturales de algunos países de habla inglesa."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "respeto-cultural-closed",
+      "type": "CLOSED_QUESTION",
+      "title": "Respeto entre culturas",
+      "instructions": "Elige la mejor actitud al conocer una costumbre diferente a la tuya.",
+      "content": {
+        "prompt": "Si una persona de un país de habla inglesa celebra una fiesta distinta a la tuya, ¿qué es lo más adecuado?",
+        "options": [
+          "Preguntar con respeto y aprender algo nuevo",
+          "Reírse de esa fiesta",
+          "Decir que solo importa tu cultura"
+        ],
+        "correct_option": "Preguntar con respeto y aprender algo nuevo",
+        "explanation": "La interculturalidad se basa en el respeto y el interés por conocer otras formas de vida, no en rechazarlas."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Interculturalidad",
+  "generation_provider": "GROK_CLI"
+}

@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.mathematics-c3-sentido-socioafectivo",
+  "title": "Sentido socioafectivo en matemáticas",
+  "summary": "Módulo para reconocer emociones, actitudes y formas de trabajo en equipo al resolver problemas matemáticos, fomentando la perseverancia y el respeto.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Reconocer y regular emociones al enfrentarse a tareas matemáticas.",
+    "Valorar el error como parte del aprendizaje y mantener la perseverancia.",
+    "Colaborar con respeto, escuchar ideas ajenas y aportar con claridad.",
+    "Desarrollar una actitud positiva y realista hacia las matemáticas."
+  ],
+  "assessment_criteria": [
+    "Identifica emociones frecuentes al resolver problemas y propone estrategias adecuadas para gestionarlas.",
+    "Explica cómo el error y el esfuerzo ayudan a mejorar en matemáticas.",
+    "Distingue actitudes que favorecen el trabajo en equipo de las que lo dificultan.",
+    "Elige formas de pedir ayuda y de ayudar a compañeros de manera respetuosa."
+  ],
+  "basic_knowledge": [
+    "Emociones ante las matemáticas: seguridad, duda, frustración y satisfacción.",
+    "Estrategias de autorregulación: respirar, releer el enunciado, dividir el problema y pedir ayuda.",
+    "El error como información para aprender y reintentar.",
+    "Normas de colaboración: turno de palabra, respeto, reparto de tareas y revisión conjunta.",
+    "Actitudes útiles: curiosidad, paciencia, honestidad y constancia."
+  ],
+  "activities": [
+    {
+      "id": "emociones-al-resolver",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué hacer si me siento frustrado?",
+      "instructions": "Lee la situación y elige la mejor respuesta.",
+      "content": {
+        "prompt": "Estás resolviendo un problema y te sientes frustrado porque no te sale. ¿Qué es lo más útil?",
+        "options": [
+          "Dejar el problema para siempre y no volver a intentarlo.",
+          "Respirar, releer el enunciado y probar un paso más sencillo.",
+          "Decir que las matemáticas no sirven para nada."
+        ],
+        "correct_option": "Respirar, releer el enunciado y probar un paso más sencillo.",
+        "explanation": "Regular la emoción y volver a intentarlo con un paso más pequeño ayuda a avanzar sin abandonar."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "actitudes-de-equipo",
+      "type": "CLASSIFICATION",
+      "title": "Actitudes en el trabajo en equipo",
+      "instructions": "Clasifica cada frase según favorezca o dificulte el trabajo en equipo.",
+      "content": {
+        "prompt": "Clasifica estas actitudes al resolver un problema en grupo.",
+        "categories": [
+          "Favorece el equipo",
+          "Dificulta el equipo"
+        ],
+        "items": [
+          {
+            "label": "Escuchar la idea de un compañero antes de opinar",
+            "category": "Favorece el equipo"
+          },
+          {
+            "label": "Reírse del error de otra persona",
+            "category": "Dificulta el equipo"
+          },
+          {
+            "label": "Repartir tareas y revisar juntos el resultado",
+            "category": "Favorece el equipo"
+          },
+          {
+            "label": "Imponer la solución sin explicar por qué",
+            "category": "Dificulta el equipo"
+          }
+        ],
+        "explanation": "Escuchar, repartir y revisar juntos construyen un buen equipo; burlarse o imponer sin diálogo lo dificultan."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "valor-del-error",
+      "type": "CLOSED_QUESTION",
+      "title": "El error en matemáticas",
+      "instructions": "Elige la idea más correcta sobre los errores.",
+      "content": {
+        "prompt": "¿Qué significa un error al resolver un problema de matemáticas?",
+        "options": [
+          "Que ya no se puede aprender más en esa unidad.",
+          "Que hay información para revisar el proceso y mejorar.",
+          "Que solo las personas con talento no se equivocan."
+        ],
+        "correct_option": "Que hay información para revisar el proceso y mejorar.",
+        "explanation": "El error indica qué revisar. Con esfuerzo y análisis se aprende y se mejora."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido socioafectivo",
+  "generation_provider": "GROK_CLI"
+}

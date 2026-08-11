@@ -1,0 +1,118 @@
+{
+  "id": "org.edumath.primary.civic-and-ethical-values-c3-autoconocimiento-y-autonomia-moral",
+  "title": "Autoconocimiento y autonomía moral",
+  "summary": "Módulo para reconocer emociones, valores personales y decisiones éticas sencillas, fomentando la autonomía moral y el respeto en la vida diaria.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "CIVIC_AND_ETHICAL_VALUES",
+  "competencies": [
+    "Reconocer y nombrar emociones propias y ajenas en situaciones cotidianas.",
+    "Reflexionar sobre valores personales y su influencia en las decisiones.",
+    "Actuar con autonomía moral eligiendo conductas respetuosas y responsables."
+  ],
+  "assessment_criteria": [
+    "Identifica emociones y las relaciona con hechos de la vida diaria.",
+    "Explica de forma sencilla por qué una decisión es justa o injusta.",
+    "Propone conductas responsables ante dilemas morales cercanos a su edad."
+  ],
+  "basic_knowledge": [
+    "Emociones básicas y su expresión respetuosa.",
+    "Valores personales: honestidad, responsabilidad, empatía y respeto.",
+    "Autonomía moral: pensar antes de actuar y asumir las consecuencias.",
+    "Diferencia entre lo que se desea y lo que es correcto para convivir."
+  ],
+  "activities": [
+    {
+      "id": "emociones-en-situaciones",
+      "type": "CLASSIFICATION",
+      "title": "¿Qué emoción siento?",
+      "instructions": "Clasifica cada situación en la emoción que mejor la describe.",
+      "content": {
+        "prompt": "Relaciona cada situación con la emoción más adecuada.",
+        "categories": [
+          "Alegría",
+          "Tristeza",
+          "Enfado"
+        ],
+        "items": [
+          {
+            "label": "Has ayudado a un compañero y te da las gracias.",
+            "category": "Alegría"
+          },
+          {
+            "label": "Se ha roto tu juguete favorito.",
+            "category": "Tristeza"
+          },
+          {
+            "label": "Alguien se ha colado delante de ti en la fila.",
+            "category": "Enfado"
+          },
+          {
+            "label": "Has ganado un premio en el concurso del colegio.",
+            "category": "Alegría"
+          }
+        ],
+        "explanation": "Nombrar bien las emociones ayuda a conocernos y a expresar lo que sentimos con respeto."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "decision-justa-o-no",
+      "type": "CLOSED_QUESTION",
+      "title": "Una decisión responsable",
+      "instructions": "Lee la situación y elige la opción más justa y responsable.",
+      "content": {
+        "prompt": "En el recreo encuentras un bolígrafo que no es tuyo. ¿Qué es lo más correcto?",
+        "options": [
+          "Guardarlo en tu estuche sin decir nada.",
+          "Entregarlo a la maestra o a su dueño.",
+          "Tirarlo a la basura para que nadie lo use."
+        ],
+        "correct_option": "Entregarlo a la maestra o a su dueño.",
+        "explanation": "Devolver lo que no es nuestro es un acto de honestidad y responsabilidad."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "valores-en-accion",
+      "type": "CLASSIFICATION",
+      "title": "Valores en la vida diaria",
+      "instructions": "Clasifica cada conducta según el valor que representa.",
+      "content": {
+        "prompt": "Asocia cada acción con el valor que muestra.",
+        "categories": [
+          "Respeto",
+          "Responsabilidad",
+          "Empatía"
+        ],
+        "items": [
+          {
+            "label": "Escuchar sin interrumpir cuando habla un compañero.",
+            "category": "Respeto"
+          },
+          {
+            "label": "Hacer los deberes a tiempo y sin que te lo recuerden.",
+            "category": "Responsabilidad"
+          },
+          {
+            "label": "Consolar a alguien que se ha caído en el patio.",
+            "category": "Empatía"
+          },
+          {
+            "label": "Cuidar el material común del aula.",
+            "category": "Responsabilidad"
+          }
+        ],
+        "explanation": "Los valores se demuestran con acciones concretas que mejoran la convivencia."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Autoconocimiento y autonomía moral",
+  "generation_provider": "GROK_CLI"
+}

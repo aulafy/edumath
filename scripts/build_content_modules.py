@@ -57,6 +57,8 @@ def main() -> None:
             "review_status": module.get("review_status", "COMMUNITY_DRAFT"),
             "curriculum_strand": module.get("curriculum_strand"),
         }
+        if module.get("generation_provider"):
+            manifest["generation_provider"] = module["generation_provider"]
         target = OUTPUT / f"{module['id']}-{manifest['version']}.edumath"
         with ZipFile(target, "w") as archive:
             write_file(archive, "manifest.json", json.dumps(manifest, ensure_ascii=False))

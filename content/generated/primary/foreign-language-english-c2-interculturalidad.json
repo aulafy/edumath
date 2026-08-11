@@ -1,0 +1,195 @@
+{
+  "id": "org.edumath.primary.foreign-language-english-c2-interculturalidad",
+  "title": "Discovering Our World Through English",
+  "summary": "Students will explore basic cultural differences and similarities in English-speaking countries, focusing on daily routines, food, and traditions, to develop an initial sense of intercultural awareness.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "FOREIGN_LANGUAGE_ENGLISH",
+  "competencies": [
+    "LCL01",
+    "LCL02",
+    "LCL03",
+    "LCL04",
+    "LCL05",
+    "LCL06",
+    "LCL07",
+    "LCL08",
+    "LCL09",
+    "LCL10",
+    "LCL11",
+    "LCL12",
+    "LCL13",
+    "LCL14",
+    "LCL15",
+    "LCL16",
+    "LCL17",
+    "LCL18",
+    "LCL19",
+    "LCL20",
+    "LCL21",
+    "LCL22",
+    "LCL23",
+    "LCL24",
+    "LCL25",
+    "LCL26",
+    "LCL27",
+    "LCL28",
+    "LCL29",
+    "LCL30",
+    "LCL31",
+    "LCL32",
+    "LCL33",
+    "LCL34",
+    "LCL35",
+    "LCL36",
+    "LCL37",
+    "LCL38",
+    "LCL39",
+    "LCL40",
+    "LCL41",
+    "LCL42",
+    "LCL43",
+    "LCL44",
+    "LCL45",
+    "LCL46",
+    "LCL47",
+    "LCL48",
+    "LCL49",
+    "LCL50",
+    "LCL51",
+    "LCL52",
+    "LCL53",
+    "LCL54",
+    "LCL55",
+    "LCL56",
+    "LCL57",
+    "LCL58",
+    "LCL59",
+    "LCL60",
+    "LCL61",
+    "LCL62",
+    "LCL63",
+    "LCL64",
+    "LCL65",
+    "LCL66",
+    "LCL67",
+    "LCL68",
+    "LCL69",
+    "LCL70",
+    "LCL71",
+    "LCL72",
+    "LCL73",
+    "LCL74",
+    "LCL75",
+    "LCL76",
+    "LCL77",
+    "LCL78",
+    "LCL79",
+    "LCL80",
+    "LCL81",
+    "LCL82",
+    "LCL83",
+    "LCL84",
+    "LCL85",
+    "LCL86",
+    "LCL87",
+    "LCL88",
+    "LCL89",
+    "LCL90",
+    "LCL91",
+    "LCL92",
+    "LCL93",
+    "LCL94",
+    "LCL95",
+    "LCL96",
+    "LCL97",
+    "LCL98",
+    "LCL99",
+    "LCL100"
+  ],
+  "assessment_criteria": [
+    "The student can identify simple cultural elements in English.",
+    "The student can compare their own culture with another using basic vocabulary."
+  ],
+  "basic_knowledge": [
+    "Greetings and introductions in English.",
+    "Common foods in English-speaking countries.",
+    "Simple traditions and celebrations."
+  ],
+  "activities": [
+    {
+      "id": "activity-1-greetings",
+      "type": "CLOSED_QUESTION",
+      "title": "How do we say hello?",
+      "instructions": "Listen to the audio clip of a greeting in English. Choose the correct Spanish translation.",
+      "content": {
+        "prompt": "What is the meaning of 'Hello' in Spanish?",
+        "options": [
+          "Adiós",
+          "Hola",
+          "Por favor"
+        ],
+        "correct_option": "Hola",
+        "explanation": "'Hello' is used to greet someone, which translates to 'Hola' in Spanish. 'Adiós' means goodbye and 'Por favor' means please."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "activity-2-food",
+      "type": "CLOSED_QUESTION",
+      "title": "What do they eat?",
+      "instructions": "Look at the picture of the food. Select the correct English word for the item shown.",
+      "content": {
+        "prompt": "Which word matches the picture of a round, yellow fruit?",
+        "options": [
+          "Apple",
+          "Banana",
+          "Orange"
+        ],
+        "correct_option": "Orange",
+        "explanation": "An orange is a round, orange-colored fruit. An apple is usually red or green, and a banana is long and curved."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "activity-3-traditions",
+      "type": "CLASSIFICATION",
+      "title": "Traditions around the world",
+      "instructions": "Read the description of the celebration. Drag the item to the correct category: 'My Country' or 'English Country'.",
+      "content": {
+        "prompt": "Sort these celebrations based on where they are traditionally celebrated.",
+        "categories": [
+          "My Country",
+          "English Country"
+        ],
+        "items": [
+          {
+            "label": "Christmas",
+            "category": "English Country"
+          },
+          {
+            "label": "Semana Santa",
+            "category": "My Country"
+          },
+          {
+            "label": "Halloween",
+            "category": "English Country"
+          },
+          {
+            "label": "Día de la Constitución",
+            "category": "My Country"
+          }
+        ],
+        "explanation": "Christmas and Halloween are common in English-speaking countries, while Semana Santa and Día de la Constitución are celebrated in Spain."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Interculturalidad",
+  "generation_provider": "LM_STUDIO_QWEN"
+}

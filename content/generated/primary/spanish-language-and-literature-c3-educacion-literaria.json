@@ -1,0 +1,104 @@
+{
+  "id": "org.edumath.primary.spanish-language-and-literature-c3-educacion-literaria",
+  "title": "Educación literaria: géneros, personajes y lectura",
+  "summary": "Módulo del tercer ciclo de Primaria para reconocer géneros literarios, identificar elementos del relato y valorar la lectura de obras adecuadas a la edad.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "SPANISH_LANGUAGE_AND_LITERATURE",
+  "competencies": [
+    "Leer con comprensión y disfrute textos literarios propios de la edad.",
+    "Reconocer géneros literarios básicos y sus rasgos principales.",
+    "Identificar personajes, espacio, tiempo y trama en relatos sencillos.",
+    "Expresar de forma clara gustos y valoraciones sobre lo leído."
+  ],
+  "assessment_criteria": [
+    "Identifica si un texto breve es narrativo, poético o teatral a partir de sus rasgos.",
+    "Localiza personajes, lugar, tiempo y conflicto en un relato corto.",
+    "Explica con palabras sencillas por qué le gusta o no un texto literario leído.",
+    "Clasifica elementos literarios en categorías correctas sin confusiones graves."
+  ],
+  "basic_knowledge": [
+    "Géneros literarios: narración, poesía y teatro.",
+    "Elementos del relato: personajes, espacio, tiempo y trama.",
+    "Lectura de cuentos, poemas y fragmentos teatrales adecuados al ciclo.",
+    "Valoración personal y respeto hacia las preferencias lectoras de los demás.",
+    "Vocabulario literario básico: verso, estrofa, diálogo, narrador y escena."
+  ],
+  "activities": [
+    {
+      "id": "generos-literarios-cerrada",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué género es?",
+      "instructions": "Lee la descripción y elige la opción correcta.",
+      "content": {
+        "prompt": "Un texto cuenta una historia con personajes, un principio, un nudo y un final. ¿De qué género se trata?",
+        "options": [
+          "Narración",
+          "Poesía",
+          "Teatro"
+        ],
+        "correct_option": "Narración",
+        "explanation": "La narración cuenta hechos y suele tener personajes, espacio, tiempo y una trama con comienzo, nudo y desenlace."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "elementos-del-relato-clasificacion",
+      "type": "CLASSIFICATION",
+      "title": "Clasifica elementos del relato",
+      "instructions": "Arrastra cada elemento a la categoría que le corresponde.",
+      "content": {
+        "prompt": "Clasifica estos elementos del cuento en la categoría correcta.",
+        "categories": [
+          "Personaje",
+          "Espacio",
+          "Tiempo"
+        ],
+        "items": [
+          {
+            "label": "La pastora Marta",
+            "category": "Personaje"
+          },
+          {
+            "label": "Un bosque de pinos",
+            "category": "Espacio"
+          },
+          {
+            "label": "Al atardecer",
+            "category": "Tiempo"
+          },
+          {
+            "label": "El dragón amable",
+            "category": "Personaje"
+          }
+        ],
+        "explanation": "Los personajes son quienes actúan en la historia; el espacio es el lugar; el tiempo indica cuándo ocurren los hechos."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "poesia-o-teatro-cerrada",
+      "type": "CLOSED_QUESTION",
+      "title": "Poesía o teatro",
+      "instructions": "Lee con atención y elige la respuesta correcta.",
+      "content": {
+        "prompt": "Un texto está escrito en versos, rima y se organiza en estrofas. ¿Qué género es?",
+        "options": [
+          "Teatro",
+          "Poesía",
+          "Noticia"
+        ],
+        "correct_option": "Poesía",
+        "explanation": "La poesía se escribe en versos y suele agruparse en estrofas; el teatro se organiza en diálogos y escenas."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Educación literaria",
+  "generation_provider": "GROK_CLI"
+}

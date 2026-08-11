@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.physical-education-c2-resolucion-de-problemas-motores",
+  "title": "Resolución de problemas motores",
+  "summary": "Aprendemos a pensar antes de movernos: observar el espacio, elegir una acción segura y cambiar el plan si hace falta en juegos y retos motores sencillos.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Observar el entorno y los compañeros para decidir cómo moverse con seguridad.",
+    "Probar distintas soluciones motoras ante un mismo reto.",
+    "Adaptar la velocidad, el recorrido o la forma de moverse según el espacio y las normas del juego.",
+    "Explicar con palabras sencillas por qué se elige una acción u otra."
+  ],
+  "assessment_criteria": [
+    "Identifica la información útil del espacio y de la situación antes de actuar.",
+    "Propone al menos dos formas seguras de resolver un mismo problema motor.",
+    "Elige acciones que respetan las normas y evitan choques o empujones.",
+    "Describe de forma clara la decisión tomada y si funcionó o hay que cambiarla."
+  ],
+  "basic_knowledge": [
+    "Elementos de un problema motor: objetivo, espacio, normas y obstáculos.",
+    "Percepción del espacio cercano y lejano, y de la posición de los compañeros.",
+    "Estrategias sencillas: parar, esperar el turno, cambiar de dirección o de ritmo.",
+    "Toma de decisiones seguras en juegos de persecución, relevos y retos de equilibrio o precisión sin material peligroso.",
+    "Valoración del propio plan y del plan de los demás con respeto."
+  ],
+  "activities": [
+    {
+      "id": "elegir-accion-segura",
+      "type": "CLOSED_QUESTION",
+      "title": "Elegir la acción segura",
+      "instructions": "Lee la situación y elige la mejor respuesta.",
+      "content": {
+        "prompt": "En un juego de pillado en el patio, varios compañeros corren hacia ti. ¿Qué es lo más seguro?",
+        "options": [
+          "Parar un momento, mirar a los lados y cambiar de dirección sin empujar",
+          "Cerrar los ojos y seguir corriendo en línea recta",
+          "Empujar al compañero que se acerca para pasar"
+        ],
+        "correct_option": "Parar un momento, mirar a los lados y cambiar de dirección sin empujar",
+        "explanation": "Mirar el espacio y cambiar de dirección ayuda a resolver el problema sin chocar ni hacer daño."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-decisiones-motoras",
+      "type": "CLASSIFICATION",
+      "title": "Decisiones buenas o poco seguras",
+      "instructions": "Clasifica cada decisión según si es una buena idea o poco segura en un juego escolar.",
+      "content": {
+        "prompt": "Clasifica cada decisión en «Buena idea» o «Poco segura».",
+        "categories": [
+          "Buena idea",
+          "Poco segura"
+        ],
+        "items": [
+          {
+            "label": "Avisar con la voz antes de pasar cerca de un compañero",
+            "category": "Buena idea"
+          },
+          {
+            "label": "Correr mirando solo el balón y no a los demás",
+            "category": "Poco segura"
+          },
+          {
+            "label": "Esperar el turno en un relevo para no chocar en la línea",
+            "category": "Buena idea"
+          },
+          {
+            "label": "Subirse a un banco alto sin que un adulto lo autorice",
+            "category": "Poco segura"
+          }
+        ],
+        "explanation": "Las buenas decisiones miran el espacio, respetan turnos y evitan riesgos. Las poco seguras ignoran a los demás o buscan acciones no permitidas."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "dos-soluciones-al-reto",
+      "type": "CLOSED_QUESTION",
+      "title": "Dos soluciones para un mismo reto",
+      "instructions": "Elige la respuesta que muestra resolver un problema motor de más de una forma.",
+      "content": {
+        "prompt": "El reto es llegar al cono sin tocar las líneas del suelo. ¿Qué respuesta muestra dos soluciones correctas?",
+        "options": [
+          "Saltar las líneas o rodearlas caminando con cuidado",
+          "Empujar a un compañero o saltar por encima de él",
+          "Ignorar las líneas y correr en línea recta siempre"
+        ],
+        "correct_option": "Saltar las líneas o rodearlas caminando con cuidado",
+        "explanation": "Un mismo problema motor puede resolverse de varias formas seguras: saltar o cambiar el recorrido."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Resolución de problemas motores",
+  "generation_provider": "GROK_CLI"
+}

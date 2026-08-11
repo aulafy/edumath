@@ -65,6 +65,7 @@ def _module_payload(row: EducationalModuleRow) -> dict:
         "imported_at": row.imported_at,
         "review_status": manifest.get("review_status", "COMMUNITY_DRAFT"),
         "curriculum_strand": manifest.get("curriculum_strand"),
+        "generation_provider": manifest.get("generation_provider"),
     }
 
 

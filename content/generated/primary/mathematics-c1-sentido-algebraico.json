@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.mathematics-c1-sentido-algebraico",
+  "title": "Patrones y relaciones sencillas",
+  "summary": "Módulo del primer ciclo de Primaria para reconocer patrones, completar series y entender la igualdad como relación de equilibrio, con actividades cortas y claras.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Reconocer y continuar patrones sencillos en objetos, números y formas.",
+    "Identificar relaciones de igualdad y desigualdad en situaciones cotidianas.",
+    "Explicar de forma oral por qué un elemento sigue o no un patrón.",
+    "Clasificar elementos según una regla clara y compartida."
+  ],
+  "assessment_criteria": [
+    "Continúa series simples de formas, colores o números con una regla evidente.",
+    "Elige el elemento que completa un patrón de repetición.",
+    "Distingue situaciones de igualdad y de desigualdad en ejemplos cercanos.",
+    "Justifica con palabras sencillas la regla de un patrón o una clasificación."
+  ],
+  "basic_knowledge": [
+    "Patrones de repetición (color, forma, tamaño, número).",
+    "Series numéricas sencillas de contar de 1 en 1 o de 2 en 2.",
+    "Igualdad y desigualdad como relación entre cantidades.",
+    "Reglas simples para ordenar o clasificar elementos.",
+    "Representación oral y gráfica de relaciones sencillas."
+  ],
+  "activities": [
+    {
+      "id": "completa-el-patron-de-colores",
+      "type": "CLOSED_QUESTION",
+      "title": "Completa el patrón de colores",
+      "instructions": "Mira la serie y elige el color que sigue.",
+      "content": {
+        "prompt": "Serie: rojo, azul, rojo, azul, rojo, ¿? ¿Qué color va después?",
+        "options": [
+          "azul",
+          "verde",
+          "amarillo"
+        ],
+        "correct_option": "azul",
+        "explanation": "El patrón repite rojo y azul. Después de rojo va azul."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "igual-o-no-igual",
+      "type": "CLASSIFICATION",
+      "title": "¿Es igual o no es igual?",
+      "instructions": "Clasifica cada situación según sea igual o no sea igual.",
+      "content": {
+        "prompt": "Lee cada situación y colócala en la categoría correcta.",
+        "categories": [
+          "igual",
+          "no es igual"
+        ],
+        "items": [
+          {
+            "label": "3 manzanas y 3 manzanas",
+            "category": "igual"
+          },
+          {
+            "label": "2 lápices y 4 lápices",
+            "category": "no es igual"
+          },
+          {
+            "label": "5 pegatinas y 5 pegatinas",
+            "category": "igual"
+          },
+          {
+            "label": "1 pelota y 2 pelotas",
+            "category": "no es igual"
+          }
+        ],
+        "explanation": "Es igual cuando las dos cantidades son las mismas. No es igual cuando una cantidad es mayor o menor que la otra."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "elige-el-numero-que-sigue",
+      "type": "CLOSED_QUESTION",
+      "title": "Elige el número que sigue",
+      "instructions": "Observa la serie de números y elige el que continúa el patrón.",
+      "content": {
+        "prompt": "Serie: 2, 4, 6, 8, ¿? ¿Qué número sigue?",
+        "options": [
+          "9",
+          "10",
+          "12"
+        ],
+        "correct_option": "10",
+        "explanation": "La serie cuenta de 2 en 2: 2, 4, 6, 8 y después 10."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido algebraico",
+  "generation_provider": "GROK_CLI"
+}

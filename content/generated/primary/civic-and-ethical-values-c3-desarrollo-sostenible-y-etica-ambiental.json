@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.civic-and-ethical-values-c3-desarrollo-sostenible-y-etica-ambiental",
+  "title": "Desarrollo sostenible y ética ambiental",
+  "summary": "Módulo para 5.º y 6.º de Primaria sobre el cuidado del planeta, el consumo responsable y las decisiones éticas que protegen el medioambiente y el bien común.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "CIVIC_AND_ETHICAL_VALUES",
+  "competencies": [
+    "Reconocer la importancia de cuidar el entorno natural y los recursos de la Tierra.",
+    "Tomar decisiones responsables que reduzcan el daño ambiental en la vida cotidiana.",
+    "Valorar el desarrollo sostenible como forma de proteger el presente y el futuro de todas las personas."
+  ],
+  "assessment_criteria": [
+    "Identifica acciones que protegen o dañan el medioambiente en situaciones cercanas.",
+    "Explica con claridad por qué el consumo responsable ayuda a un desarrollo más sostenible.",
+    "Clasifica hábitos diarios según su impacto ambiental y propone alternativas más éticas."
+  ],
+  "basic_knowledge": [
+    "Desarrollo sostenible: satisfacer necesidades actuales sin agotar los recursos de las generaciones futuras.",
+    "Ética ambiental: pensar en el bien común y en el respeto a la naturaleza al decidir qué hacemos.",
+    "Consumo responsable, reutilización, reciclaje y reducción de residuos.",
+    "Cuidado del agua, la energía, el aire y los seres vivos del entorno."
+  ],
+  "activities": [
+    {
+      "id": "accion-cuidar-planeta",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué acción cuida mejor el planeta?",
+      "instructions": "Lee la pregunta y elige la opción más responsable con el medioambiente.",
+      "content": {
+        "prompt": "¿Cuál de estas acciones cuida mejor el medioambiente?",
+        "options": [
+          "Tirar basura en el río para que se la lleve el agua",
+          "Apagar las luces al salir de una habitación",
+          "Usar siempre bolsas de plástico de un solo uso"
+        ],
+        "correct_option": "Apagar las luces al salir de una habitación",
+        "explanation": "Apagar las luces ahorra energía y reduce el impacto ambiental. Las otras opciones ensucian o generan más residuos."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "habitos-sostenibles",
+      "type": "CLASSIFICATION",
+      "title": "Hábitos sostenibles o no sostenibles",
+      "instructions": "Clasifica cada hábito según si ayuda o no a un desarrollo más sostenible.",
+      "content": {
+        "prompt": "Clasifica cada hábito como sostenible o no sostenible.",
+        "categories": [
+          "Sostenible",
+          "No sostenible"
+        ],
+        "items": [
+          {
+            "label": "Llevar una botella reutilizable al colegio",
+            "category": "Sostenible"
+          },
+          {
+            "label": "Dejar el grifo abierto mientras te enjabonas las manos",
+            "category": "No sostenible"
+          },
+          {
+            "label": "Separar el papel, el plástico y el vidrio para reciclar",
+            "category": "Sostenible"
+          },
+          {
+            "label": "Comprar objetos que se usan una sola vez y se tiran",
+            "category": "No sostenible"
+          }
+        ],
+        "explanation": "Los hábitos sostenibles ahorran recursos y reducen residuos. Los no sostenibles gastan más agua, energía o materiales de forma innecesaria."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "motivo-reciclar",
+      "type": "CLOSED_QUESTION",
+      "title": "Por qué reciclar es una decisión ética",
+      "instructions": "Elige la respuesta que mejor explica el valor ético de reciclar.",
+      "content": {
+        "prompt": "¿Por qué reciclar es una decisión ética y responsable?",
+        "options": [
+          "Porque ayuda a reutilizar materiales y proteger el entorno para todos",
+          "Porque solo sirve para ganar premios en el colegio",
+          "Porque es una moda que no tiene relación con el planeta"
+        ],
+        "correct_option": "Porque ayuda a reutilizar materiales y proteger el entorno para todos",
+        "explanation": "Reciclar es ético porque cuida los recursos naturales y el bien común, no por premios ni por moda."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Desarrollo sostenible y ética ambiental",
+  "generation_provider": "GROK_CLI"
+}

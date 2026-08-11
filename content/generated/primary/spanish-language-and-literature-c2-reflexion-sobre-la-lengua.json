@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.spanish-language-and-literature-c2-reflexion-sobre-la-lengua",
+  "title": "Reflexión sobre la lengua: palabras y oraciones",
+  "summary": "Módulo del segundo ciclo de Primaria para observar cómo funcionan las palabras (sustantivo, adjetivo y verbo) y la concordancia de género y número en oraciones sencillas.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "SPANISH_LANGUAGE_AND_LITERATURE",
+  "competencies": [
+    "Observar y explicar de forma sencilla cómo se usan las palabras en textos cercanos.",
+    "Identificar clases de palabras básicas y su papel en la oración.",
+    "Aplicar la concordancia de género y número al formar oraciones correctas.",
+    "Usar el metalenguaje escolar con precisión y claridad."
+  ],
+  "assessment_criteria": [
+    "Reconoce sustantivos, adjetivos y verbos en oraciones cortas y conocidas.",
+    "Explica con ejemplos sencillos la concordancia entre artículo, sustantivo y adjetivo.",
+    "Clasifica palabras según su función o categoría gramatical de forma justificada.",
+    "Corrige errores básicos de género o número en frases del aula."
+  ],
+  "basic_knowledge": [
+    "Clases de palabras: sustantivo, adjetivo y verbo.",
+    "Género (masculino/femenino) y número (singular/plural).",
+    "Concordancia entre artículo, sustantivo y adjetivo.",
+    "La oración simple: quién realiza la acción y qué acción se realiza.",
+    "Vocabulario gramatical escolar: palabra, oración, género, número, concordancia."
+  ],
+  "activities": [
+    {
+      "id": "elige-clase-de-palabra",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué tipo de palabra es?",
+      "instructions": "Lee la oración y elige la opción correcta.",
+      "content": {
+        "prompt": "En la oración «El gato duerme», la palabra «duerme» es un…",
+        "options": [
+          "sustantivo",
+          "adjetivo",
+          "verbo"
+        ],
+        "correct_option": "verbo",
+        "explanation": "«Duerme» nombra la acción que realiza el gato; por eso es un verbo."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasifica-sustantivo-o-verbo",
+      "type": "CLASSIFICATION",
+      "title": "Sustantivo o verbo",
+      "instructions": "Clasifica cada palabra en la categoría correcta.",
+      "content": {
+        "prompt": "Coloca cada palabra en «sustantivo» o «verbo».",
+        "categories": [
+          "sustantivo",
+          "verbo"
+        ],
+        "items": [
+          {
+            "label": "mesa",
+            "category": "sustantivo"
+          },
+          {
+            "label": "correr",
+            "category": "verbo"
+          },
+          {
+            "label": "niña",
+            "category": "sustantivo"
+          },
+          {
+            "label": "cantar",
+            "category": "verbo"
+          }
+        ],
+        "explanation": "Los sustantivos nombran personas, animales o cosas; los verbos nombran acciones."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "elige-concordancia-correcta",
+      "type": "CLOSED_QUESTION",
+      "title": "Concordancia de género y número",
+      "instructions": "Elige la frase en la que todas las palabras concuerdan bien.",
+      "content": {
+        "prompt": "¿Cuál de estas oraciones está bien escrita?",
+        "options": [
+          "Las flores rojas crecen en el jardín.",
+          "Las flores rojo crecen en el jardín.",
+          "El flores rojas crecen en el jardín."
+        ],
+        "correct_option": "Las flores rojas crecen en el jardín.",
+        "explanation": "«Las», «flores» y «rojas» van en femenino y plural; así hay concordancia correcta."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Reflexión sobre la lengua",
+  "generation_provider": "GROK_CLI"
+}

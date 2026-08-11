@@ -1,0 +1,105 @@
+{
+  "id": "org.edumath.primary.mathematics-c1-sentido-numerico",
+  "title": "Números hasta 99: contar, leer y comparar",
+  "summary": "Módulo de sentido numérico para 1.º y 2.º de Primaria: contar, leer y escribir números, comparar cantidades y descomponer en decenas y unidades de forma sencilla y concreta.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Interpretar situaciones cotidianas con números pequeños y cantidades concretas.",
+    "Resolver problemas sencillos de contar, comparar y reunir o quitar objetos.",
+    "Explicar con palabras o dibujos cómo se ha contado o comparado un número.",
+    "Reconocer el valor de las decenas y las unidades en números de dos cifras."
+  ],
+  "assessment_criteria": [
+    "Cuenta objetos y dice el número total de forma ordenada.",
+    "Lee y escribe números de hasta dos cifras.",
+    "Compara dos cantidades y dice cuál es mayor, menor o si son iguales.",
+    "Descompone un número en decenas y unidades con material o dibujos.",
+    "Resuelve situaciones simples de sumar o quitar con apoyo visual."
+  ],
+  "basic_knowledge": [
+    "Conteo de objetos y cardinalidad.",
+    "Lectura y escritura de números naturales de hasta dos cifras.",
+    "Comparación y orden de números y cantidades.",
+    "Composición y descomposición en decenas y unidades.",
+    "Sumas y restas sencillas ligadas a situaciones cercanas.",
+    "Estimación aproximada de cantidades pequeñas."
+  ],
+  "activities": [
+    {
+      "id": "contar-manzanas",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Cuántas manzanas hay?",
+      "instructions": "Mira el dibujo mental: hay 7 manzanas en una cesta. Elige la respuesta correcta.",
+      "content": {
+        "prompt": "En una cesta hay 7 manzanas. ¿Qué número lo dice?",
+        "options": [
+          "5",
+          "7",
+          "9"
+        ],
+        "correct_option": "7",
+        "explanation": "Si contamos uno a uno hasta siete, el número que representa esa cantidad es el 7."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "mayor-o-menor",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué número es mayor?",
+      "instructions": "Compara los dos números y elige el mayor.",
+      "content": {
+        "prompt": "¿Cuál de estos números es mayor que 24?",
+        "options": [
+          "18",
+          "24",
+          "31"
+        ],
+        "correct_option": "31",
+        "explanation": "31 es mayor que 24 porque tiene más unidades en total. 18 es menor y 24 es igual, no mayor."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "decenas-y-unidades",
+      "type": "CLASSIFICATION",
+      "title": "Decenas o unidades",
+      "instructions": "Clasifica cada ejemplo según si habla de decenas o de unidades.",
+      "content": {
+        "prompt": "Clasifica cada idea: ¿es una decena o una unidad?",
+        "categories": [
+          "Decena",
+          "Unidad"
+        ],
+        "items": [
+          {
+            "label": "Un paquete de 10 lápices",
+            "category": "Decena"
+          },
+          {
+            "label": "1 goma suelta",
+            "category": "Unidad"
+          },
+          {
+            "label": "Una caja con 10 canicas",
+            "category": "Decena"
+          },
+          {
+            "label": "1 boton suelto",
+            "category": "Unidad"
+          }
+        ],
+        "explanation": "Una decena es un grupo de 10. Una unidad es 1 solo. Así se entiende el valor de cada cifra."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido numérico",
+  "generation_provider": "GROK_CLI"
+}

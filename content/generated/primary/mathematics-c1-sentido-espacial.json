@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.mathematics-c1-sentido-espacial",
+  "title": "Dónde están las cosas",
+  "summary": "Módulo de ciclo 1 para ubicar objetos en el espacio, reconocer posiciones relativas y clasificar formas planas sencillas del entorno.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Describir la posición de objetos usando vocabulario espacial básico.",
+    "Reconocer y clasificar formas planas sencillas del entorno próximo.",
+    "Interpretar y seguir instrucciones espaciales cortas en situaciones cotidianas."
+  ],
+  "assessment_criteria": [
+    "Sitúa un objeto respecto a otro usando palabras como arriba, abajo, dentro o fuera.",
+    "Identifica formas planas habituales (círculo, cuadrado, triángulo) en objetos reales o dibujos.",
+    "Clasifica figuras según un criterio espacial o de forma dado de forma clara."
+  ],
+  "basic_knowledge": [
+    "Posiciones relativas: arriba, abajo, dentro, fuera, cerca, lejos.",
+    "Formas planas básicas: círculo, cuadrado, triángulo.",
+    "Orientación en el plano: izquierda y derecha en contextos sencillos.",
+    "Observación del entorno para localizar y comparar objetos."
+  ],
+  "activities": [
+    {
+      "id": "arriba-o-abajo",
+      "type": "CLOSED_QUESTION",
+      "title": "Arriba o abajo",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "El pájaro está en el árbol y el gato está en el suelo. ¿Dónde está el pájaro respecto al gato?",
+        "options": [
+          "Arriba",
+          "Abajo",
+          "Dentro"
+        ],
+        "correct_option": "Arriba",
+        "explanation": "Si el pájaro está en el árbol y el gato en el suelo, el pájaro está más alto: está arriba."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "dentro-o-fuera",
+      "type": "CLOSED_QUESTION",
+      "title": "Dentro o fuera",
+      "instructions": "Mira la situación y marca la opción correcta.",
+      "content": {
+        "prompt": "La pelota está en la caja cerrada. ¿Dónde está la pelota?",
+        "options": [
+          "Fuera de la caja",
+          "Dentro de la caja",
+          "Encima de la mesa"
+        ],
+        "correct_option": "Dentro de la caja",
+        "explanation": "Si la pelota está en la caja, su posición es dentro de la caja."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "formas-del-entorno",
+      "type": "CLASSIFICATION",
+      "title": "Formas del entorno",
+      "instructions": "Clasifica cada objeto según su forma. Arrastra o elige la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica cada objeto según si tiene forma de círculo o de cuadrado.",
+        "categories": [
+          "Círculo",
+          "Cuadrado"
+        ],
+        "items": [
+          {
+            "label": "Una rueda",
+            "category": "Círculo"
+          },
+          {
+            "label": "Una ventana cuadrada",
+            "category": "Cuadrado"
+          },
+          {
+            "label": "Un plato redondo",
+            "category": "Círculo"
+          },
+          {
+            "label": "Un dado visto de frente",
+            "category": "Cuadrado"
+          }
+        ],
+        "explanation": "Los objetos redondos se agrupan en círculo y los de cuatro lados iguales en cuadrado."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido espacial",
+  "generation_provider": "GROK_CLI"
+}

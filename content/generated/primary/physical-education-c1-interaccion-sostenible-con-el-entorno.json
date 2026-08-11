@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.physical-education-c1-interaccion-sostenible-con-el-entorno",
+  "title": "Cuidamos el entorno al movernos",
+  "summary": "Módulo del primer ciclo de Primaria en Educación Física sobre cómo jugar y movernos al aire libre respetando la naturaleza, las normas del espacio y a las demás personas.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Cuidar el entorno natural y los espacios de juego al realizar actividad física.",
+    "Seguir normas sencillas de seguridad y respeto en salidas y juegos al aire libre.",
+    "Tomar decisiones responsables para dejar limpio y ordenado el lugar de actividad."
+  ],
+  "assessment_criteria": [
+    "Reconoce acciones que protegen el entorno durante el juego y el movimiento.",
+    "Identifica normas básicas de seguridad y cuidado en espacios abiertos.",
+    "Clasifica conductas respetuosas e irrespetuosas con el medio y con los compañeros."
+  ],
+  "basic_knowledge": [
+    "Espacios naturales y de patio como lugares de juego y movimiento.",
+    "Normas sencillas de respeto a plantas, animales y materiales.",
+    "Hábitos de limpieza y orden tras la actividad.",
+    "Seguridad básica al desplazarse en el entorno cercano."
+  ],
+  "activities": [
+    {
+      "id": "dejar-limpio-el-patio",
+      "type": "CLOSED_QUESTION",
+      "title": "Dejamos el patio limpio",
+      "instructions": "Lee la pregunta y elige la mejor respuesta.",
+      "content": {
+        "prompt": "Tras jugar en el patio, ¿qué debemos hacer con los papeles y restos?",
+        "options": [
+          "Recogerlos y tirarlos a la basura",
+          "Dejarlos en el suelo",
+          "Empujarlos hacia un rincón"
+        ],
+        "correct_option": "Recogerlos y tirarlos a la basura",
+        "explanation": "Recoger y tirar los restos ayuda a cuidar el espacio de juego y el entorno."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "cuidar-plantas-al-jugar",
+      "type": "CLASSIFICATION",
+      "title": "Cuidamos las plantas al jugar",
+      "instructions": "Clasifica cada acción según si cuida o no cuida las plantas.",
+      "content": {
+        "prompt": "Clasifica estas acciones al jugar cerca de un jardín o zona con plantas.",
+        "categories": [
+          "Cuida las plantas",
+          "No cuida las plantas"
+        ],
+        "items": [
+          {
+            "label": "Jugar en el camino sin pisar las flores",
+            "category": "Cuida las plantas"
+          },
+          {
+            "label": "Arrancar hojas de los arbustos",
+            "category": "No cuida las plantas"
+          },
+          {
+            "label": "Mirar las plantas sin tocarlas",
+            "category": "Cuida las plantas"
+          },
+          {
+            "label": "Tirar la pelota a propósito sobre el jardín",
+            "category": "No cuida las plantas"
+          }
+        ],
+        "explanation": "Jugar sin dañar plantas y sin pisar zonas verdes ayuda a proteger el entorno."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "seguridad-en-el-parque",
+      "type": "CLOSED_QUESTION",
+      "title": "Seguridad en el parque",
+      "instructions": "Elige la opción más segura y respetuosa.",
+      "content": {
+        "prompt": "En un parque, ¿qué es lo más seguro al salir a caminar o jugar?",
+        "options": [
+          "Seguir al adulto y respetar las normas del espacio",
+          "Correr lejos del grupo sin avisar",
+          "Subir a sitios no permitidos para mirar mejor"
+        ],
+        "correct_option": "Seguir al adulto y respetar las normas del espacio",
+        "explanation": "Ir con el adulto y respetar las normas ayuda a movernos con seguridad y a cuidar el lugar."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Interacción sostenible con el entorno",
+  "generation_provider": "GROK_CLI"
+}

@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.physical-education-c3-interaccion-sostenible-con-el-entorno",
+  "title": "Cuidamos el entorno al movernos",
+  "summary": "Módulo de 5.º y 6.º sobre cómo practicar actividad física al aire libre o en la calle respetando la naturaleza, los espacios compartidos y la seguridad de todos.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Participar en actividades físicas al aire libre o en espacios comunes cuidando el entorno natural y urbano.",
+    "Tomar decisiones seguras y responsables al moverse en la naturaleza o en la calle.",
+    "Reconocer hábitos sostenibles relacionados con el desplazamiento activo y el uso de espacios.",
+    "Colaborar con respeto hacia las personas y el medio durante la práctica motriz."
+  ],
+  "assessment_criteria": [
+    "Identifica acciones que cuidan o dañan el entorno durante la actividad física.",
+    "Elige opciones seguras y respetuosas al practicar en espacios naturales o compartidos.",
+    "Explica con palabras sencillas por qué conviene cuidar el medio al movernos.",
+    "Clasifica prácticas según si favorecen o no una interacción sostenible con el entorno."
+  ],
+  "basic_knowledge": [
+    "Uso respetuoso de parques, caminos y espacios naturales al jugar o caminar.",
+    "Normas básicas de seguridad y respeto en salidas o actividades en el exterior.",
+    "Cuidado de plantas, animales, agua y residuos durante la actividad física.",
+    "Desplazamiento activo (andar o ir en bici de forma segura) como opción sostenible.",
+    "Convivencia en espacios compartidos: no molestar a otras personas ni dañar el entorno."
+  ],
+  "activities": [
+    {
+      "id": "que-cuidamos-en-el-parque",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué cuidamos en el parque?",
+      "instructions": "Lee la situación y elige la mejor respuesta.",
+      "content": {
+        "prompt": "Tras un juego en el parque, el grupo va a marcharse. ¿Qué acción cuida mejor el entorno?",
+        "options": [
+          "Recoger la basura y dejar el espacio limpio",
+          "Romper ramas para hacer un juego nuevo",
+          "Dejar botellas y papeles donde están"
+        ],
+        "correct_option": "Recoger la basura y dejar el espacio limpio",
+        "explanation": "Recoger residuos y no dañar plantas o bancos ayuda a que todos puedan seguir disfrutando del parque."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "seguro-o-poco-seguro-fuera",
+      "type": "CLASSIFICATION",
+      "title": "Seguro o poco seguro al aire libre",
+      "instructions": "Clasifica cada acción según si es segura o poco segura en una salida al exterior.",
+      "content": {
+        "prompt": "Clasifica estas acciones de una salida al parque o al campo.",
+        "categories": [
+          "Segura",
+          "Poco segura"
+        ],
+        "items": [
+          {
+            "label": "Quedarse con el grupo y seguir las indicaciones del adulto",
+            "category": "Segura"
+          },
+          {
+            "label": "Alejarse solo del grupo sin avisar",
+            "category": "Poco segura"
+          },
+          {
+            "label": "Beber agua y descansar cuando se necesita",
+            "category": "Segura"
+          },
+          {
+            "label": "Cruzar un camino sin mirar ni esperar a los demás",
+            "category": "Poco segura"
+          }
+        ],
+        "explanation": "En el exterior es importante no separarse, avisar, hidratarse y cruzar con atención para cuidar la seguridad de todos."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "eleccion-sostenible-para-ir",
+      "type": "CLOSED_QUESTION",
+      "title": "Elegir un desplazamiento sostenible",
+      "instructions": "Elige la opción más sostenible y adecuada para un trayecto corto y seguro.",
+      "content": {
+        "prompt": "Para ir a un parque cercano un día soleado y con tiempo, ¿qué opción es más sostenible y adecuada?",
+        "options": [
+          "Ir andando con un adulto por un camino seguro",
+          "Pedir un coche solo para ese trayecto corto",
+          "Tirar basura por el camino para aligerar la mochila"
+        ],
+        "correct_option": "Ir andando con un adulto por un camino seguro",
+        "explanation": "Andar en trayectos cortos y seguros reduce el uso innecesario de coche y favorece un hábito saludable y respetuoso con el entorno."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Interacción sostenible con el entorno",
+  "generation_provider": "GROK_CLI"
+}

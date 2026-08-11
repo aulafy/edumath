@@ -1,0 +1,105 @@
+{
+  "id": "org.edumath.primary.art-education-c3-musica-y-artes-escenicas",
+  "title": "Música y artes escénicas: escuchamos, creamos y representamos",
+  "summary": "Módulo de ciclo 3 para reconocer elementos musicales y teatrales, interpretar con sentido y valorar producciones artísticas propias y ajenas.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "ART_EDUCATION",
+  "competencies": [
+    "Escuchar con atención obras musicales y escénicas e identificar elementos básicos (ritmo, melodía, tempo, dinámica, voz, gesto y espacio).",
+    "Expresar ideas, emociones y relatos mediante la voz, el cuerpo, instrumentos sencillos y recursos escénicos de forma respetuosa y colaborativa.",
+    "Interpretar y crear piezas breves de música o teatro aplicando normas de ensayo, escucha activa y cuidado del material y del espacio.",
+    "Valorar la diversidad de estilos, géneros y tradiciones musicales y escénicas, incluyendo el patrimonio cultural cercano."
+  ],
+  "assessment_criteria": [
+    "Identifica en audiciones o vídeos elementos musicales y escénicos básicos y los describe con vocabulario sencillo y preciso.",
+    "Participa en interpretaciones o representaciones breves manteniendo el ritmo, la escucha al grupo y el uso adecuado de la voz o el cuerpo.",
+    "Crea o adapta una secuencia musical o teatral corta con intención expresiva clara.",
+    "Explica con respeto qué le transmite una obra y qué recursos ha usado el autor o el grupo para conseguirlo.",
+    "Cuida el material, el espacio y las normas de trabajo en ensayo y en puesta en escena."
+  ],
+  "basic_knowledge": [
+    "Elementos del lenguaje musical: pulso, ritmo, melodía, tempo (rápido/lento), dinámica (fuerte/suave) y silencios.",
+    "La voz hablada y cantada; instrumentos de percusión corporal y de pequeña percusión escolar.",
+    "Formas y géneros sencillos: canción, danza, marcha, pieza teatral breve y escena improvisada.",
+    "Recursos de las artes escénicas: gesto, postura, desplazamiento, expresión facial, espacio escénico y personaje.",
+    "Ensayo, escucha activa, cooperación y respeto al público y a las producciones de los demás.",
+    "Patrimonio musical y escénico del entorno y de distintas culturas, presentado de forma accesible."
+  ],
+  "activities": [
+    {
+      "id": "escucha-elementos-musicales",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué oímos en la música?",
+      "instructions": "Lee con atención y elige la respuesta correcta.",
+      "content": {
+        "prompt": "Si una canción suena cada vez más fuerte, ¿qué elemento musical está cambiando?",
+        "options": [
+          "La dinámica",
+          "El color de la ropa",
+          "El tamaño del escenario"
+        ],
+        "correct_option": "La dinámica",
+        "explanation": "La dinámica indica si la música suena fuerte o suave. Cuando se oye más fuerte o más suave, cambia la dinámica."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-musica-o-teatro",
+      "type": "CLASSIFICATION",
+      "title": "¿Es de música o de teatro?",
+      "instructions": "Clasifica cada elemento en la categoría que le corresponde.",
+      "content": {
+        "prompt": "Coloca cada elemento en Música o en Teatro.",
+        "categories": [
+          "Música",
+          "Teatro"
+        ],
+        "items": [
+          {
+            "label": "Melodía cantada",
+            "category": "Música"
+          },
+          {
+            "label": "Personaje y gesto",
+            "category": "Teatro"
+          },
+          {
+            "label": "Pulso y ritmo",
+            "category": "Música"
+          },
+          {
+            "label": "Espacio escénico",
+            "category": "Teatro"
+          }
+        ],
+        "explanation": "La melodía y el pulso pertenecen al lenguaje musical. El personaje, el gesto y el espacio escénico son recursos del teatro."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "ensayo-buena-practica",
+      "type": "CLOSED_QUESTION",
+      "title": "Buenas prácticas en el ensayo",
+      "instructions": "Elige la mejor opción para un ensayo en clase.",
+      "content": {
+        "prompt": "Durante un ensayo de canción o escena, ¿qué debes hacer para que el grupo suene o actúe bien?",
+        "options": [
+          "Escuchar al grupo y respetar el turno",
+          "Hablar por encima de los demás",
+          "Romper o esconder el material"
+        ],
+        "correct_option": "Escuchar al grupo y respetar el turno",
+        "explanation": "En el ensayo es clave la escucha activa, respetar los turnos y cuidar el material para que la interpretación funcione."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Música y artes escénicas",
+  "generation_provider": "GROK_CLI"
+}

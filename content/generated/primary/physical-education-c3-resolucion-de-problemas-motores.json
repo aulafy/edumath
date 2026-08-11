@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.physical-education-c3-resolucion-de-problemas-motores",
+  "title": "Resolviendo problemas motores en el juego",
+  "summary": "Este módulo enseña a los alumnos de 5º y 6º de Primaria a identificar situaciones de juego y elegir las mejores soluciones motrices para resolverlas de forma segura y cooperativa.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Competencia en conciencia y expresión culturales",
+    "Competencia en aprender a aprender",
+    "Competencia personal, social y de aprender a vivir juntos"
+  ],
+  "assessment_criteria": [
+    "Identificar el problema motor planteado en una situación de juego.",
+    "Seleccionar la solución motriz más adecuada y segura para resolver el problema.",
+    "Coordinar acciones con compañeros para ejecutar la solución elegida."
+  ],
+  "basic_knowledge": [
+    "Los problemas motores son situaciones en las que necesitamos decidir qué movimiento hacer para lograr un objetivo.",
+    "Las soluciones pueden ser individuales (saltar, correr) o colectivas (pasarse el balón, defender).",
+    "Es importante elegir la solución que sea segura para todos y que permita jugar con los demás."
+  ],
+  "activities": [
+    {
+      "id": "actividad-1-identificar-problema",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué problema motor estamos viendo?",
+      "instructions": "Lee la situación y elige la opción que explica mejor el problema motor del juego.",
+      "content": {
+      "prompt": "En un juego de invasión, el equipo con balón encuentra varias personas defendiendo el camino hacia la zona de puntuación. ¿Qué problema motor debe resolver?",
+        "options": [
+        "Cómo crear espacio y avanzar mediante pases o desplazamientos",
+        "Cómo cambiar el resultado sin continuar el juego",
+        "Cómo ignorar a las personas del propio equipo"
+        ],
+      "correct_option": "Cómo crear espacio y avanzar mediante pases o desplazamientos",
+      "explanation": "El equipo puede observar espacios libres, desmarcarse y cooperar con pases para avanzar sin contacto peligroso."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "actividad-2-elegir-solucion",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Cuál es la mejor solución?",
+      "instructions": "Lee la situación y selecciona la solución motriz más segura y eficaz.",
+      "content": {
+      "prompt": "Dos compañeros deben llevar el balón hasta una zona de puntuación sin entrar en un espacio marcado con conos. ¿Qué solución es segura y cooperativa?",
+        "options": [
+        "Pasarse el balón y rodear juntos el espacio marcado",
+        "Atravesar el espacio prohibido corriendo",
+        "Lanzar el balón sin mirar dónde están los demás"
+        ],
+      "correct_option": "Pasarse el balón y rodear juntos el espacio marcado",
+      "explanation": "Rodear la zona y cooperar con pases respeta la regla, mantiene el control y permite participar a ambos compañeros."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "actividad-3-clasificacion-soluciones",
+      "type": "CLASSIFICATION",
+      "title": "Clasifica las soluciones motoras",
+      "instructions": "Clasifica cada decisión por su forma de participación y seguridad.",
+      "content": {
+        "prompt": "Clasifica cada decisión en una categoría.",
+        "categories": [
+        "Individual segura",
+        "Colectiva segura",
+        "Arriesgada"
+        ],
+        "items": [
+          {
+            "label": "Un jugador avanza solo por un espacio libre y respeta las reglas.",
+            "category": "Individual segura"
+          },
+          {
+            "label": "Dos jugadores se pasan el balón para crear una jugada.",
+            "category": "Colectiva segura"
+          },
+          {
+            "label": "Un jugador corre mirando solo el balón y empuja para pasar.",
+            "category": "Arriesgada"
+          },
+          {
+            "label": "Un grupo se organiza en defensa manteniendo una distancia segura.",
+            "category": "Colectiva segura"
+          }
+        ],
+        "explanation": "Las decisiones seguras pueden ser individuales o colectivas. Correr sin observar el entorno y empujar puede causar choques o caídas."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Resolución de problemas motores",
+  "generation_provider": "LM_STUDIO_QWEN"
+}

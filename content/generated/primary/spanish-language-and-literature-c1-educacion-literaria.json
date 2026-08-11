@@ -1,0 +1,104 @@
+{
+  "id": "org.edumath.primary.spanish-language-and-literature-c1-educacion-literaria",
+  "title": "Educación literaria",
+  "summary": "Escucha, disfruta y reconoce cuentos, poemas y canciones sencillos. Identifica personajes, lugares y tipos de texto literario propios del primer ciclo.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "SPANISH_LANGUAGE_AND_LITERATURE",
+  "competencies": [
+    "Escuchar con atención textos literarios orales sencillos y mostrar interés y disfrute.",
+    "Reconocer personajes, lugares y hechos básicos de cuentos y poemas infantiles.",
+    "Distinguir tipos simples de textos literarios: cuento, poema y canción.",
+    "Participar en actividades de lectura y recreación oral de textos literarios adecuados a su edad."
+  ],
+  "assessment_criteria": [
+    "Escucha cuentos, poemas o canciones y comenta de forma sencilla lo que ha entendido o le ha gustado.",
+    "Identifica el personaje principal y el lugar donde ocurre una historia breve.",
+    "Clasifica textos literarios sencillos según sean cuento, poema o canción.",
+    "Responde con claridad a preguntas simples sobre el contenido de un texto literario escuchado o leído."
+  ],
+  "basic_knowledge": [
+    "Cuentos, poemas y canciones infantiles de tradición oral y de autor.",
+    "Elementos básicos del relato: personajes, lugar y hechos principales.",
+    "Rasgos sencillos del poema y de la canción: rima, ritmo y verso.",
+    "Lectura y escucha placentera de textos literarios adecuados al primer ciclo.",
+    "Recreación oral de textos literarios: recitado, dramatización sencilla y recontado."
+  ],
+  "activities": [
+    {
+      "id": "cuento-poema-cancion",
+      "type": "CLASSIFICATION",
+      "title": "¿Cuento, poema o canción?",
+      "instructions": "Lee cada texto corto. Colócalo en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica cada texto: ¿es un cuento, un poema o una canción?",
+        "categories": [
+          "Cuento",
+          "Poema",
+          "Canción"
+        ],
+        "items": [
+          {
+            "label": "Había una vez un gato que vivía en una casa roja.",
+            "category": "Cuento"
+          },
+          {
+            "label": "El sol brilla en el cielo azul, / la flor se abre con la luz.",
+            "category": "Poema"
+          },
+          {
+            "label": "Cumpleaños feliz, cumpleaños feliz...",
+            "category": "Canción"
+          },
+          {
+            "label": "La niña abrió la puerta y encontró un tesoro.",
+            "category": "Cuento"
+          }
+        ],
+        "explanation": "El cuento cuenta una historia. El poema usa versos y rimas. La canción se canta."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "personaje-principal-cuento",
+      "type": "CLOSED_QUESTION",
+      "title": "El personaje principal",
+      "instructions": "Lee el cuento corto. Elige al personaje principal.",
+      "content": {
+        "prompt": "Había una vez un perro llamado Lolo. Lolo vivía en el campo. Un día, Lolo encontró una pelota y jugó feliz. ¿Quién es el personaje principal?",
+        "options": [
+          "Lolo, el perro",
+          "La pelota",
+          "El campo"
+        ],
+        "correct_option": "Lolo, el perro",
+        "explanation": "El personaje principal es quien hace las acciones de la historia. Aquí es Lolo."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "lugar-de-la-historia",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Dónde ocurre?",
+      "instructions": "Lee la historia. Elige el lugar donde ocurre.",
+      "content": {
+        "prompt": "María se sentó bajo el árbol del parque. Leyó su libro y vio pájaros en las ramas. ¿Dónde ocurre la historia?",
+        "options": [
+          "En el parque",
+          "En la escuela",
+          "En la playa"
+        ],
+        "correct_option": "En el parque",
+        "explanation": "El lugar es donde pasan los hechos. Aquí María está en el parque, bajo un árbol."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Educación literaria",
+  "generation_provider": "GROK_CLI"
+}

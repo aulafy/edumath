@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.physical-education-c1-autorregulacion-emocional-e-interaccion-social",
+  "title": "Emociones y convivencia en el juego",
+  "summary": "Módulo de Educación Física para 1.º y 2.º de Primaria sobre reconocer emociones, calmarse y jugar con respeto y cooperación.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Reconocer emociones sencillas al jugar o moverse.",
+    "Usar formas seguras y amables de calmarse y pedirse turno.",
+    "Cooperar, respetar normas y aceptar el resultado del juego."
+  ],
+  "assessment_criteria": [
+    "Identifica emociones básicas en situaciones de juego y actividad física.",
+    "Elige acciones seguras para regular la emoción y cuidar a los demás.",
+    "Participa con respeto, espera su turno y colabora en juegos sencillos."
+  ],
+  "basic_knowledge": [
+    "Emociones al jugar: alegría, enfado, tristeza, nerviosismo.",
+    "Formas seguras de calmarse: respirar despacio, pedir ayuda, tomarse un respiro.",
+    "Interacción social: turnos, normas del juego, pedir las cosas con amabilidad.",
+    "Cooperación y respeto: animar, compartir espacio y aceptar ganar o perder."
+  ],
+  "activities": [
+    {
+      "id": "emocion-al-perder",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué siento si pierdo?",
+      "instructions": "Lee la situación y elige la emoción que mejor encaja.",
+      "content": {
+        "prompt": "En un juego, tu equipo no gana. Te sientes mal por un momento. ¿Qué emoción es más probable?",
+        "options": [
+          "Alegría",
+          "Enfado o tristeza",
+          "Hambre"
+        ],
+        "correct_option": "Enfado o tristeza",
+        "explanation": "Perder puede producir enfado o tristeza. Es normal sentirlo; después se puede calmar y seguir jugando con respeto."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "como-calmarse-seguro",
+      "type": "CLOSED_QUESTION",
+      "title": "Calmarse con seguridad",
+      "instructions": "Elige la forma segura y amable de calmarse.",
+      "content": {
+        "prompt": "Estás muy nervioso o enfadado en el patio. ¿Qué es lo más seguro y adecuado?",
+        "options": [
+          "Respirar despacio y pedir ayuda a un adulto",
+          "Empujar a un compañero",
+          "Gritar muy fuerte sin parar"
+        ],
+        "correct_option": "Respirar despacio y pedir ayuda a un adulto",
+        "explanation": "Respirar despacio y pedir ayuda sirve para calmarse sin hacer daño ni romper las normas."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "juego-respeto-o-no",
+      "type": "CLASSIFICATION",
+      "title": "Juego respetuoso o no respetuoso",
+      "instructions": "Clasifica cada acción según si es respetuosa o no en el juego.",
+      "content": {
+        "prompt": "Clasifica estas acciones de juego.",
+        "categories": [
+          "Respetuoso",
+          "No respetuoso"
+        ],
+        "items": [
+          {
+            "label": "Esperar el turno para saltar a la comba",
+            "category": "Respetuoso"
+          },
+          {
+            "label": "Empujar para llegar primero",
+            "category": "No respetuoso"
+          },
+          {
+            "label": "Animar a un compañero que se cae sin hacerse daño",
+            "category": "Respetuoso"
+          },
+          {
+            "label": "Insultar si pierdes",
+            "category": "No respetuoso"
+          }
+        ],
+        "explanation": "El juego respetuoso incluye turnos, ayuda y buen trato. Empujar o insultar no es respetuoso ni seguro."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Autorregulación emocional e interacción social",
+  "generation_provider": "GROK_CLI"
+}

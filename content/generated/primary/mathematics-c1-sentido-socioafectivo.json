@@ -1,0 +1,104 @@
+{
+  "id": "org.edumath.primary.mathematics-c1-sentido-socioafectivo",
+  "title": "Sentido socioafectivo en matemáticas",
+  "summary": "Módulo para 1.º y 2.º de Primaria que ayuda a expresar emociones al aprender matemáticas, perseverar ante los errores y colaborar con respeto.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Identificar y expresar emociones sencillas al hacer matemáticas.",
+    "Mostrar perseverancia y actitud positiva ante errores y dificultades.",
+    "Colaborar con respeto, pedir y ofrecer ayuda en tareas matemáticas.",
+    "Valorar el esfuerzo propio y el de los compañeros en el aprendizaje."
+  ],
+  "assessment_criteria": [
+    "Expresa cómo se siente al resolver o no una tarea matemática con palabras o gestos adecuados.",
+    "Reintenta una actividad tras un error sin abandonar de inmediato.",
+    "Pide ayuda de forma educada y acepta ayuda de compañeros o del docente.",
+    "Participa en el trabajo en pareja o grupo respetando turnos y opiniones.",
+    "Reconoce el esfuerzo en el proceso, no solo el resultado correcto."
+  ],
+  "basic_knowledge": [
+    "Emociones básicas al aprender matemáticas: alegría, duda, frustración, calma.",
+    "Errores como parte del aprendizaje y la importancia de intentarlo de nuevo.",
+    "Normas sencillas de colaboración: escuchar, turnarse, pedir ayuda con cortesía.",
+    "Autoconfianza y valoración del esfuerzo en el trabajo matemático.",
+    "Actitudes de respeto y apoyo entre compañeros en el aula de matemáticas."
+  ],
+  "activities": [
+    {
+      "id": "emociones-al-calcular",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Cómo me siento?",
+      "instructions": "Lee la situación y elige la emoción que encaja mejor.",
+      "content": {
+        "prompt": "Ana prueba una suma, se equivoca y dice: «Voy a intentarlo otra vez». ¿Cómo se siente Ana?",
+        "options": [
+          "Con ganas de seguir intentándolo",
+          "Contenta de no hacer más sumas",
+          "Enfadada con su compañero"
+        ],
+        "correct_option": "Con ganas de seguir intentándolo",
+        "explanation": "Querer intentarlo de nuevo muestra perseverancia y una actitud positiva ante el error."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasifica-actitudes-grupo",
+      "type": "CLASSIFICATION",
+      "title": "Ayuda o no ayuda",
+      "instructions": "Clasifica cada frase según si ayuda o no ayuda al trabajar juntos en matemáticas.",
+      "content": {
+        "prompt": "Clasifica cada frase en «Ayuda al grupo» o «No ayuda al grupo».",
+        "categories": [
+          "Ayuda al grupo",
+          "No ayuda al grupo"
+        ],
+        "items": [
+          {
+            "label": "«¿Me explicas cómo lo hiciste?»",
+            "category": "Ayuda al grupo"
+          },
+          {
+            "label": "«¡Tu idea está mal y punto!»",
+            "category": "No ayuda al grupo"
+          },
+          {
+            "label": "«Vamos a turnarnos para contar.»",
+            "category": "Ayuda al grupo"
+          },
+          {
+            "label": "«No te dejo coger los bloques.»",
+            "category": "No ayuda al grupo"
+          }
+        ],
+        "explanation": "Pedir explicaciones y turnarse ayuda; insultar o no compartir dificulta el trabajo en equipo."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "que-hacer-si-no-se",
+      "type": "CLOSED_QUESTION",
+      "title": "Si no sé la respuesta",
+      "instructions": "Elige la mejor acción cuando no sabes resolver un problema.",
+      "content": {
+        "prompt": "No sabes cómo empezar un problema de matemáticas. ¿Qué es lo mejor?",
+        "options": [
+          "Pedir ayuda con educación",
+          "Romper la hoja del problema",
+          "Decir que el problema es tonto"
+        ],
+        "correct_option": "Pedir ayuda con educación",
+        "explanation": "Pedir ayuda de forma educada permite seguir aprendiendo y cuidar el clima del aula."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido socioafectivo",
+  "generation_provider": "GROK_CLI"
+}

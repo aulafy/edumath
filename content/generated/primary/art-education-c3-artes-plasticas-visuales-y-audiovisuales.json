@@ -1,0 +1,106 @@
+{
+  "id": "org.edumath.primary.art-education-c3-artes-plasticas-visuales-y-audiovisuales",
+  "title": "Artes plásticas, visuales y audiovisuales",
+  "summary": "Exploramos imágenes, colores, formas y mensajes visuales. Aprendemos a observar, crear y clasificar obras plásticas y audiovisuales con criterio y respeto.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "ART_EDUCATION",
+  "competencies": [
+    "Observar e interpretar imágenes, obras plásticas y productos audiovisuales con atención al mensaje y a los elementos visuales.",
+    "Expresar ideas y emociones mediante técnicas plásticas, visuales y audiovisuales sencillas, planificando el proceso creativo.",
+    "Reconocer y valorar la diversidad de manifestaciones artísticas y su presencia en la vida cotidiana y en el entorno cultural.",
+    "Usar de forma responsable y segura herramientas, materiales e imágenes digitales en contextos de creación y análisis."
+  ],
+  "assessment_criteria": [
+    "Describe con claridad elementos visuales básicos (color, forma, línea, textura, composición) en imágenes y obras.",
+    "Clasifica imágenes y productos audiovisuales según su finalidad, técnica o medio de difusión.",
+    "Explica de forma sencilla el mensaje o la emoción que transmite una imagen o un fragmento audiovisual.",
+    "Aplica de manera segura y ordenada técnicas plásticas o visuales sencillas para comunicar una idea.",
+    "Valora el trabajo propio y el de otras personas con respeto y con argumentos visuales simples."
+  ],
+  "basic_knowledge": [
+    "Elementos del lenguaje visual: línea, forma, color, textura, luz, espacio y composición.",
+    "Técnicas plásticas y visuales básicas: dibujo, pintura, collage, modelado y edición de imagen sencilla.",
+    "Géneros y medios: pintura, escultura, fotografía, cómic, cartel, animación y vídeo corto.",
+    "Funciones de la imagen: informar, expresar, persuadir y entretener.",
+    "Proceso creativo: observación, idea, boceto, realización y revisión.",
+    "Uso responsable de imágenes, materiales y dispositivos digitales."
+  ],
+  "activities": [
+    {
+      "id": "elementos-visuales-basicos",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué es la composición?",
+      "instructions": "Lee con atención y elige la opción correcta.",
+      "content": {
+        "prompt": "En una imagen, la composición es…",
+        "options": [
+          "La forma de organizar los elementos dentro del espacio",
+          "El color más brillante de la obra",
+          "El material con el que se pinta"
+        ],
+        "correct_option": "La forma de organizar los elementos dentro del espacio",
+        "explanation": "La composición es cómo se colocan y relacionan las formas, colores y líneas para crear un conjunto visual."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "funcion-de-la-imagen",
+      "type": "CLASSIFICATION",
+      "title": "¿Para qué sirve cada imagen?",
+      "instructions": "Clasifica cada ejemplo según la función principal de la imagen.",
+      "content": {
+        "prompt": "Clasifica cada imagen según su función principal.",
+        "categories": [
+          "Informar",
+          "Persuadir",
+          "Entretener"
+        ],
+        "items": [
+          {
+            "label": "Un cartel del comedor con el menú de la semana",
+            "category": "Informar"
+          },
+          {
+            "label": "Un anuncio que invita a comprar un juguete",
+            "category": "Persuadir"
+          },
+          {
+            "label": "Un cómic gracioso de aventuras",
+            "category": "Entretener"
+          },
+          {
+            "label": "Un mapa del colegio con las aulas numeradas",
+            "category": "Informar"
+          }
+        ],
+        "explanation": "Las imágenes pueden informar (dar datos), persuadir (convencer) o entretener (divertir). A veces combinan funciones, pero aquí nos fijamos en la principal."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "medio-artistico-correcto",
+      "type": "CLOSED_QUESTION",
+      "title": "Reconoce el medio artístico",
+      "instructions": "Elige la respuesta más adecuada.",
+      "content": {
+        "prompt": "Una secuencia de dibujos que se muestran muy rápido para crear la ilusión de movimiento se llama…",
+        "options": [
+          "Animación",
+          "Escultura",
+          "Collage"
+        ],
+        "correct_option": "Animación",
+        "explanation": "La animación une muchos dibujos o fotogramas seguidos para que parezca que las figuras se mueven."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Artes plásticas, visuales y audiovisuales",
+  "generation_provider": "GROK_CLI"
+}

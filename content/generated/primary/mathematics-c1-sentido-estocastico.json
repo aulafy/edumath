@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.mathematics-c1-sentido-estocastico",
+  "title": "Datos y azar en lo cotidiano",
+  "summary": "Módulo de 1.º ciclo de Primaria para observar, contar y organizar datos sencillos y hablar de lo seguro, lo posible y lo imposible en situaciones cercanas.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Recoger y contar datos sencillos de la vida diaria.",
+    "Organizar información en tablas o gráficos muy simples.",
+    "Reconocer situaciones seguras, posibles e imposibles.",
+    "Explicar con palabras propias lo que muestran los datos."
+  ],
+  "assessment_criteria": [
+    "Cuenta y registra datos de su entorno de forma ordenada.",
+    "Interpreta pictogramas o gráficos de barras muy simples.",
+    "Clasifica hechos cotidianos según sean seguros, posibles o imposibles.",
+    "Comunica con claridad qué informa un conjunto de datos sencillo."
+  ],
+  "basic_knowledge": [
+    "Recogida y conteo de datos cercanos (gustos, colores, objetos).",
+    "Representaciones simples: pictogramas y tablas de doble entrada básicas.",
+    "Lenguaje del azar: seguro, posible e imposible.",
+    "Comparación cualitativa de frecuencias (más, menos, igual)."
+  ],
+  "activities": [
+    {
+      "id": "pictograma-mas-votos",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué fruta tiene más votos?",
+      "instructions": "Mira el pictograma de la clase y elige la respuesta correcta.",
+      "content": {
+        "prompt": "En un pictograma, la manzana tiene 5 caritas y el plátano tiene 3 caritas. ¿Qué fruta tiene más votos?",
+        "options": [
+          "La manzana",
+          "El plátano",
+          "Las dos por igual"
+        ],
+        "correct_option": "La manzana",
+        "explanation": "Cinco es más que tres, así que la manzana tiene más votos."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "seguro-posible-imposible",
+      "type": "CLASSIFICATION",
+      "title": "Seguro, posible o imposible",
+      "instructions": "Clasifica cada situación en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica cada hecho según sea seguro, posible o imposible.",
+        "categories": [
+          "Seguro",
+          "Posible",
+          "Imposible"
+        ],
+        "items": [
+          {
+            "label": "El sol saldrá mañana",
+            "category": "Seguro"
+          },
+          {
+            "label": "Hoy puede llover",
+            "category": "Posible"
+          },
+          {
+            "label": "Un gato habla como una persona",
+            "category": "Imposible"
+          },
+          {
+            "label": "Al lanzar un dado puede salir un 4",
+            "category": "Posible"
+          }
+        ],
+        "explanation": "Lo seguro siempre ocurre; lo posible a veces sí y a veces no; lo imposible no puede ocurrir."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "tabla-colores-preferidos",
+      "type": "CLOSED_QUESTION",
+      "title": "Leemos la tabla de colores",
+      "instructions": "Lee la tabla y responde con atención.",
+      "content": {
+        "prompt": "En una tabla, el color azul tiene 6 votos y el color rojo tiene 4 votos. ¿Qué color tiene menos votos?",
+        "options": [
+          "El rojo",
+          "El azul",
+          "Ninguno"
+        ],
+        "correct_option": "El rojo",
+        "explanation": "Cuatro es menos que seis, por eso el rojo tiene menos votos."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido estocástico",
+  "generation_provider": "GROK_CLI"
+}

@@ -1,0 +1,106 @@
+{
+  "id": "org.edumath.primary.spanish-language-and-literature-c1-reflexion-sobre-la-lengua",
+  "title": "Reflexión sobre la lengua",
+  "summary": "Módulo de 1.º ciclo para observar y usar con sentido letras, palabras y oraciones sencillas: mayúsculas, signos básicos, nombres y verbos, y concordancia de número y género en el uso cotidiano.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "SPANISH_LANGUAGE_AND_LITERATURE",
+  "competencies": [
+    "Observar cómo se construyen las palabras y las oraciones en mensajes cortos.",
+    "Reconocer unidades básicas de la lengua (letra, palabra, oración) y su función en la comunicación.",
+    "Aplicar normas sencillas de escritura: mayúscula inicial y punto final.",
+    "Identificar nombres y verbos en contextos cercanos y con vocabulario familiar.",
+    "Ajustar el número (singular/plural) y el género (masculino/femenino) en frases muy simples."
+  ],
+  "assessment_criteria": [
+    "Reconoce letras, palabras y oraciones en textos breves y claros.",
+    "Usa mayúscula al empezar la oración y punto al terminarla en producciones muy sencillas.",
+    "Distingue nombres de verbos en ejemplos cotidianos.",
+    "Completa o elige formas correctas de singular/plural y masculino/femenino en oraciones cortas.",
+    "Explica con sus palabras, de forma muy simple, por qué una palabra o un signo encaja en la frase."
+  ],
+  "basic_knowledge": [
+    "Letras, sílabas, palabras y oraciones como unidades de la lengua.",
+    "Mayúscula al inicio de la oración y en nombres propios sencillos; punto al final.",
+    "El nombre: personas, animales y cosas cercanas.",
+    "El verbo: acciones que se hacen o se sienten.",
+    "Singular y plural; masculino y femenino en palabras de uso frecuente.",
+    "Orden básico de la oración: quién hace la acción y qué hace."
+  ],
+  "activities": [
+    {
+      "id": "mayuscula-inicio-oracion",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Dónde va la mayúscula?",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "¿Qué oración está bien escrita?",
+        "options": [
+          "el gato duerme.",
+          "El gato duerme.",
+          "el Gato duerme."
+        ],
+        "correct_option": "El gato duerme.",
+        "explanation": "La oración empieza con mayúscula y las demás palabras van en minúscula si no son nombres propios."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-nombres-y-verbos",
+      "type": "CLASSIFICATION",
+      "title": "Nombres y verbos",
+      "instructions": "Clasifica cada palabra en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica estas palabras: ¿es un nombre o un verbo?",
+        "categories": [
+          "Nombre",
+          "Verbo"
+        ],
+        "items": [
+          {
+            "label": "mesa",
+            "category": "Nombre"
+          },
+          {
+            "label": "correr",
+            "category": "Verbo"
+          },
+          {
+            "label": "perro",
+            "category": "Nombre"
+          },
+          {
+            "label": "saltar",
+            "category": "Verbo"
+          }
+        ],
+        "explanation": "Los nombres nombran personas, animales o cosas. Los verbos dicen lo que se hace."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "singular-o-plural",
+      "type": "CLOSED_QUESTION",
+      "title": "Uno o varios",
+      "instructions": "Elige la forma que completa bien la frase.",
+      "content": {
+        "prompt": "Completa: «Hay tres ___ en el parque.»",
+        "options": [
+          "niño",
+          "niños",
+          "niña"
+        ],
+        "correct_option": "niños",
+        "explanation": "«Tres» indica varios, así que usamos el plural «niños»."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Reflexión sobre la lengua",
+  "generation_provider": "GROK_CLI"
+}

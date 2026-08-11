@@ -1,0 +1,119 @@
+{
+  "id": "org.edumath.primary.spanish-language-and-literature-c3-reflexion-sobre-la-lengua",
+  "title": "Reflexión sobre la lengua",
+  "summary": "Módulo de 5.º y 6.º de Primaria para observar y explicar cómo funcionan las palabras y las oraciones en castellano, con el fin de mejorar la comprensión y la expresión.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "SPANISH_LANGUAGE_AND_LITERATURE",
+  "competencies": [
+    "Observar y describir el uso de las palabras y las oraciones en textos sencillos.",
+    "Aplicar nociones básicas de gramática y ortografía para mejorar la comunicación.",
+    "Explicar con palabras propias por qué una forma lingüística es adecuada en un contexto."
+  ],
+  "assessment_criteria": [
+    "Identifica categorías gramaticales frecuentes (sustantivo, adjetivo, verbo, adverbio) en oraciones conocidas.",
+    "Distingue sujetos y predicados en oraciones simples y justifica su respuesta.",
+    "Reconoce relaciones de significado entre palabras (sinónimos, antónimos, familias léxicas) y las usa con corrección.",
+    "Aplica reglas ortográficas y de concordancia básicas al analizar o corregir ejemplos."
+  ],
+  "basic_knowledge": [
+    "Clases de palabras: sustantivo, adjetivo, verbo, adverbio, determinante y preposición.",
+    "La oración simple: sujeto, predicado y concordancia.",
+    "Formación de palabras: prefijos, sufijos y familias léxicas.",
+    "Relaciones semánticas: sinónimos, antónimos y campos léxicos.",
+    "Normas ortográficas y de puntuación habituales en textos del ciclo."
+  ],
+  "activities": [
+    {
+      "id": "clases-de-palabras-oracion",
+      "type": "CLASSIFICATION",
+      "title": "Clasifica las palabras de la oración",
+      "instructions": "Lee cada palabra y colócala en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica estas palabras según su clase gramatical.",
+        "categories": [
+          "Sustantivo",
+          "Adjetivo",
+          "Verbo"
+        ],
+        "items": [
+          {
+            "label": "correr",
+            "category": "Verbo"
+          },
+          {
+            "label": "alegre",
+            "category": "Adjetivo"
+          },
+          {
+            "label": "escuela",
+            "category": "Sustantivo"
+          },
+          {
+            "label": "escribir",
+            "category": "Verbo"
+          }
+        ],
+        "explanation": "Los sustantivos nombran personas, animales o cosas; los adjetivos describen cualidades; los verbos expresan acciones o estados."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "sujeto-o-predicado",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Sujeto o predicado?",
+      "instructions": "Elige la opción que indica correctamente el sujeto de la oración.",
+      "content": {
+        "prompt": "En la oración «Los alumnos preparan un mural», ¿cuál es el sujeto?",
+        "options": [
+          "Los alumnos",
+          "preparan un mural",
+          "un mural"
+        ],
+        "correct_option": "Los alumnos",
+        "explanation": "El sujeto es quien realiza la acción. Aquí «Los alumnos» hacen la acción de preparar."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "sinonimos-y-antonimos",
+      "type": "CLASSIFICATION",
+      "title": "Sinónimos y antónimos",
+      "instructions": "Clasifica cada par de palabras según la relación de significado.",
+      "content": {
+        "prompt": "Clasifica cada par según si las palabras tienen significado parecido o contrario.",
+        "categories": [
+          "Sinónimos",
+          "Antónimos"
+        ],
+        "items": [
+          {
+            "label": "rápido – veloz",
+            "category": "Sinónimos"
+          },
+          {
+            "label": "alto – bajo",
+            "category": "Antónimos"
+          },
+          {
+            "label": "contento – feliz",
+            "category": "Sinónimos"
+          },
+          {
+            "label": "abrir – cerrar",
+            "category": "Antónimos"
+          }
+        ],
+        "explanation": "Los sinónimos tienen un significado parecido; los antónimos expresan ideas contrarias."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Reflexión sobre la lengua",
+  "generation_provider": "GROK_CLI"
+}

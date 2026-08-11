@@ -1,0 +1,120 @@
+{
+  "id": "org.edumath.primary.physical-education-c3-autorregulacion-emocional-e-interaccion-social",
+  "title": "Autorregulación emocional e interacción social",
+  "summary": "Módulo de Educación Física (ciclo 3.º) para reconocer emociones en el juego, regular reacciones y mejorar la convivencia con respeto, cooperación y resolución pacífica de conflictos.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Identificar y nombrar emociones que aparecen en juegos y actividades motrices.",
+    "Regular la conducta ante el éxito, el error o la frustración en situaciones de juego.",
+    "Cooperar, respetar turnos y normas, e incluir a compañeros y compañeras.",
+    "Resolver desacuerdos de forma pacífica y dialogada en el patio o en clase."
+  ],
+  "assessment_criteria": [
+    "Reconoce emociones propias y ajenas en situaciones de juego y explica cómo influyen en la conducta.",
+    "Aplica estrategias sencillas de autorregulación (parar, respirar, pedir ayuda, cambiar de rol) ante la frustración o el conflicto.",
+    "Participa con respeto, cooperación y juego limpio, aceptando normas y resultados.",
+    "Propone o elige soluciones dialogadas ante desacuerdos, sin agredir ni excluir."
+  ],
+  "basic_knowledge": [
+    "Emociones frecuentes en la actividad física: alegría, nervios, enfado, decepción y orgullo.",
+    "Estrategias de autorregulación: pausa, respiración calmada, autodiálogo positivo y pedir apoyo.",
+    "Normas de convivencia en el juego: turnos, respeto, inclusión y aceptación del resultado.",
+    "Juego limpio y cooperación frente a la rivalidad agresiva o la exclusión.",
+    "Resolución pacífica de conflictos: escuchar, explicar, proponer y acordar."
+  ],
+  "activities": [
+    {
+      "id": "emociones-en-el-juego",
+      "type": "CLASSIFICATION",
+      "title": "Emociones en el juego",
+      "instructions": "Lee cada situación y clasifícala en la emoción que mejor la describe.",
+      "content": {
+        "prompt": "Clasifica cada situación según la emoción principal que suele sentir el alumnado.",
+        "categories": [
+          "Alegría",
+          "Frustración",
+          "Calma"
+        ],
+        "items": [
+          {
+            "label": "Tu equipo marca un punto y celebráis juntos sin burlaros.",
+            "category": "Alegría"
+          },
+          {
+            "label": "Pierdes un partido y sientes ganas de gritar o abandonar.",
+            "category": "Frustración"
+          },
+          {
+            "label": "Tras un fallo, respiras despacio y vuelves a intentarlo.",
+            "category": "Calma"
+          },
+          {
+            "label": "Te eligen para un juego cooperativo y te sientes a gusto.",
+            "category": "Alegría"
+          }
+        ],
+        "explanation": "Identificar la emoción ayuda a elegir una respuesta adecuada: celebrar con respeto, gestionar la frustración y recuperar la calma para seguir jugando."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "que-hacer-si-me-enfado",
+      "type": "CLOSED_QUESTION",
+      "title": "Qué hacer si me enfado",
+      "instructions": "Elige la opción más segura y respetuosa cuando sientes enfado en un juego.",
+      "content": {
+        "prompt": "En un partido de patio te sientes muy enfadado porque crees que ha habido una falta. ¿Qué es lo más adecuado?",
+        "options": [
+          "Parar un momento, respirar y explicar con calma lo que ha pasado.",
+          "Empujar a quien te molesta para que no vuelva a pasar.",
+          "Abandonar el juego gritando y sin escuchar a nadie."
+        ],
+        "correct_option": "Parar un momento, respirar y explicar con calma lo que ha pasado.",
+        "explanation": "La autorregulación empieza por frenar el impulso. Respirar y dialogar permite resolver el conflicto sin dañar a nadie ni romper el juego."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "juego-limpio-o-no",
+      "type": "CLASSIFICATION",
+      "title": "Juego limpio o no",
+      "instructions": "Clasifica cada conducta según si favorece o no la convivencia en el juego.",
+      "content": {
+        "prompt": "Clasifica cada conducta como ejemplo de juego limpio o de conducta poco respetuosa.",
+        "categories": [
+          "Juego limpio",
+          "Poco respetuoso"
+        ],
+        "items": [
+          {
+            "label": "Dejar pasar el turno y animar a quien se equivoca.",
+            "category": "Juego limpio"
+          },
+          {
+            "label": "Reírse de un compañero cuando falla un lanzamiento.",
+            "category": "Poco respetuoso"
+          },
+          {
+            "label": "Aceptar el resultado final aunque no te guste.",
+            "category": "Juego limpio"
+          },
+          {
+            "label": "Excluir a alguien del equipo porque es más lento.",
+            "category": "Poco respetuoso"
+          }
+        ],
+        "explanation": "El juego limpio se basa en respeto, inclusión y aceptación del resultado. Burlarse o excluir daña la convivencia y rompe el sentido educativo del juego."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Autorregulación emocional e interacción social",
+  "generation_provider": "GROK_CLI"
+}

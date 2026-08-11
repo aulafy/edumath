@@ -49,6 +49,7 @@ class EduModuleManifest(BaseModel):
     created_at: str
     review_status: Literal["AI_DRAFT", "COMMUNITY_DRAFT", "EDUCATOR_REVIEWED"] = "COMMUNITY_DRAFT"
     curriculum_strand: str | None = Field(default=None, max_length=140)
+    generation_provider: Literal["LM_STUDIO_QWEN", "GROK_CLI"] | None = None
 
 
 class CoinValueScene(BaseModel):

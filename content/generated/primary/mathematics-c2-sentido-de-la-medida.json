@@ -1,0 +1,104 @@
+{
+  "id": "org.edumath.primary.mathematics-c2-sentido-de-la-medida",
+  "title": "Medimos longitudes, masas y tiempos",
+  "summary": "Módulo de ciclo 2 para estimar, medir y comparar longitudes, masas y duraciones con unidades habituales, y elegir el instrumento adecuado.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Resolver situaciones sencillas de medida en la vida diaria eligiendo unidades e instrumentos adecuados.",
+    "Estimar, medir y comparar longitudes, masas y tiempos con sentido crítico.",
+    "Explicar de forma clara el proceso de medida y el resultado obtenido.",
+    "Usar el lenguaje de la medida (unidad, mayor, menor, aproximadamente) en contextos cercanos."
+  ],
+  "assessment_criteria": [
+    "Estima y mide longitudes, masas y duraciones usando unidades e instrumentos habituales de forma adecuada.",
+    "Compara y ordena magnitudes sencillas y justifica si un resultado es razonable.",
+    "Elige la unidad o el instrumento más conveniente según lo que se quiere medir.",
+    "Expresa medidas con claridad y revisa si el resultado tiene sentido en el contexto."
+  ],
+  "basic_knowledge": [
+    "Unidades habituales de longitud (cm, m, km), masa (g, kg) y tiempo (min, h, día).",
+    "Estimación y medición con reglas, balanzas y relojes.",
+    "Comparación y ordenación de medidas.",
+    "Relaciones sencillas entre unidades del mismo sistema (por ejemplo, 100 cm = 1 m).",
+    "Uso de la medida en situaciones cotidianas del aula y del entorno."
+  ],
+  "activities": [
+    {
+      "id": "elige-unidad-longitud",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué unidad usamos?",
+      "instructions": "Lee la situación y elige la unidad más adecuada.",
+      "content": {
+        "prompt": "Quieres medir la longitud de tu lápiz. ¿Qué unidad es la más adecuada?",
+        "options": [
+          "Centímetros (cm)",
+          "Kilómetros (km)",
+          "Horas (h)"
+        ],
+        "correct_option": "Centímetros (cm)",
+        "explanation": "Un lápiz es corto; se mide mejor en centímetros. Los kilómetros son para distancias grandes y las horas miden tiempo, no longitud."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasifica-magnitudes",
+      "type": "CLASSIFICATION",
+      "title": "¿Longitud, masa o tiempo?",
+      "instructions": "Clasifica cada ejemplo en la magnitud correcta.",
+      "content": {
+        "prompt": "Coloca cada ejemplo en longitud, masa o tiempo.",
+        "categories": [
+          "Longitud",
+          "Masa",
+          "Tiempo"
+        ],
+        "items": [
+          {
+            "label": "La altura de la puerta",
+            "category": "Longitud"
+          },
+          {
+            "label": "El peso de una manzana",
+            "category": "Masa"
+          },
+          {
+            "label": "La duración del recreo",
+            "category": "Tiempo"
+          },
+          {
+            "label": "La distancia al patio",
+            "category": "Longitud"
+          }
+        ],
+        "explanation": "Longitud mide lo largo o lejos que está algo; masa mide cuánto pesa; tiempo mide cuánto dura una actividad."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "estima-masa-bolsa",
+      "type": "CLOSED_QUESTION",
+      "title": "Estima una masa",
+      "instructions": "Elige la estimación más razonable.",
+      "content": {
+        "prompt": "Una bolsa de manzanas del desayuno del aula pesa, aproximadamente:",
+        "options": [
+          "2 kilogramos (kg)",
+          "2 gramos (g)",
+          "2 kilómetros (km)"
+        ],
+        "correct_option": "2 kilogramos (kg)",
+        "explanation": "Una bolsa de manzanas pesa unos pocos kilogramos. Dos gramos es casi nada y el kilómetro no es una unidad de masa."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido de la medida",
+  "generation_provider": "GROK_CLI"
+}

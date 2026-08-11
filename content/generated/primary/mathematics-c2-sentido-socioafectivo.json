@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.mathematics-c2-sentido-socioafectivo",
+  "title": "Sentido socioafectivo en matemáticas",
+  "summary": "Módulo para 3.º y 4.º sobre emociones, perseverancia, error como aprendizaje y trabajo en equipo al resolver problemas matemáticos.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Gestionar emociones ante retos matemáticos y perseverar con estrategias de calma y reintento.",
+    "Reconocer el error como parte del aprendizaje y valorarlo para mejorar.",
+    "Colaborar con respeto, escuchar ideas y aportar de forma constructiva en tareas matemáticas."
+  ],
+  "assessment_criteria": [
+    "Identifica emociones que aparecen al resolver problemas y propone formas útiles de gestionarlas.",
+    "Explica cómo un error puede ayudar a entender mejor un contenido matemático.",
+    "Participa en el trabajo en pareja o grupo mostrando respeto, ayuda y escucha activa."
+  ],
+  "basic_knowledge": [
+    "Emociones frecuentes en el aprendizaje matemático: seguridad, duda, frustración y orgullo.",
+    "Estrategias simples de perseverancia: releer el enunciado, probar otro camino y pedir ayuda con claridad.",
+    "El error como información para revisar el razonamiento y corregir.",
+    "Normas de colaboración: turnos de palabra, valoración de ideas y reparto equitativo de tareas."
+  ],
+  "activities": [
+    {
+      "id": "emociones-al-resolver",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué emoción sientes?",
+      "instructions": "Lee la situación y elige la emoción más adecuada.",
+      "content": {
+        "prompt": "María lleva rato con un problema y no le sale. Se pone nerviosa, pero respira y lo vuelve a leer. ¿Qué hace bien María?",
+        "options": [
+          "Se rinde y deja el problema sin intentarlo.",
+          "Reconoce su nerviosismo y prueba otra estrategia.",
+          "Se enfada con un compañero por el resultado."
+        ],
+        "correct_option": "Reconoce su nerviosismo y prueba otra estrategia.",
+        "explanation": "Gestionar la emoción y reintentar con calma ayuda a seguir aprendiendo matemáticas."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "error-como-aprendizaje",
+      "type": "CLASSIFICATION",
+      "title": "Error útil o no útil",
+      "instructions": "Clasifica cada frase según si ayuda o no a aprender del error.",
+      "content": {
+        "prompt": "Clasifica cada actitud al cometer un error en matemáticas.",
+        "categories": [
+          "Ayuda a aprender",
+          "No ayuda a aprender"
+        ],
+        "items": [
+          {
+            "label": "Reviso los pasos y busco dónde me equivoqué.",
+            "category": "Ayuda a aprender"
+          },
+          {
+            "label": "Me río del error de un compañero.",
+            "category": "No ayuda a aprender"
+          },
+          {
+            "label": "Pregunto cómo se puede corregir el cálculo.",
+            "category": "Ayuda a aprender"
+          },
+          {
+            "label": "Digo que soy malo en mates y lo dejo.",
+            "category": "No ayuda a aprender"
+          }
+        ],
+        "explanation": "El error es útil cuando se revisa y se corrige con respeto; no lo es si se usa para humillar o abandonar."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "trabajar-en-equipo",
+      "type": "CLOSED_QUESTION",
+      "title": "Buen trabajo en equipo",
+      "instructions": "Elige la opción que muestra un buen trabajo en equipo en mates.",
+      "content": {
+        "prompt": "En un problema en pareja, ¿qué es lo más adecuado?",
+        "options": [
+          "Escuchar la idea del otro y explicar la tuya con respeto.",
+          "Hacer todo tú solo y no dejar hablar a nadie.",
+          "Decir que solo una persona sabe mates en el grupo."
+        ],
+        "correct_option": "Escuchar la idea del otro y explicar la tuya con respeto.",
+        "explanation": "Colaborar bien significa escuchar, respetar y aportar ideas para resolver juntos."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido socioafectivo",
+  "generation_provider": "GROK_CLI"
+}

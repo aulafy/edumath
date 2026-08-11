@@ -1,0 +1,107 @@
+{
+  "id": "org.edumath.primary.mathematics-c3-sentido-estocastico",
+  "title": "Sentido estocástico: datos y probabilidad",
+  "summary": "Módulo de 5.º y 6.º de Primaria para recoger y representar datos, interpretar gráficos sencillos y estimar la probabilidad de sucesos cotidianos de forma razonada.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Formular preguntas que se pueden responder con datos y planificar una recogida sencilla.",
+    "Organizar datos en tablas y representarlos en gráficos adecuados.",
+    "Interpretar información estadística de la vida diaria y sacar conclusiones razonables.",
+    "Describir y comparar la probabilidad de sucesos usando lenguaje de seguro, posible, imposible, más o menos probable.",
+    "Explicar con claridad por qué un resultado es más o menos probable en un experimento simple."
+  ],
+  "assessment_criteria": [
+    "Plantea una pregunta estadística clara y elige un modo adecuado de recoger datos.",
+    "Organiza datos en tablas y construye gráficos legibles (barras, pictogramas o sectores simples).",
+    "Lee e interpreta gráficos y tablas, y comunica conclusiones con sentido.",
+    "Clasifica sucesos según su probabilidad y compara cuál es más o menos probable.",
+    "Justifica estimaciones de probabilidad con ejemplos o con recuentos de casos favorables."
+  ],
+  "basic_knowledge": [
+    "Preguntas estadísticas y variables cualitativas o cuantitativas sencillas.",
+    "Tablas de frecuencias y gráficos de barras, pictogramas y diagramas de sectores.",
+    "Media aritmética en conjuntos pequeños de datos y su significado.",
+    "Sucesos seguros, posibles e imposibles; más probable y menos probable.",
+    "Experimentos aleatorios simples (moneda, dado, sacos de fichas) y recuento de resultados.",
+    "Uso del lenguaje de la incertidumbre en situaciones cotidianas."
+  ],
+  "activities": [
+    {
+      "id": "probabilidad-suceso-dado",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué tan probable es?",
+      "instructions": "Lee la situación y elige la opción que mejor describe la probabilidad del suceso.",
+      "content": {
+        "prompt": "Se lanza un dado de seis caras numeradas del 1 al 6. ¿Cuál es la probabilidad de sacar un número par (2, 4 o 6)?",
+        "options": [
+          "Es imposible sacar un número par.",
+          "Es más probable sacar un número par que un número impar.",
+          "Es igual de probable sacar par o impar."
+        ],
+        "correct_option": "Es igual de probable sacar par o impar.",
+        "explanation": "Hay tres números pares (2, 4, 6) y tres impares (1, 3, 5). Como hay la misma cantidad de cada tipo, par e impar son igual de probables."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-tipos-sucesos",
+      "type": "CLASSIFICATION",
+      "title": "Seguro, posible o imposible",
+      "instructions": "Clasifica cada suceso según su probabilidad: seguro, posible o imposible.",
+      "content": {
+        "prompt": "Clasifica estos sucesos de la vida diaria según su probabilidad.",
+        "categories": [
+          "Seguro",
+          "Posible",
+          "Imposible"
+        ],
+        "items": [
+          {
+            "label": "Mañana saldrá el sol por el este.",
+            "category": "Seguro"
+          },
+          {
+            "label": "Al lanzar una moneda sale cara.",
+            "category": "Posible"
+          },
+          {
+            "label": "Un pez vive en el desierto sin agua.",
+            "category": "Imposible"
+          },
+          {
+            "label": "Hoy puede llover o no llover.",
+            "category": "Posible"
+          }
+        ],
+        "explanation": "Un suceso seguro ocurre siempre; uno posible puede ocurrir o no; uno imposible no puede ocurrir. La lluvia y la moneda son posibles; el sol por el este es seguro en condiciones normales; un pez sin agua en el desierto es imposible."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "interpretar-grafico-barras",
+      "type": "CLOSED_QUESTION",
+      "title": "Leer un gráfico de barras",
+      "instructions": "Observa los datos del gráfico descrito y elige la conclusión correcta.",
+      "content": {
+        "prompt": "En un gráfico de barras sobre la fruta favorita de 20 alumnos: manzana 8, plátano 5, naranja 4 y fresa 3. ¿Qué afirmación es correcta?",
+        "options": [
+          "La fruta favorita más elegida es la fresa.",
+          "La manzana es la fruta favorita de más alumnos.",
+          "El plátano y la naranja tienen la misma frecuencia."
+        ],
+        "correct_option": "La manzana es la fruta favorita de más alumnos.",
+        "explanation": "La manzana tiene 8 votos, más que plátano (5), naranja (4) y fresa (3). Por eso es la más elegida. La fresa es la menos elegida y plátano y naranja no empatan."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido estocástico",
+  "generation_provider": "GROK_CLI"
+}

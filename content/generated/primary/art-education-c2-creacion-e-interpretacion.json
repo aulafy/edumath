@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.art-education-c2-creacion-e-interpretacion",
+  "title": "Crear e interpretar con el cuerpo, la voz y los materiales",
+  "summary": "El alumnado experimenta, crea e interpreta producciones plásticas y musicales sencillas, eligiendo materiales, sonidos y gestos para expresar ideas y emociones.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "ART_EDUCATION",
+  "competencies": [
+    "Explorar y combinar elementos plásticos, sonoros y corporales para crear producciones sencillas.",
+    "Interpretar con intención comunicativa obras o fragmentos propios y ajenos de forma respetuosa.",
+    "Describir con vocabulario básico las decisiones tomadas al crear e interpretar."
+  ],
+  "assessment_criteria": [
+    "Participa en creaciones plásticas o musicales sencillas eligiendo materiales, colores, sonidos o gestos con una intención clara.",
+    "Interpreta producciones propias o del grupo cuidando la atención, el respeto y la expresión.",
+    "Explica de forma breve qué ha querido comunicar y qué elementos ha usado en su creación o interpretación."
+  ],
+  "basic_knowledge": [
+    "Elementos básicos de la creación plástica: color, forma, línea, textura y composición sencilla.",
+    "Elementos básicos de la creación e interpretación musical y corporal: sonido, silencio, ritmo, movimiento y gesto.",
+    "Procesos de creación e interpretación: observar, explorar, ensayar, producir y compartir.",
+    "Uso responsable de materiales y espacios para crear e interpretar de forma segura y respetuosa."
+  ],
+  "activities": [
+    {
+      "id": "que-es-interpretar",
+      "type": "CLOSED_QUESTION",
+      "title": "Qué es interpretar",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "¿Qué hacemos cuando interpretamos una canción o un baile en clase?",
+        "options": [
+          "La presentamos con atención y expresión",
+          "Guardamos los materiales sin mirarla",
+          "Copiamos solo los colores de un dibujo"
+        ],
+        "correct_option": "La presentamos con atención y expresión",
+        "explanation": "Interpretar es presentar una obra con atención, cuidado y expresión para comunicar algo."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-crear-o-interpretar",
+      "type": "CLASSIFICATION",
+      "title": "Crear o interpretar",
+      "instructions": "Clasifica cada acción según si pertenece a crear o a interpretar.",
+      "content": {
+        "prompt": "Decide si cada acción es crear o interpretar.",
+        "categories": [
+          "Crear",
+          "Interpretar"
+        ],
+        "items": [
+          {
+            "label": "Inventar un ritmo con las palmas",
+            "category": "Crear"
+          },
+          {
+            "label": "Cantar una canción aprendida ante el grupo",
+            "category": "Interpretar"
+          },
+          {
+            "label": "Dibujar un paisaje con colores libres",
+            "category": "Crear"
+          },
+          {
+            "label": "Representar con gestos un cuento conocido",
+            "category": "Interpretar"
+          }
+        ],
+        "explanation": "Crear es inventar o producir algo nuevo. Interpretar es presentar o representar una obra con expresión."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "material-para-crear",
+      "type": "CLOSED_QUESTION",
+      "title": "Materiales para crear",
+      "instructions": "Elige el material más adecuado para la creación pedida.",
+      "content": {
+        "prompt": "Quieres crear un mural con manchas de color. ¿Qué material es más adecuado?",
+        "options": [
+          "Pinturas y pinceles",
+          "Solo un metrónomo",
+          "Una partitura cerrada sin colores"
+        ],
+        "correct_option": "Pinturas y pinceles",
+        "explanation": "Para un mural con manchas de color se usan materiales plásticos como pinturas y pinceles."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Creación e interpretación",
+  "generation_provider": "GROK_CLI"
+}

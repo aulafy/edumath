@@ -1,0 +1,101 @@
+{
+  "id": "org.edumath.primary.physical-education-c1-vida-activa-y-saludable",
+  "title": "Vida activa y saludable",
+  "summary": "Módulo de Educación Física para 1.º y 2.º sobre hábitos diarios que ayudan a moverse, descansar y cuidar el cuerpo de forma segura.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "PHYSICAL_EDUCATION",
+  "competencies": [
+    "Reconocer hábitos diarios que favorecen una vida activa y saludable.",
+    "Elegir, en situaciones sencillas, acciones seguras de cuidado del cuerpo y del movimiento.",
+    "Relacionar el descanso, la higiene y el juego activo con el bienestar personal."
+  ],
+  "assessment_criteria": [
+    "Identifica acciones cotidianas que ayudan a mantenerse activo y saludable.",
+    "Diferencia conductas seguras e inseguras en el cuidado del cuerpo y en el juego.",
+    "Explica, con palabras sencillas, por qué conviene descansar, hidratarse e higienizarse tras el ejercicio."
+  ],
+  "basic_knowledge": [
+    "Hábitos de vida activa: juego, desplazamiento a pie y movimiento diario.",
+    "Higiene corporal básica tras el ejercicio o el recreo.",
+    "Importancia del descanso y del sueño para sentirse bien.",
+    "Hidratación con agua en el colegio y en casa.",
+    "Decisiones seguras al jugar y al moverse con otras personas."
+  ],
+  "activities": [
+    {
+      "id": "agua-despues-de-jugar",
+      "type": "CLOSED_QUESTION",
+      "title": "Agua después de jugar",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "Después de jugar en el recreo, ¿qué es una buena idea para cuidar tu cuerpo?",
+        "options": [
+          "Beber un poco de agua",
+          "No descansar nunca",
+          "Correr sin parar hasta cansarse mucho"
+        ],
+        "correct_option": "Beber un poco de agua",
+        "explanation": "Beber agua ayuda a hidratarte después de moverte. No hace falta agotarse ni saltarse el descanso."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "activo-o-poco-activo",
+      "type": "CLASSIFICATION",
+      "title": "Activo o poco activo",
+      "instructions": "Clasifica cada acción según ayude a moverte o sea poco activa.",
+      "content": {
+        "prompt": "Clasifica cada acción en «Me ayuda a moverme» o «Es poco activa».",
+        "categories": [
+          "Me ayuda a moverme",
+          "Es poco activa"
+        ],
+        "items": [
+          {
+            "label": "Jugar a la pídola en el patio",
+            "category": "Me ayuda a moverme"
+          },
+          {
+            "label": "Ir andando un rato con un adulto",
+            "category": "Me ayuda a moverme"
+          },
+          {
+            "label": "Pasar muchas horas sin levantarme del sofá",
+            "category": "Es poco activa"
+          },
+          {
+            "label": "Ver pantallas todo el día sin pausas",
+            "category": "Es poco activa"
+          }
+        ],
+        "explanation": "El juego y caminar son formas activas. Estar mucho rato quieto sin pausas es poco activo."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "despues-del-ejercicio",
+      "type": "CLOSED_QUESTION",
+      "title": "Después del ejercicio",
+      "instructions": "Elige la mejor opción para cuidarte al terminar de moverte.",
+      "content": {
+        "prompt": "Al terminar una clase de Educación Física, ¿qué conviene hacer?",
+        "options": [
+          "Lavarse las manos y, si hace falta, secarse el sudor",
+          "Seguir corriendo sin beber ni descansar",
+          "Ignorar el cansancio y no parar"
+        ],
+        "correct_option": "Lavarse las manos y, si hace falta, secarse el sudor",
+        "explanation": "La higiene y un momento de calma ayudan a cuidarte tras el movimiento."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Vida activa y saludable",
+  "generation_provider": "GROK_CLI"
+}

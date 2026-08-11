@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.art-education-c3-creacion-e-interpretacion",
+  "title": "Crear e interpretar con arte",
+  "summary": "Módulo de ciclo 3 para planificar, realizar e interpretar producciones artísticas con intención, materiales adecuados y respeto al trabajo propio y ajeno.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "ART_EDUCATION",
+  "competencies": [
+    "Planificar y realizar creaciones artísticas con una intención clara.",
+    "Interpretar obras o piezas sencillas prestando atención a elementos expresivos.",
+    "Elegir técnicas y materiales de forma segura y adecuada al resultado buscado.",
+    "Valorar el proceso creativo y el de los demás con respeto y actitud colaborativa."
+  ],
+  "assessment_criteria": [
+    "Describe la intención de una creación propia o ajena con vocabulario artístico básico.",
+    "Aplica con cuidado técnicas y materiales acordes al tipo de producción.",
+    "Identifica elementos expresivos (color, ritmo, forma, movimiento o dinámica) en una interpretación.",
+    "Participa en la creación o interpretación respetando turnos, normas y el trabajo del grupo."
+  ],
+  "basic_knowledge": [
+    "Fases sencillas del proceso creativo: idea, plan, realización y revisión.",
+    "Elementos básicos de expresión visual y escénico-musical: color, forma, textura, ritmo, dinámica y movimiento.",
+    "Técnicas y materiales habituales de creación e interpretación en el aula.",
+    "Interpretación con sentido: transmitir una emoción, una idea o una historia.",
+    "Cuidado de materiales, espacios y normas de seguridad en la práctica artística."
+  ],
+  "activities": [
+    {
+      "id": "intencion-de-la-creacion",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué es la intención?",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "Cuando creas una obra y decides qué quieres expresar o contar, ¿cómo se llama eso?",
+        "options": [
+          "La intención de la creación",
+          "El marco del cuadro",
+          "El color de la pared"
+        ],
+        "correct_option": "La intención de la creación",
+        "explanation": "La intención es lo que quieres comunicar con tu obra: una idea, un sentimiento o una historia."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-elementos-expresivos",
+      "type": "CLASSIFICATION",
+      "title": "Elementos de la expresión",
+      "instructions": "Clasifica cada elemento según corresponda a lo visual o a lo sonoro y del movimiento.",
+      "content": {
+        "prompt": "Coloca cada elemento en su categoría.",
+        "categories": [
+          "Visual",
+          "Sonoro y del movimiento"
+        ],
+        "items": [
+          {
+            "label": "Color",
+            "category": "Visual"
+          },
+          {
+            "label": "Forma",
+            "category": "Visual"
+          },
+          {
+            "label": "Ritmo",
+            "category": "Sonoro y del movimiento"
+          },
+          {
+            "label": "Dinámica",
+            "category": "Sonoro y del movimiento"
+          }
+        ],
+        "explanation": "Color y forma se perciben con la vista. Ritmo y dinámica se relacionan con el sonido y el movimiento."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "planificar-antes-de-crear",
+      "type": "CLOSED_QUESTION",
+      "title": "Primer paso del proceso",
+      "instructions": "Elige la opción que completa mejor la idea.",
+      "content": {
+        "prompt": "Antes de empezar a dibujar, modelar o interpretar, ¿qué conviene hacer primero?",
+        "options": [
+          "Pensar la idea y planificar",
+          "Tirar los materiales usados",
+          "Cambiar de sitio sin motivo"
+        ],
+        "correct_option": "Pensar la idea y planificar",
+        "explanation": "Planificar ayuda a elegir materiales, técnicas y el mensaje que quieres transmitir."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Creación e interpretación",
+  "generation_provider": "GROK_CLI"
+}

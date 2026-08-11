@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.mathematics-c2-sentido-numerico",
+  "title": "Sentido numérico: números, valor posicional y comparación",
+  "summary": "Módulo de 3.º y 4.º de Primaria para comprender números naturales y decimales sencillos, el valor de cada cifra, comparar cantidades y clasificar números según sus propiedades básicas.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Interpretar y representar números naturales y decimales sencillos en contextos cotidianos.",
+    "Usar el valor posicional para leer, escribir y descomponer números.",
+    "Comparar y ordenar cantidades con criterios claros.",
+    "Reconocer propiedades numéricas básicas (par e impar, mayor y menor) para resolver situaciones simples."
+  ],
+  "assessment_criteria": [
+    "Lee, escribe y representa números naturales y decimales sencillos de forma correcta.",
+    "Identifica el valor de cada cifra según su posición.",
+    "Compara y ordena números usando símbolos y lenguaje matemático adecuado.",
+    "Clasifica números según propiedades sencillas y justifica la elección con un ejemplo o una explicación breve."
+  ],
+  "basic_knowledge": [
+    "Números naturales hasta varias cifras y decimales sencillos de uso habitual.",
+    "Sistema de numeración decimal y valor posicional (unidades, decenas, centenas, unidades de millar, décimas y centésimas).",
+    "Comparación y ordenación de números.",
+    "Propiedades básicas: par e impar; mayor, menor e igual.",
+    "Descomposición aditiva y multiplicativa sencilla de un número."
+  ],
+  "activities": [
+    {
+      "id": "valor-posicional-centenas",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué vale el 7?",
+      "instructions": "Lee el número y elige la opción correcta. Solo hay una respuesta válida.",
+      "content": {
+        "prompt": "En el número 3 725, ¿qué representa la cifra 7?",
+        "options": [
+          "7 unidades",
+          "7 decenas",
+          "7 centenas"
+        ],
+        "correct_option": "7 centenas",
+        "explanation": "En 3 725, el 7 está en el lugar de las centenas: vale 700, es decir, 7 centenas."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-pares-impares",
+      "type": "CLASSIFICATION",
+      "title": "Pares e impares",
+      "instructions": "Clasifica cada número en la categoría correcta. Fíjate en la cifra de las unidades.",
+      "content": {
+        "prompt": "Clasifica estos números en pares o impares.",
+        "categories": [
+          "Pares",
+          "Impares"
+        ],
+        "items": [
+          {
+            "label": "24",
+            "category": "Pares"
+          },
+          {
+            "label": "17",
+            "category": "Impares"
+          },
+          {
+            "label": "30",
+            "category": "Pares"
+          },
+          {
+            "label": "9",
+            "category": "Impares"
+          }
+        ],
+        "explanation": "Un número es par si termina en 0, 2, 4, 6 u 8. Es impar si termina en 1, 3, 5, 7 o 9."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "comparar-numeros-naturales",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Cuál es mayor?",
+      "instructions": "Compara los dos números y elige la afirmación correcta.",
+      "content": {
+        "prompt": "¿Qué afirmación es correcta?",
+        "options": [
+          "1 409 es mayor que 1 490",
+          "1 490 es mayor que 1 409",
+          "1 409 y 1 490 son iguales"
+        ],
+        "correct_option": "1 490 es mayor que 1 409",
+        "explanation": "Las millares y las centenas son iguales (1 4__). En las decenas, 9 es mayor que 0, así que 1 490 es mayor que 1 409."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido numérico",
+  "generation_provider": "GROK_CLI"
+}

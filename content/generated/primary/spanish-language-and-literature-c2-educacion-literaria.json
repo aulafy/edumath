@@ -1,0 +1,104 @@
+{
+  "id": "org.edumath.primary.spanish-language-and-literature-c2-educacion-literaria",
+  "title": "Educación literaria: géneros y disfrute de textos",
+  "summary": "Módulo del ciclo 2 para reconocer géneros literarios, disfrutar de cuentos y poemas, y clasificar textos sencillos de narrativa, poesía y teatro.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "SPANISH_LANGUAGE_AND_LITERATURE",
+  "competencies": [
+    "Competencia en comunicación lingüística: comprender y disfrutar textos literarios orales y escritos",
+    "Competencia en conciencia y expresión culturales: valorar la literatura como forma de expresión y patrimonio",
+    "Competencia personal, social y de aprender a aprender: reflexionar sobre lo leído y compartir preferencias literarias"
+  ],
+  "assessment_criteria": [
+    "Identifica de forma sencilla el género de textos literarios breves (cuento, poema o texto teatral).",
+    "Reconoce elementos básicos de un texto narrativo, como personajes, lugar y acciones.",
+    "Disfruta de la lectura literaria y explica con palabras sencillas por qué le gusta un texto.",
+    "Clasifica versos, rimas o diálogos según rasgos propios de la poesía o del teatro."
+  ],
+  "basic_knowledge": [
+    "Géneros literarios básicos: narrativa (cuento), poesía y teatro",
+    "Elementos del cuento: personajes, lugar, comienzo, nudo y final",
+    "Rasgos de la poesía: verso, rima y ritmo",
+    "Rasgos del teatro: diálogo, personajes y escena",
+    "Lectura en voz alta y escucha atenta de textos literarios infantiles",
+    "Valoración personal de lo leído con respeto a las opiniones de los demás"
+  ],
+  "activities": [
+    {
+      "id": "reconocer-genero-literario",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué género es?",
+      "instructions": "Lee el texto y elige el género literario correcto.",
+      "content": {
+        "prompt": "«Érase una vez una niña que vivía cerca del bosque. Un día encontró un mapa mágico y salió a buscar un tesoro.» ¿Qué tipo de texto es?",
+        "options": [
+          "Un cuento",
+          "Un poema",
+          "Una noticia"
+        ],
+        "correct_option": "Un cuento",
+        "explanation": "Es un cuento porque cuenta una historia con personajes y acciones, y empieza con «Érase una vez»."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-rasgos-generos",
+      "type": "CLASSIFICATION",
+      "title": "Clasifica rasgos de géneros",
+      "instructions": "Arrastra o marca cada rasgo en el género literario al que pertenece.",
+      "content": {
+        "prompt": "Clasifica cada rasgo en el género literario correcto.",
+        "categories": [
+          "Poesía",
+          "Teatro",
+          "Cuento"
+        ],
+        "items": [
+          {
+            "label": "Está escrito en versos",
+            "category": "Poesía"
+          },
+          {
+            "label": "Los personajes hablan con diálogos",
+            "category": "Teatro"
+          },
+          {
+            "label": "Tiene personajes y un final",
+            "category": "Cuento"
+          },
+          {
+            "label": "Suele tener rima y ritmo",
+            "category": "Poesía"
+          }
+        ],
+        "explanation": "La poesía usa versos, rima y ritmo; el teatro se basa en diálogos; el cuento narra una historia con personajes y un final."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "elementos-del-cuento",
+      "type": "CLOSED_QUESTION",
+      "title": "Elementos del cuento",
+      "instructions": "Elige la respuesta correcta sobre el cuento.",
+      "content": {
+        "prompt": "En un cuento, ¿quiénes hacen las acciones de la historia?",
+        "options": [
+          "Los personajes",
+          "Los títulos",
+          "Los números"
+        ],
+        "correct_option": "Los personajes",
+        "explanation": "Los personajes son quienes viven la historia y realizan las acciones del cuento."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Educación literaria",
+  "generation_provider": "GROK_CLI"
+}

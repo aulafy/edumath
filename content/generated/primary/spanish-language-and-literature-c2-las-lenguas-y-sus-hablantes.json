@@ -1,0 +1,101 @@
+{
+  "id": "org.edumath.primary.spanish-language-and-literature-c2-las-lenguas-y-sus-hablantes",
+  "title": "Las lenguas y sus hablantes",
+  "summary": "Conocemos que hay muchas lenguas y formas de hablar, y aprendemos a respetarlas.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "SPANISH_LANGUAGE_AND_LITERATURE",
+  "competencies": [
+    "Reconocer la diversidad de lenguas y de formas de hablar en el entorno cercano y en España.",
+    "Mostrar respeto e interés hacia las lenguas y variedades lingüísticas propias y ajenas.",
+    "Identificar situaciones en las que se usan distintas lenguas o formas de hablar."
+  ],
+  "assessment_criteria": [
+    "Identifica que existen distintas lenguas y formas de hablar.",
+    "Explica de manera sencilla por qué hay que respetar cómo habla cada persona.",
+    "Relaciona lenguas o formas de hablar con situaciones o lugares conocidos.",
+    "Distingue entre lengua, dialecto o variedad y forma de hablar en el aula o en la familia con ejemplos simples."
+  ],
+  "basic_knowledge": [
+    "Las lenguas del entorno y de España: castellano y otras lenguas.",
+    "Diferentes formas de hablar según el lugar, la edad o la situación.",
+    "El respeto a la diversidad lingüística y a las personas que hablan otras lenguas o de otra forma.",
+    "La idea de que todas las lenguas sirven para comunicarse y ninguna es mejor que otra."
+  ],
+  "activities": [
+    {
+      "id": "lenguas-de-espana",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué lenguas hay en España?",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "Además del castellano, en España se hablan otras lenguas. ¿Cuál de estas es una lengua de España?",
+        "options": [
+          "El catalán",
+          "El chino",
+          "El ruso"
+        ],
+        "correct_option": "El catalán",
+        "explanation": "En España se hablan varias lenguas, como el catalán, el gallego o el euskera, además del castellano."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "respeto-al-hablar",
+      "type": "CLOSED_QUESTION",
+      "title": "Respetamos cómo habla cada persona",
+      "instructions": "Elige la opción que muestra respeto.",
+      "content": {
+        "prompt": "Un compañero habla de forma distinta a ti. ¿Qué es lo más respetuoso?",
+        "options": [
+          "Escucharlo con atención y no reírse",
+          "Imitarlo para burlarse",
+          "Decirle que habla mal"
+        ],
+        "correct_option": "Escucharlo con atención y no reírse",
+        "explanation": "Todas las formas de hablar merecen respeto. Escuchar con atención ayuda a entendernos mejor."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasifica-situaciones-lengua",
+      "type": "CLASSIFICATION",
+      "title": "¿Cuándo usamos cada forma de hablar?",
+      "instructions": "Clasifica cada situación en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica cada situación según si es un momento más formal o más cercano.",
+        "categories": [
+          "Más formal",
+          "Más cercano"
+        ],
+        "items": [
+          {
+            "label": "Saludar al director o a la directora",
+            "category": "Más formal"
+          },
+          {
+            "label": "Contar un chiste a un amigo",
+            "category": "Más cercano"
+          },
+          {
+            "label": "Leer un poema en la fiesta del colegio",
+            "category": "Más formal"
+          },
+          {
+            "label": "Hablar con tu hermano o hermana en casa",
+            "category": "Más cercano"
+          }
+        ],
+        "explanation": "Cambiamos la forma de hablar según la situación: más formal en actos y con adultos desconocidos, y más cercana con familia y amigos."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Las lenguas y sus hablantes",
+  "generation_provider": "GROK_CLI"
+}

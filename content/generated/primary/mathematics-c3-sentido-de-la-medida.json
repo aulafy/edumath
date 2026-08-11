@@ -1,0 +1,104 @@
+{
+  "id": "org.edumath.primary.mathematics-c3-sentido-de-la-medida",
+  "title": "Sentido de la medida: unidades, estimación y equivalencias",
+  "summary": "Módulo de ciclo 3 para trabajar magnitudes, elección de unidades, estimación y equivalencias sencillas de longitud, masa, capacidad y tiempo.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "MATHEMATICS",
+  "competencies": [
+    "Elegir y usar unidades de medida adecuadas según la magnitud y el contexto.",
+    "Estimar medidas de objetos y situaciones cotidianas y comprobar la razonabilidad del resultado.",
+    "Establecer equivalencias sencillas entre unidades del sistema métrico y del tiempo.",
+    "Resolver problemas de medida con longitud, masa, capacidad, superficie y tiempo."
+  ],
+  "assessment_criteria": [
+    "Selecciona la unidad más adecuada para medir longitudes, masas, capacidades o tiempos.",
+    "Realiza estimaciones razonables y las contrasta con medidas o datos dados.",
+    "Convierte entre unidades usuales de forma correcta y con sentido.",
+    "Explica el proceso de medición o de resolución de un problema de medida con claridad."
+  ],
+  "basic_knowledge": [
+    "Magnitudes: longitud, masa, capacidad, superficie y tiempo.",
+    "Unidades del sistema métrico decimal y del tiempo de uso habitual.",
+    "Estimación y medición con instrumentos y estrategias adecuadas.",
+    "Equivalencias y cambios de unidad.",
+    "Perímetro y área de figuras planas sencillas en contextos reales."
+  ],
+  "activities": [
+    {
+      "id": "unidad-longitud-adecuada",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué unidad usamos?",
+      "instructions": "Lee la situación y elige la unidad más adecuada.",
+      "content": {
+        "prompt": "Quieres medir la longitud de un patio de recreo. ¿Qué unidad es la más adecuada?",
+        "options": [
+          "Milímetros",
+          "Metros",
+          "Toneladas"
+        ],
+        "correct_option": "Metros",
+        "explanation": "Un patio es grande: los metros permiten medir y expresar esa longitud de forma cómoda. Los milímetros son demasiado pequeños y las toneladas miden masa, no longitud."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-magnitudes",
+      "type": "CLASSIFICATION",
+      "title": "Clasifica cada medida",
+      "instructions": "Clasifica cada ejemplo según la magnitud que mide.",
+      "content": {
+        "prompt": "Clasifica cada medida en la magnitud correcta.",
+        "categories": [
+          "Longitud",
+          "Masa",
+          "Capacidad"
+        ],
+        "items": [
+          {
+            "label": "2 litros de zumo",
+            "category": "Capacidad"
+          },
+          {
+            "label": "15 kilogramos de manzanas",
+            "category": "Masa"
+          },
+          {
+            "label": "120 centímetros de cinta",
+            "category": "Longitud"
+          },
+          {
+            "label": "500 mililitros de agua",
+            "category": "Capacidad"
+          }
+        ],
+        "explanation": "Los litros y mililitros miden capacidad; los kilogramos miden masa; los centímetros miden longitud."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "equivalencia-metros-centimetros",
+      "type": "CLOSED_QUESTION",
+      "title": "Equivalencia de longitud",
+      "instructions": "Calcula la equivalencia y elige la respuesta correcta.",
+      "content": {
+        "prompt": "¿Cuántos centímetros hay en 3 metros?",
+        "options": [
+          "30 centímetros",
+          "300 centímetros",
+          "3000 centímetros"
+        ],
+        "correct_option": "300 centímetros",
+        "explanation": "1 metro equivale a 100 centímetros. Por tanto, 3 metros son 3 × 100 = 300 centímetros."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sentido de la medida",
+  "generation_provider": "GROK_CLI"
+}

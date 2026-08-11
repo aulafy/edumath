@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.spanish-language-and-literature-c3-las-lenguas-y-sus-hablantes",
+  "title": "Las lenguas y sus hablantes",
+  "summary": "Exploramos la diversidad lingüística de España y del mundo: distintas lenguas, formas de hablar y el respeto a todas las personas hablantes.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "SPANISH_LANGUAGE_AND_LITERATURE",
+  "competencies": [
+    "Reconocer la diversidad de lenguas y de formas de hablar en el entorno y en España.",
+    "Valorar el respeto hacia todas las lenguas y sus hablantes.",
+    "Identificar prejuicios lingüísticos sencillos y proponer actitudes inclusivas."
+  ],
+  "assessment_criteria": [
+    "Describe con ejemplos sencillos que existen distintas lenguas y variedades de habla.",
+    "Explica por qué todas las lenguas y formas de hablar merecen respeto.",
+    "Distingue usos de la lengua adecuados al contexto comunicativo."
+  ],
+  "basic_knowledge": [
+    "Las lenguas de España y la idea de plurilingüismo.",
+    "Variedades de la lengua según el lugar, la edad o la situación.",
+    "Actitudes de respeto ante la diversidad lingüística y rechazo de prejuicios.",
+    "La lengua como herramienta de comunicación e identidad."
+  ],
+  "activities": [
+    {
+      "id": "lenguas-de-espana",
+      "type": "CLOSED_QUESTION",
+      "title": "Lenguas de España",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "Además del castellano o español, ¿cuál de estas es también una lengua oficial en algunas comunidades de España?",
+        "options": [
+          "El catalán",
+          "El latín clásico",
+          "El esperanto"
+        ],
+        "correct_option": "El catalán",
+        "explanation": "En España hay varias lenguas oficiales en distintas comunidades. El catalán es una de ellas; el latín clásico y el esperanto no lo son."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-usos-lengua",
+      "type": "CLASSIFICATION",
+      "title": "Forma formal o cercana",
+      "instructions": "Clasifica cada frase según si es un uso formal o un uso cercano.",
+      "content": {
+        "prompt": "Clasifica cada ejemplo según el tipo de uso de la lengua.",
+        "categories": [
+          "Uso formal",
+          "Uso cercano"
+        ],
+        "items": [
+          {
+            "label": "Estimada señora: le escribo para solicitar información.",
+            "category": "Uso formal"
+          },
+          {
+            "label": "¡Hola! ¿Quedamos luego en el parque?",
+            "category": "Uso cercano"
+          },
+          {
+            "label": "Le ruego que confirme la cita, por favor.",
+            "category": "Uso formal"
+          },
+          {
+            "label": "Oye, pásame el boli un momento.",
+            "category": "Uso cercano"
+          }
+        ],
+        "explanation": "El uso formal se emplea en situaciones serias o con personas desconocidas. El uso cercano se usa con familia y amigos."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "respeto-linguistico",
+      "type": "CLOSED_QUESTION",
+      "title": "Respeto a las formas de hablar",
+      "instructions": "Elige la opción que muestra una actitud de respeto.",
+      "content": {
+        "prompt": "Un compañero habla con un acento distinto al tuyo. ¿Qué es lo más respetuoso?",
+        "options": [
+          "Escucharlo con atención y no burlarse de su forma de hablar",
+          "Corregirle cada palabra porque «no habla bien»",
+          "Imitar su acento para reírse con el grupo"
+        ],
+        "correct_option": "Escucharlo con atención y no burlarse de su forma de hablar",
+        "explanation": "Todas las formas de hablar son válidas. Respetar a quien habla con otro acento o variedad es una actitud inclusiva."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Las lenguas y sus hablantes",
+  "generation_provider": "GROK_CLI"
+}
