@@ -580,6 +580,15 @@ def complete_module_activity(
             or response["transit"] * 2 < content["target_mobility"]
         ):
             raise HTTPException(status_code=422, detail="The submitted city plan does not meet the budget and targets.")
+    if activity.type == "BINARY_SIGNAL_LAB":
+        response = data.response
+        if (
+            not isinstance(response, list)
+            or len(response) != 4
+            or any(type(bit) is not int or bit not in {0, 1} for bit in response)
+            or response != activity.content["target_bits"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted binary signal does not encode the target message.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

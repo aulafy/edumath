@@ -170,6 +170,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 
 `CITY_BUDGET_LAB` declares three minimum indicator scores, an initial ten-token allocation, and one valid example allocation. Solar, trees, and public-transit investments each produce two points in their named indicator. Package validation enumerates every integer allocation and requires at least two valid strategies, preventing disguised single-answer questions. The runner shows the remaining budget, all numeric indicators, and a reactive 3D city; the backend independently enforces the ten-token budget and every threshold.
 
+`BINARY_SIGNAL_LAB` declares a decimal target from 1 to 15, exactly four binary target bits in 8-4-2-1 order, and a different initial state. Package validation recomputes the weighted sum and rejects inconsistent targets. The runner synchronises labelled `ON/OFF` states, `1/0` digits, the expanded sum, decimal total, and animated 3D beacons, so neither colour nor light is required. The backend accepts only four strict integer bits matching the canonical code.
+
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.

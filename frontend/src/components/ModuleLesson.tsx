@@ -30,6 +30,7 @@ const LightMixLab3D = lazy(() => import("./LightMixLab3D").then((module) => ({ d
 const LeverLab3D = lazy(() => import("./LeverLab3D").then((module) => ({ default: module.LeverLab3D })));
 const ShadowViewLab3D = lazy(() => import("./ShadowViewLab3D").then((module) => ({ default: module.ShadowViewLab3D })));
 const CityBudgetLab3D = lazy(() => import("./CityBudgetLab3D").then((module) => ({ default: module.CityBudgetLab3D })));
+const BinarySignalLab3D = lazy(() => import("./BinarySignalLab3D").then((module) => ({ default: module.BinarySignalLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -79,6 +80,8 @@ type ShadowOrientation = "NORTH" | "EAST" | "SOUTH" | "WEST";
 type ShadowCube = { x: number; y: number; z: number };
 type ShadowViewLab = { prompt: string; object_label: string; cubes: ShadowCube[]; target_orientation: ShadowOrientation; initial_orientation: ShadowOrientation; explanation: string };
 type CityBudgetLab = { prompt: string; target_energy: number; target_green: number; target_mobility: number; initial_solar: number; initial_trees: number; initial_transit: number; example_solar: number; example_trees: number; example_transit: number; explanation: string };
+type BinaryBit = 0 | 1;
+type BinarySignalLab = { prompt: string; target_value: number; target_bits: BinaryBit[]; initial_bits: BinaryBit[]; message_label: string; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -803,6 +806,27 @@ function CityBudgetExercise({ content, onSolved }: { content: CityBudgetLab; onS
   </div>;
 }
 
+function BinarySignalExercise({ content, onSolved }: { content: BinarySignalLab; onSolved: (response: BinaryBit[]) => void }) {
+  const [bits, setBits] = useState<BinaryBit[]>(content.initial_bits);
+  const [checked, setChecked] = useState(false);
+  const weights = [8, 4, 2, 1];
+  const total = bits.reduce<number>((sum, bit, index) => sum + bit * weights[index], 0);
+  const correct = bits.every((bit, index) => bit === content.target_bits[index]);
+  const toggle = (index: number) => { setBits((current) => current.map((bit, position) => position === index ? (bit ? 0 : 1) : bit) as BinaryBit[]); setChecked(false); };
+  const addends = bits.map((bit, index) => bit ? weights[index] : 0);
+  return <div className="interactiveExercise binarySignalExercise">
+    <strong>{content.prompt}</strong>
+    <div className="binaryMission"><span>Mensaje decimal</span><strong>{content.target_value}</strong><small>{content.message_label}</small></div>
+    <Suspense fallback={<div className="binarySignalScene loadingScene" aria-label="Preparando torre de señales 3D" />}><BinarySignalLab3D bits={bits} /></Suspense>
+    <div className="binaryEquation" aria-live="polite"><span>{addends.join(" + ")}</span><b>=</b><strong>{total}</strong></div>
+    <div className="binarySwitches" role="group" aria-label="Bits con pesos 8, 4, 2 y 1">{weights.map((weight, index) => <button key={weight} className={bits[index] ? "selected" : "secondary"} aria-pressed={!!bits[index]} onClick={() => toggle(index)}><small>Peso</small><strong>{weight}</strong><b>{bits[index] ? "ON · 1" : "OFF · 0"}</b></button>)}</div>
+    <div className="binaryWord" aria-label={`Código binario ${bits.join("")}`}><small>Código de 4 bits</small><strong>{bits.join(" ")}</strong></div>
+    <p className="modelBoundary">Modelo binario de cuatro posiciones: de izquierda a derecha valen 8, 4, 2 y 1. Una baliza encendida aporta su peso y una apagada aporta cero. La luz y el color no son necesarios para resolverlo.</p>
+    <button onClick={() => { setChecked(true); if (correct) onSolved(bits); }}><Check /> Transmitir código</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Mensaje recibido! ${content.explanation}` : `La señal actual vale ${total}, no ${content.target_value}. No cuentes balizas: suma únicamente los pesos que muestran ON · 1.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -812,7 +836,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB" || activity.type === "CITY_BUDGET_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB" || activity.type === "CITY_BUDGET_LAB" || activity.type === "BINARY_SIGNAL_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -866,6 +890,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "LEVER_LAB" && <LeverExercise key={activity.id} content={activity.content as LeverLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "SHADOW_VIEW_LAB" && <ShadowViewExercise key={activity.id} content={activity.content as ShadowViewLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "CITY_BUDGET_LAB" && <CityBudgetExercise key={activity.id} content={activity.content as CityBudgetLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "BINARY_SIGNAL_LAB" && <BinarySignalExercise key={activity.id} content={activity.content as BinarySignalLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

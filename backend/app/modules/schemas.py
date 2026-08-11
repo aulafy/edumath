@@ -823,6 +823,24 @@ class CityBudgetLabContent(BaseModel):
         return self
 
 
+class BinarySignalLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    target_value: int = Field(ge=1, le=15)
+    target_bits: list[Literal[0, 1]] = Field(min_length=4, max_length=4)
+    initial_bits: list[Literal[0, 1]] = Field(min_length=4, max_length=4)
+    message_label: str = Field(min_length=2, max_length=80)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_binary_signal(self):
+        weights = [8, 4, 2, 1]
+        if sum(bit * weight for bit, weight in zip(self.target_bits, weights, strict=True)) != self.target_value:
+            raise ValueError("The binary target bits must encode the declared decimal value.")
+        if self.initial_bits == self.target_bits:
+            raise ValueError("The initial binary signal must require a change.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -854,6 +872,7 @@ class ModuleActivity(BaseModel):
         "LEVER_LAB",
         "SHADOW_VIEW_LAB",
         "CITY_BUDGET_LAB",
+        "BINARY_SIGNAL_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -923,4 +942,6 @@ class ModuleActivity(BaseModel):
             ShadowViewLabContent.model_validate(self.content)
         elif self.type == "CITY_BUDGET_LAB":
             CityBudgetLabContent.model_validate(self.content)
+        elif self.type == "BINARY_SIGNAL_LAB":
+            BinarySignalLabContent.model_validate(self.content)
         return self

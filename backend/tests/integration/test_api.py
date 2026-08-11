@@ -36,6 +36,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "LEVER_LAB": "org.edumath.tests.science-lever",
             "SHADOW_VIEW_LAB": "org.edumath.tests.math-shadow-view",
             "CITY_BUDGET_LAB": "org.edumath.tests.civic-city-budget",
+            "BINARY_SIGNAL_LAB": "org.edumath.tests.technology-binary-signal",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -480,6 +481,18 @@ def make_city_budget_activity() -> dict:
             "initial_solar": 6, "initial_trees": 2, "initial_transit": 2,
             "example_solar": 4, "example_trees": 3, "example_transit": 3,
             "explanation": "Several balanced plans satisfy all three targets.",
+        }, "evidence": {},
+    }
+
+
+def make_binary_signal_activity() -> dict:
+    return {
+        "id": "send-five", "type": "BINARY_SIGNAL_LAB",
+        "title": "Send five", "instructions": "Toggle four weighted bits.",
+        "content": {
+            "prompt": "Encode decimal five.", "target_value": 5,
+            "target_bits": [0, 1, 0, 1], "initial_bits": [1, 0, 0, 1],
+            "message_label": "Test message", "explanation": "Four plus one equals five.",
         }, "evidence": {},
     }
 
@@ -1382,3 +1395,20 @@ def test_city_budget_lab_accepts_multiple_plans_but_enforces_every_constraint() 
         completed = client.post(endpoint, json={"student_id": student["id"], "response": {"solar": 3, "trees": 4, "transit": 3}})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["fund-the-city"]
+
+
+def test_binary_signal_lab_requires_exact_strict_bits() -> None:
+    with TestClient(app) as client:
+        classroom = client.post("/api/teacher/classrooms", json={"name": "Binary test", "stage": "PRIMARY", "grade": 4}).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post("/api/modules/import", headers=headers, files={"package": ("binary.edumath", make_package(make_binary_signal_activity()), "application/zip")})
+        assert imported.status_code == 200
+        assignment = client.post(f"/api/modules/{imported.json()['id']}/assignments", headers=headers, json={"classroom_id": classroom["id"], "activity_ids": ["send-five"]}).json()
+        student = client.post("/api/students", json={"display_name": "Bina"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/send-five/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": [1, 0, 1, 0]}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": [False, 1, 0, 1]}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": [0, 1, 0, 1]})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["send-five"]
