@@ -32,6 +32,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "FUNCTION_MACHINE_LAB": "org.edumath.tests.math-function-machine",
             "SOUND_WAVE_LAB": "org.edumath.tests.physics-sound-wave",
             "ATOM_BUILDER_LAB": "org.edumath.tests.chemistry-atom-builder",
+            "LIGHT_MIX_LAB": "org.edumath.tests.art-light-mix",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -424,6 +425,19 @@ def make_atom_builder_activity() -> dict:
             "target_neutrons": 6, "target_electrons": 6,
             "initial_protons": 4, "initial_neutrons": 5, "initial_electrons": 4,
             "explanation": "Six protons identify carbon; six neutrons and electrons complete it.",
+        }, "evidence": {},
+    }
+
+
+def make_light_mix_activity() -> dict:
+    return {
+        "id": "mix-cyan-light", "type": "LIGHT_MIX_LAB",
+        "title": "Mix cyan light", "instructions": "Toggle the RGB lamps.",
+        "content": {
+            "prompt": "Create cyan light.", "target_label": "CYAN",
+            "target_red": 0, "target_green": 1, "target_blue": 1,
+            "initial_red": 1, "initial_green": 0, "initial_blue": 0,
+            "explanation": "Green and blue light add to cyan.",
         }, "evidence": {},
     }
 
@@ -1249,3 +1263,29 @@ def test_atom_builder_requires_the_exact_atomic_composition() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": {"protons": 6, "neutrons": 6, "electrons": 6}})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["build-carbon-12"]
+
+
+def test_light_mix_lab_requires_the_exact_binary_channels() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms", json={"name": "5A Light", "stage": "PRIMARY", "grade": 4}
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import", headers=headers,
+            files={"package": ("light.edumath", make_package(make_light_mix_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments", headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["mix-cyan-light"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Luz"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/mix-cyan-light/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"red": 1, "green": 1, "blue": 1}}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"red": False, "green": 1, "blue": 1}}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": {"red": 0, "green": 1, "blue": 1}})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["mix-cyan-light"]

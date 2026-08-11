@@ -687,6 +687,33 @@ class AtomBuilderLabContent(BaseModel):
         return self
 
 
+class LightMixLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    target_label: Literal["CYAN", "YELLOW", "MAGENTA", "WHITE"]
+    target_red: Literal[0, 1]
+    target_green: Literal[0, 1]
+    target_blue: Literal[0, 1]
+    initial_red: Literal[0, 1]
+    initial_green: Literal[0, 1]
+    initial_blue: Literal[0, 1]
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_light_mix(self):
+        channels = (self.target_red, self.target_green, self.target_blue)
+        expected = {
+            "CYAN": (0, 1, 1),
+            "YELLOW": (1, 1, 0),
+            "MAGENTA": (1, 0, 1),
+            "WHITE": (1, 1, 1),
+        }[self.target_label]
+        if channels != expected:
+            raise ValueError("The additive-light channels must match the target color label.")
+        if channels == (self.initial_red, self.initial_green, self.initial_blue):
+            raise ValueError("The initial light-mix state must require an adjustment.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -714,6 +741,7 @@ class ModuleActivity(BaseModel):
         "FUNCTION_MACHINE_LAB",
         "SOUND_WAVE_LAB",
         "ATOM_BUILDER_LAB",
+        "LIGHT_MIX_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -775,4 +803,6 @@ class ModuleActivity(BaseModel):
             SoundWaveLabContent.model_validate(self.content)
         elif self.type == "ATOM_BUILDER_LAB":
             AtomBuilderLabContent.model_validate(self.content)
+        elif self.type == "LIGHT_MIX_LAB":
+            LightMixLabContent.model_validate(self.content)
         return self

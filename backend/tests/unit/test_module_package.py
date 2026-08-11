@@ -610,3 +610,25 @@ def test_atom_builder_rejects_a_symbol_that_disagrees_with_protons() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_light_mix_rejects_channels_that_disagree_with_the_label() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "LIGHT_MIX_LAB",
+        "content": {
+            "prompt": "Create cyan light.", "target_label": "CYAN",
+            "target_red": 1, "target_green": 1, "target_blue": 0,
+            "initial_red": 0, "initial_green": 0, "initial_blue": 1,
+            "explanation": "These channels produce yellow, not cyan.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

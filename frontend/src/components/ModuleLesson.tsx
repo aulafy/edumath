@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, Dices, FlaskConical, Gauge, ListChecks, Minus, Moon, Play, Plus, Shovel, Sun, Thermometer, Undo2, Volume2, Weight, X } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, Dices, FlaskConical, Gauge, Lightbulb, ListChecks, Minus, Moon, Play, Plus, Shovel, Sun, Thermometer, Undo2, Volume2, Weight, X } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { api } from "../api/client";
 import type { ModuleAssignment, Student } from "../types/contracts";
@@ -26,6 +26,7 @@ const LunarPhaseLab3D = lazy(() => import("./LunarPhaseLab3D").then((module) => 
 const FunctionMachineLab3D = lazy(() => import("./FunctionMachineLab3D").then((module) => ({ default: module.FunctionMachineLab3D })));
 const SoundWaveLab3D = lazy(() => import("./SoundWaveLab3D").then((module) => ({ default: module.SoundWaveLab3D })));
 const AtomBuilderLab3D = lazy(() => import("./AtomBuilderLab3D").then((module) => ({ default: module.AtomBuilderLab3D })));
+const LightMixLab3D = lazy(() => import("./LightMixLab3D").then((module) => ({ default: module.LightMixLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -67,6 +68,8 @@ type FunctionCard = { id: string; kind: "ADD" | "MULTIPLY"; value: number };
 type FunctionMachineLab = { prompt: string; inputs: number[]; target_outputs: number[]; cards: FunctionCard[]; example_solution: string[]; explanation: string };
 type SoundWaveLab = { prompt: string; frequency_min: number; frequency_max: number; amplitude_min: number; amplitude_max: number; initial_frequency: number; initial_amplitude: number; example_frequency: number; example_amplitude: number; explanation: string };
 type AtomBuilderLab = { prompt: string; element_symbol: string; element_name: string; target_protons: number; target_neutrons: number; target_electrons: number; initial_protons: number; initial_neutrons: number; initial_electrons: number; explanation: string };
+type LightChannel = 0 | 1;
+type LightMixLab = { prompt: string; target_label: "CYAN" | "YELLOW" | "MAGENTA" | "WHITE"; target_red: LightChannel; target_green: LightChannel; target_blue: LightChannel; initial_red: LightChannel; initial_green: LightChannel; initial_blue: LightChannel; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -677,6 +680,35 @@ function AtomBuilderExercise({ content, onSolved }: { content: AtomBuilderLab; o
   </div>;
 }
 
+const additiveColorLabels: Record<string, string> = { "000": "Oscuridad", "100": "Rojo", "010": "Verde", "001": "Azul", "110": "Amarillo", "101": "Magenta", "011": "Cian", "111": "Blanco" };
+const additiveTargetLabels = { CYAN: "Cian", YELLOW: "Amarillo", MAGENTA: "Magenta", WHITE: "Blanco" };
+
+function LightMixExercise({ content, onSolved }: { content: LightMixLab; onSolved: (response: { red: number; green: number; blue: number }) => void }) {
+  const [red, setRed] = useState<LightChannel>(content.initial_red);
+  const [green, setGreen] = useState<LightChannel>(content.initial_green);
+  const [blue, setBlue] = useState<LightChannel>(content.initial_blue);
+  const [checked, setChecked] = useState(false);
+  const key = `${red}${green}${blue}`;
+  const result = additiveColorLabels[key];
+  const correct = red === content.target_red && green === content.target_green && blue === content.target_blue;
+  const channels = [
+    { key: "red", short: "R", label: "Rojo", value: red, set: setRed, css: "red" },
+    { key: "green", short: "G", label: "Verde", value: green, set: setGreen, css: "green" },
+    { key: "blue", short: "B", label: "Azul", value: blue, set: setBlue, css: "blue" },
+  ];
+  const color = `rgb(${red * 255} ${green * 255} ${blue * 255})`;
+  return <div className="interactiveExercise lightMixExercise">
+    <strong>{content.prompt}</strong>
+    <div className="lightTarget"><span><Lightbulb /> Color objetivo</span><strong>{additiveTargetLabels[content.target_label]}</strong></div>
+    <Suspense fallback={<div className="lightMixScene loadingScene" aria-label="Preparando teatro de luz 3D" />}><LightMixLab3D red={red} green={green} blue={blue} /></Suspense>
+    <div className="lightResult" aria-live="polite"><span className="lightResultSwatch" style={{ backgroundColor: color }} aria-hidden="true" /><span><small>Resultado de la mezcla</small><strong>{result}</strong><b>{red + green + blue} focos encendidos</b></span></div>
+    <div className="lightSwitches" role="group" aria-label="Interruptores de los focos RGB">{channels.map((channel) => <button key={channel.key} className={`${channel.css} ${channel.value ? "selected" : "secondary"}`} aria-pressed={!!channel.value} onClick={() => { channel.set(channel.value ? 0 : 1); setChecked(false); }}><span className="channelSwatch" /><strong>{channel.short} · {channel.label}</strong><small>{channel.value ? "Encendido" : "Apagado"}</small></button>)}</div>
+    <p className="modelBoundary">Mezcla aditiva de luz: al sumar focos el resultado se acerca al blanco. Las pinturas y tintas mezclan pigmentos de forma sustractiva y no siguen estas mismas combinaciones.</p>
+    <button onClick={() => { setChecked(true); if (correct) onSolved({ red, green, blue }); }}><Check /> Comprobar iluminación</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Escena iluminada! ${content.explanation}` : `La combinación actual produce ${result.toLowerCase()}. Cambia los interruptores hasta crear ${additiveTargetLabels[content.target_label].toLowerCase()}.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -686,7 +718,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -736,6 +768,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "FUNCTION_MACHINE_LAB" && <FunctionMachineExercise key={activity.id} content={activity.content as FunctionMachineLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "SOUND_WAVE_LAB" && <SoundWaveExercise key={activity.id} content={activity.content as SoundWaveLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "ATOM_BUILDER_LAB" && <AtomBuilderExercise key={activity.id} content={activity.content as AtomBuilderLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "LIGHT_MIX_LAB" && <LightMixExercise key={activity.id} content={activity.content as LightMixLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

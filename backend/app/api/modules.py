@@ -521,6 +521,18 @@ def complete_module_activity(
             or response["electrons"] != content["target_electrons"]
         ):
             raise HTTPException(status_code=422, detail="The submitted atomic composition does not match the target species.")
+    if activity.type == "LIGHT_MIX_LAB":
+        response = data.response
+        content = activity.content
+        if (
+            not isinstance(response, dict)
+            or set(response) != {"red", "green", "blue"}
+            or any(type(value) is not int or value not in {0, 1} for value in response.values())
+            or response["red"] != content["target_red"]
+            or response["green"] != content["target_green"]
+            or response["blue"] != content["target_blue"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted light channels do not create the target color.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

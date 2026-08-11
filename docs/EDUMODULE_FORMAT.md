@@ -162,6 +162,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 
 `ATOM_BUILDER_LAB` declares an element among the first eighteen, exact target and initial counts for protons (1–18), neutrons (0–22), and electrons (0–18), plus a localized element name. The package validator checks that the symbol agrees with the proton count. The runner derives `Z = p`, `A = p + n`, and `q = p − e`, while the backend requires all three target counts. The scene must be identified as a conceptual shell model whose particle sizes, distances, and electron paths are not physical scale or modern quantum orbitals.
 
+`LIGHT_MIX_LAB` declares binary red, green, and blue light channels for both an initial and target state, plus one target label among `CYAN`, `YELLOW`, `MAGENTA`, and `WHITE`. The package validator rejects labels whose canonical additive RGB channels disagree. The runner provides labelled on/off switches, a named result, and a swatch in addition to the 3D lighting, so success never depends on colour perception alone. Content must distinguish additive light from subtractive pigment mixing.
+
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.

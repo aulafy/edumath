@@ -842,6 +842,30 @@ select {
   .earthView b { grid-column: 1 / -1; }
 }
 
+.lightMixScene { width: 100%; height: clamp(300px, 44vh, 410px); overflow: hidden; border: 1px solid #343b49; border-radius: 8px; background: #171c24; }
+.lightMixScene canvas { display: block; width: 100% !important; height: 100% !important; }
+.lightTarget { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 2px solid #626a83; border-radius: 8px; background: #f0f1f7; padding: 10px 14px; }
+.lightTarget span { display: inline-flex; align-items: center; gap: 7px; font-weight: 800; }
+.lightTarget strong { font-size: 1.15rem; }
+.lightResult { display: flex; align-items: center; gap: 12px; border: 1px solid #c7ccd2; border-radius: 8px; background: #f8f9fa; padding: 9px 12px; }
+.lightResultSwatch { width: 52px; aspect-ratio: 1; flex: none; border: 2px solid #69717b; border-radius: 50%; }
+.lightResult > span:last-child { display: grid; }
+.lightResult small { color: #5e6670; font-weight: 700; }
+.lightResult strong { font-size: 1.22rem; }
+.lightResult b { color: #4d5964; }
+.lightSwitches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.lightSwitches button { min-width: 0; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 0 8px; text-align: left; }
+.lightSwitches button small { grid-column: 2; font-weight: 700; }
+.channelSwatch { grid-row: 1 / 3; width: 24px; aspect-ratio: 1; border: 2px solid currentColor; border-radius: 50%; }
+.lightSwitches .red .channelSwatch { background: #e53d3d; }
+.lightSwitches .green .channelSwatch { background: #25a85f; }
+.lightSwitches .blue .channelSwatch { background: #3479d4; }
+.lightSwitches button.selected { background: #293a4a; color: white; }
+
+@media (max-width: 600px) {
+  .lightSwitches { grid-template-columns: 1fr; }
+}
+
 .soundWaveScene { width: 100%; height: clamp(280px, 41vh, 380px); overflow: hidden; border: 1px solid #c5d2cc; border-radius: 8px; background: #eef4f1; }
 .soundWaveScene canvas { display: block; width: 100% !important; height: 100% !important; }
 .soundTargets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
