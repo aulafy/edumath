@@ -1,4 +1,4 @@
-import type { Assignment, Classroom, CurriculumUnit, EducationalModule, Lesson, ProblemResponse, Student, TranscriptionResult, VoiceCapabilities } from "../types/contracts";
+import type { Assignment, Classroom, CurriculumUnit, EducationalModule, EducationalModuleDetail, JoinedAssignment, Lesson, ModuleAssignment, ProblemResponse, Student, TranscriptionResult, VoiceCapabilities } from "../types/contracts";
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? "http://127.0.0.1:8000/api";
 
@@ -51,9 +51,18 @@ export const api = {
       headers: { "X-Teacher-Key": classroom.teacher_key },
       body: JSON.stringify({})
     }),
-  joinAssignment: (code: string, student_id: string) =>
-    request(`/assignments/${code}/join`, { method: "POST", body: JSON.stringify({ student_id }) }),
+  joinAssignment: async (code: string, student_id: string): Promise<JoinedAssignment> => {
+    const options = { method: "POST", body: JSON.stringify({ student_id }) };
+    const lessonResponse = await fetch(`${API_BASE}/assignments/${code}/join`, {
+      ...options,
+      headers: { "Content-Type": "application/json" }
+    });
+    if (lessonResponse.ok) return lessonResponse.json() as Promise<JoinedAssignment>;
+    if (lessonResponse.status !== 404) throw new Error(`Assignment error ${lessonResponse.status}`);
+    return request<ModuleAssignment>(`/modules/assignments/${code}/join`, options);
+  },
   modules: () => request<EducationalModule[]>("/modules"),
+  module: (moduleId: string) => request<EducationalModuleDetail>(`/modules/${moduleId}`),
   importModule: async (classroom: Classroom, file: File) => {
     const form = new FormData();
     form.append("package", file);
@@ -70,6 +79,17 @@ export const api = {
     if (!response.ok) throw new Error(`Module export error ${response.status}`);
     return response.blob();
   },
+  publishModule: (classroom: Classroom, moduleId: string, activity_ids: string[]) =>
+    request<ModuleAssignment>(`/modules/${moduleId}/assignments`, {
+      method: "POST",
+      headers: { "X-Teacher-Key": classroom.teacher_key },
+      body: JSON.stringify({ classroom_id: classroom.id, activity_ids })
+    }),
+  completeModuleActivity: (assignment: ModuleAssignment, studentId: string, activityId: string) =>
+    request<ModuleAssignment>(`/modules/assignments/${assignment.join_code}/activities/${activityId}/complete`, {
+      method: "POST",
+      body: JSON.stringify({ student_id: studentId })
+    }),
   transcribe: async (audio: Blob) => {
     const form = new FormData();
     form.append("audio", audio, "answer.webm");

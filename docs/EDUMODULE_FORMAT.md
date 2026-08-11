@@ -76,6 +76,14 @@ python scripts/build_example_module.py
 
 This creates `examples/dist/org.edumath.examples.plant-growth-1.0.0.edumath`. In the teacher dashboard, create or open a class, choose **Import module**, and select that file. A teacher key is required for imports; browsing module metadata is read-only.
 
+## Assign a module to a class
+
+After import, select **Assign** beside a compatible module. EduMath shows every validated activity so the teacher can include or exclude each one before publishing. The module must explicitly map to the class stage and grade.
+
+Publishing creates a six-character lesson code. A student enters this code on the home screen and receives only the selected activities, in teacher-defined order. Completion is recorded per student and activity. Reopening the same code resumes with completed activities marked; repeated completion requests do not create duplicate records.
+
+Module assignments intentionally use a separate learner runner from deterministic mathematics sessions. This allows Science, Languages, History, Arts, and future subjects to grow without giving imported content access to the mathematics engine or to authoritative LLM decisions.
+
 ## Compatibility
 
 Consumers must reject unsupported major format versions. Publishers should create a new semantic module version whenever released content changes. The same module ID and version always identify the same package bytes.

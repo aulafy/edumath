@@ -66,6 +66,7 @@ def classroom_payload(row: ClassroomRow, include_key: bool = False) -> dict:
 
 def lesson_payload(row: LessonRow) -> dict:
     return {
+        "kind": "LESSON",
         "id": row.id,
         "classroom_id": row.classroom_id,
         "title": row.title,
@@ -181,6 +182,7 @@ def publish_lesson(
     db.add(row)
     db.commit()
     return {
+        "kind": "LESSON",
         "id": row.id,
         "join_code": row.join_code,
         "status": row.status,
@@ -196,6 +198,7 @@ def get_assignment(join_code: str, db: Session = Depends(get_db)):
     lesson = db.get(LessonRow, row.lesson_id)
     classroom = db.get(ClassroomRow, lesson.classroom_id)
     return {
+        "kind": "LESSON",
         "id": row.id,
         "join_code": row.join_code,
         "status": row.status,

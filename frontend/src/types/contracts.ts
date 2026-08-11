@@ -92,3 +92,25 @@ export type EducationalModule = {
   package_sha256: string;
   imported_at: string;
 };
+export type ModuleActivity = {
+  id: string;
+  type: string;
+  title: string;
+  instructions: string;
+  content: Record<string, unknown>;
+  evidence: Record<string, unknown>;
+};
+export type EducationalModuleDetail = EducationalModule & {
+  manifest: Record<string, unknown>;
+  activities: ModuleActivity[];
+};
+export type ModuleAssignment = {
+  kind: "MODULE";
+  id: string;
+  join_code: string;
+  status: string;
+  module: EducationalModule;
+  activities: ModuleActivity[];
+  completed_activity_ids: string[];
+};
+export type JoinedAssignment = ModuleAssignment | ({ kind: "LESSON" } & Assignment);

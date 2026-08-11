@@ -135,3 +135,31 @@ class EducationalModuleRow(Base):
     package_bytes: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
     status: Mapped[str] = mapped_column(String, default="VALIDATED")
     imported_at: Mapped[str] = mapped_column(String, nullable=False)
+
+
+class ModuleAssignmentRow(Base):
+    __tablename__ = "module_assignments"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    classroom_id: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    module_row_id: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    activity_ids_json: Mapped[str] = mapped_column(Text, nullable=False)
+    join_code: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    status: Mapped[str] = mapped_column(String, default="OPEN")
+    starts_at: Mapped[str | None] = mapped_column(String)
+    due_at: Mapped[str | None] = mapped_column(String)
+    created_at: Mapped[str] = mapped_column(String, nullable=False)
+
+
+class ModuleActivityProgressRow(Base):
+    __tablename__ = "module_activity_progress"
+    __table_args__ = (
+        UniqueConstraint(
+            "assignment_id", "student_id", "activity_id", name="uq_module_activity_progress"
+        ),
+    )
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    assignment_id: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    student_id: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    activity_id: Mapped[str] = mapped_column(String, nullable=False)
+    status: Mapped[str] = mapped_column(String, default="COMPLETED")
+    completed_at: Mapped[str] = mapped_column(String, nullable=False)

@@ -18,7 +18,8 @@ import { VisualRenderer } from "../components/VisualRenderer";
 import { ThemeScene } from "../components/ThemeScene";
 import { VoiceControls } from "../components/VoiceControls";
 import { TeacherDashboard } from "../components/TeacherDashboard";
-import type { ProblemResponse, Student } from "../types/contracts";
+import { ModuleLesson } from "../components/ModuleLesson";
+import type { ModuleAssignment, ProblemResponse, Student } from "../types/contracts";
 
 export function App() {
   const [students, setStudents] = useState<Student[]>([]);
@@ -31,6 +32,7 @@ export function App() {
   const [error, setError] = useState<string | null>(null);
   const [teacherMode, setTeacherMode] = useState(false);
   const [assignmentCode, setAssignmentCode] = useState("");
+  const [moduleAssignment, setModuleAssignment] = useState<ModuleAssignment | null>(null);
 
   useEffect(() => {
     api.students().then(setStudents).catch(() => setStudents([]));
@@ -49,17 +51,34 @@ export function App() {
   }
 
   async function start() {
-    const active = student ?? students[0] ?? await api.createStudent(name);
-    setStudent(active);
-    const code = assignmentCode.trim().toUpperCase();
-    if (code) await api.joinAssignment(code, active.id);
-    const next = await api.startSession(active.id, theme, code || undefined);
-    localStorage.setItem("math-ai-session", next.session_id);
-    setSession(next);
-    setProgress(null);
+    try {
+      const active = student ?? students[0] ?? await api.createStudent(name);
+      setStudent(active);
+      const code = assignmentCode.trim().toUpperCase();
+      if (code) {
+        const joined = await api.joinAssignment(code, active.id);
+        if (joined.kind === "MODULE") {
+          setModuleAssignment(joined);
+          setProgress(null);
+          setError(null);
+          return;
+        }
+      }
+      const next = await api.startSession(active.id, theme, code || undefined);
+      localStorage.setItem("math-ai-session", next.session_id);
+      setSession(next);
+      setProgress(null);
+      setError(null);
+    } catch {
+      setError("No encontramos una lección abierta con ese código.");
+    }
   }
 
   if (teacherMode) return <TeacherDashboard onClose={() => setTeacherMode(false)} />;
+
+  if (moduleAssignment && student) {
+    return <ModuleLesson initial={moduleAssignment} student={student} onClose={() => setModuleAssignment(null)} />;
+  }
 
   async function submitValue(value: string) {
     if (!session) return;
@@ -161,6 +180,7 @@ export function App() {
           </div>
           <label className="assignmentJoin">Código de clase<input value={assignmentCode} maxLength={6} placeholder="ABC234" onChange={(event) => setAssignmentCode(event.target.value.toUpperCase())} /></label>
           <button className="startButton" onClick={start}><Play aria-hidden="true" />Comenzar</button>
+          {error && <p className="error">{error}</p>}
         </div>
         <div className="capsulePanel progressCapsule">
           <div className="capsuleTitle"><Trophy aria-hidden="true" /><span>Mis logros</span></div>

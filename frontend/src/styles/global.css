@@ -405,6 +405,185 @@ select {
   font-size: 0.85rem;
 }
 
+.moduleAssignButton {
+  min-height: 42px;
+  padding-inline: 12px;
+}
+
+.moduleComposer {
+  display: grid;
+  gap: 14px;
+  padding-top: 16px;
+  border-top: 2px solid #aebdb5;
+}
+
+.moduleComposer > div:first-child {
+  display: grid;
+}
+
+.moduleComposer > div:first-child span,
+.moduleComposer small {
+  color: #60736a;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.moduleComposer fieldset {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.moduleComposer legend {
+  margin-bottom: 8px;
+  font-weight: 800;
+}
+
+.moduleComposer fieldset label {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #d5ddd8;
+}
+
+.moduleComposer input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  accent-color: #287b63;
+}
+
+.moduleComposer fieldset span {
+  display: grid;
+}
+
+.composerActions,
+.activityNavigation {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.moduleLessonShell {
+  min-height: 100vh;
+  padding: 22px 16px 48px;
+  background: #f3f7f1;
+}
+
+.moduleLessonTopbar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: min(820px, 100%);
+  margin: 0 auto;
+}
+
+.moduleLessonTopbar > div {
+  display: grid;
+  min-width: 0;
+}
+
+.moduleLessonTopbar span {
+  overflow-wrap: anywhere;
+  color: #60736a;
+  font-size: 0.75rem;
+}
+
+.moduleProgressLabel {
+  padding: 7px 10px;
+  border: 1px solid #aebdb5;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #20342c !important;
+  font-weight: 850;
+}
+
+.moduleProgressTrack {
+  width: min(820px, 100%);
+  height: 10px;
+  margin: 18px auto 26px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #d5ddd8;
+}
+
+.moduleProgressTrack span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #287b63;
+  transition: width 220ms ease;
+}
+
+.moduleActivity {
+  display: grid;
+  gap: 18px;
+  width: min(720px, 100%);
+  margin: 0 auto;
+  padding: 28px;
+  border: 1px solid #ccd7d1;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.activityEyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #287b63;
+  font-weight: 850;
+}
+
+.moduleActivity h1 {
+  margin: 0;
+  font-size: 1.65rem;
+}
+
+.activityInstructions {
+  margin: 0;
+  font-size: 1.08rem;
+  line-height: 1.55;
+}
+
+.activityContent {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  padding: 18px 0;
+  border-block: 1px solid #d5ddd8;
+}
+
+.activityContent ul {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.activityContent dl,
+.activityContent dl div {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+}
+
+.activityContent dl div + div {
+  margin-top: 12px;
+}
+
+.activityContent dt {
+  color: #60736a;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.activityContent dd {
+  margin: 0;
+}
+
 .licenseBadge {
   padding: 5px 8px;
   border: 1px solid #aebdb5;
@@ -729,6 +908,28 @@ pre {
 
   .moduleItem .iconButton {
     width: 100%;
+  }
+
+  .composerActions,
+  .activityNavigation {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .composerActions {
+    grid-template-columns: 1fr;
+  }
+
+  .moduleLessonShell {
+    padding: 14px 10px 32px;
+  }
+
+  .moduleLessonTopbar {
+    align-items: start;
+  }
+
+  .moduleActivity {
+    padding: 20px 16px;
   }
 
   .brand {

@@ -175,3 +175,62 @@ def test_module_import_requires_a_teacher_key() -> None:
             files={"package": ("plants.edumath", make_package(), "application/zip")},
         )
         assert response.status_code == 403
+
+
+def test_teacher_assigns_selected_module_activities_and_student_completes_them() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms",
+            json={"name": "3A Science", "stage": "PRIMARY", "grade": 3},
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        module = client.post(
+            "/api/modules/import",
+            headers=headers,
+            files={"package": ("plants.edumath", make_package(), "application/zip")},
+        ).json()
+        detail = client.get(f"/api/modules/{module['id']}").json()
+        activity_id = detail["activities"][0]["id"]
+        published = client.post(
+            f"/api/modules/{module['id']}/assignments",
+            headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": [activity_id]},
+        )
+        assert published.status_code == 200
+        assignment = published.json()
+        assert assignment["kind"] == "MODULE"
+        assert [activity["id"] for activity in assignment["activities"]] == [activity_id]
+
+        student = client.post("/api/students", json={"display_name": "Mara"}).json()
+        joined = client.post(
+            f"/api/modules/assignments/{assignment['join_code']}/join",
+            json={"student_id": student["id"]},
+        )
+        assert joined.status_code == 200
+        assert joined.json()["completed_activity_ids"] == []
+        completed = client.post(
+            f"/api/modules/assignments/{assignment['join_code']}/activities/{activity_id}/complete",
+            json={"student_id": student["id"]},
+        )
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == [activity_id]
+
+
+def test_module_assignment_must_match_class_grade() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms",
+            json={"name": "1A Science", "stage": "PRIMARY", "grade": 1},
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        module = client.post(
+            "/api/modules/import",
+            headers=headers,
+            files={"package": ("plants.edumath", make_package(), "application/zip")},
+        ).json()
+        response = client.post(
+            f"/api/modules/{module['id']}/assignments",
+            headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["observe-seedling"]},
+        )
+        assert response.status_code == 422

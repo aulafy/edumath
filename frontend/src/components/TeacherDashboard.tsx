@@ -1,7 +1,8 @@
-import { ArrowLeft, BookOpen, Check, Copy, Download, Library, School, Send, Upload } from "lucide-react";
+import { ArrowLeft, BookOpen, Check, Copy, Download, Library, ListChecks, School, Send, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
-import type { Assignment, Classroom, CurriculumUnit, EducationalModule } from "../types/contracts";
+import type { Assignment, Classroom, CurriculumUnit, EducationalModule, EducationalModuleDetail, ModuleAssignment } from "../types/contracts";
+import { subjectLabel } from "../utils/labels";
 
 export function TeacherDashboard({ onClose }: { onClose: () => void }) {
   const [classroom, setClassroom] = useState<Classroom | null>(() => {
@@ -15,9 +16,11 @@ export function TeacherDashboard({ onClose }: { onClose: () => void }) {
   const [unitId, setUnitId] = useState("");
   const [title, setTitle] = useState("Sumamos cantidades pequeñas");
   const [theme, setTheme] = useState("DINOSAURS");
-  const [assignment, setAssignment] = useState<Assignment | null>(null);
+  const [assignment, setAssignment] = useState<Assignment | ModuleAssignment | null>(null);
   const [error, setError] = useState("");
   const [modules, setModules] = useState<EducationalModule[]>([]);
+  const [selectedModule, setSelectedModule] = useState<EducationalModuleDetail | null>(null);
+  const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
 
   useEffect(() => {
     api.curriculum(classroom?.stage ?? stage, classroom?.grade ?? grade)
@@ -84,6 +87,28 @@ export function TeacherDashboard({ onClose }: { onClose: () => void }) {
     URL.revokeObjectURL(url);
   }
 
+  async function prepareModule(module: EducationalModule) {
+    try {
+      const detail = await api.module(module.id);
+      setSelectedModule(detail);
+      setSelectedActivities(detail.activities.map((activity) => activity.id));
+      setError("");
+    } catch {
+      setError("No se pudo abrir el módulo.");
+    }
+  }
+
+  async function publishSelectedModule() {
+    if (!classroom || !selectedModule || selectedActivities.length === 0) return;
+    try {
+      setAssignment(await api.publishModule(classroom, selectedModule.id, selectedActivities));
+      setSelectedModule(null);
+      setError("");
+    } catch {
+      setError("El módulo no corresponde a la etapa y curso de esta clase.");
+    }
+  }
+
   return (
     <main className="teacherShell">
       <header className="teacherTopbar">
@@ -120,13 +145,29 @@ export function TeacherDashboard({ onClose }: { onClose: () => void }) {
               <div className="moduleList">
                 {modules.map((module) => (
                   <article className="moduleItem" key={module.id}>
-                    <div><strong>{module.title}</strong><span>{module.subject.replaceAll("_", " ")} · {module.stage === "PRIMARY" ? "Primaria" : "ESO"} · v{module.version}</span></div>
+                    <div><strong>{module.title}</strong><span>{subjectLabel(module.subject)} · {module.stage === "PRIMARY" ? "Primaria" : "ESO"} · v{module.version}</span></div>
                     <span className="licenseBadge">{module.license}</span>
+                    <button className="secondary moduleAssignButton" onClick={() => void prepareModule(module)}><ListChecks /> Asignar</button>
                     <button className="iconButton secondary" aria-label={`Exportar ${module.title}`} title="Exportar módulo" onClick={() => void exportModule(module)}><Download /></button>
                   </article>
                 ))}
                 {modules.length === 0 && <p className="emptyLibrary">No hay módulos importados.</p>}
               </div>
+              {selectedModule && (
+                <div className="moduleComposer">
+                  <div><span>Preparar módulo</span><strong>{selectedModule.title}</strong></div>
+                  <fieldset>
+                    <legend>Actividades para la clase</legend>
+                    {selectedModule.activities.map((activity) => (
+                      <label key={activity.id}>
+                        <input type="checkbox" checked={selectedActivities.includes(activity.id)} onChange={(event) => setSelectedActivities((current) => event.target.checked ? [...current, activity.id] : current.filter((id) => id !== activity.id))} />
+                        <span><strong>{activity.title}</strong><small>{activity.type.replaceAll("_", " ")}</small></span>
+                      </label>
+                    ))}
+                  </fieldset>
+                  <div className="composerActions"><button className="secondary" onClick={() => setSelectedModule(null)}>Cancelar</button><button disabled={selectedActivities.length === 0} onClick={() => void publishSelectedModule()}><Send /> Publicar módulo</button></div>
+                </div>
+              )}
             </div>
           </>
         )}
