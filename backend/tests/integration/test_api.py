@@ -39,6 +39,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "BINARY_SIGNAL_LAB": "org.edumath.tests.technology-binary-signal",
             "PUNCTUATION_LAB": "org.edumath.tests.language-punctuation",
             "CIRCULATION_LAB": "org.edumath.tests.biology-circulation",
+            "TIMEZONE_LAB": "org.edumath.tests.geography-timezone",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -522,6 +523,18 @@ def make_circulation_activity() -> dict:
             "prompt": "Build the pulmonary circuit.", "circuit": "PULMONARY",
             "target_route": ["RIGHT_HEART", "LUNGS", "LEFT_HEART"],
             "explanation": "Blood gains oxygen in the lungs before reaching the left heart.",
+        }, "evidence": {},
+    }
+
+
+def make_timezone_activity() -> dict:
+    return {
+        "id": "find-next-day", "type": "TIMEZONE_LAB", "title": "Find next day",
+        "instructions": "Adjust the UTC offset.", "content": {
+            "prompt": "Find 05:00 next day from 20:00 UTC.", "utc_hour": 20,
+            "target_local_hour": 5, "target_day_shift": 1, "target_offset": 9,
+            "initial_offset": 0, "destination_label": "East nine",
+            "explanation": "Twenty plus nine is twenty-nine, or five next day.",
         }, "evidence": {},
     }
 
@@ -1474,3 +1487,19 @@ def test_circulation_lab_requires_the_canonical_station_route() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": ["RIGHT_HEART", "LUNGS", "LEFT_HEART"]})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["pulmonary-route"]
+
+
+def test_timezone_lab_requires_the_exact_strict_offset() -> None:
+    with TestClient(app) as client:
+        classroom = client.post("/api/teacher/classrooms", json={"name": "Timezone test", "stage": "PRIMARY", "grade": 4}).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post("/api/modules/import", headers=headers, files={"package": ("timezone.edumath", make_package(make_timezone_activity()), "application/zip")})
+        assert imported.status_code == 200
+        assignment = client.post(f"/api/modules/{imported.json()['id']}/assignments", headers=headers, json={"classroom_id": classroom["id"], "activity_ids": ["find-next-day"]}).json()
+        student = client.post("/api/students", json={"display_name": "Hora"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/find-next-day/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": -15}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": True}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": 9})
+        assert completed.status_code == 200

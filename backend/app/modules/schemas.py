@@ -882,6 +882,27 @@ class CirculationLabContent(BaseModel):
         return self
 
 
+class TimezoneLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    utc_hour: int = Field(ge=0, le=23)
+    target_local_hour: int = Field(ge=0, le=23)
+    target_day_shift: Literal[-1, 0, 1]
+    target_offset: int = Field(ge=-11, le=12)
+    initial_offset: int = Field(ge=-11, le=12)
+    destination_label: str = Field(min_length=2, max_length=80)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_timezone(self):
+        raw_hour = self.utc_hour + self.target_offset
+        day_shift = -1 if raw_hour < 0 else 1 if raw_hour >= 24 else 0
+        if raw_hour % 24 != self.target_local_hour or day_shift != self.target_day_shift:
+            raise ValueError("The timezone target must match its modular hour and day shift.")
+        if self.initial_offset == self.target_offset:
+            raise ValueError("The initial timezone offset must require an adjustment.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -916,6 +937,7 @@ class ModuleActivity(BaseModel):
         "BINARY_SIGNAL_LAB",
         "PUNCTUATION_LAB",
         "CIRCULATION_LAB",
+        "TIMEZONE_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -991,4 +1013,6 @@ class ModuleActivity(BaseModel):
             PunctuationLabContent.model_validate(self.content)
         elif self.type == "CIRCULATION_LAB":
             CirculationLabContent.model_validate(self.content)
+        elif self.type == "TIMEZONE_LAB":
+            TimezoneLabContent.model_validate(self.content)
         return self

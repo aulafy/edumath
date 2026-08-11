@@ -33,6 +33,7 @@ const CityBudgetLab3D = lazy(() => import("./CityBudgetLab3D").then((module) => 
 const BinarySignalLab3D = lazy(() => import("./BinarySignalLab3D").then((module) => ({ default: module.BinarySignalLab3D })));
 const PunctuationLab3D = lazy(() => import("./PunctuationLab3D").then((module) => ({ default: module.PunctuationLab3D })));
 const CirculationLab3D = lazy(() => import("./CirculationLab3D").then((module) => ({ default: module.CirculationLab3D })));
+const TimezoneLab3D = lazy(() => import("./TimezoneLab3D").then((module) => ({ default: module.TimezoneLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -88,6 +89,7 @@ type PunctuationMark = "NONE" | "COMMA" | "COLON" | "PERIOD";
 type PunctuationLab = { prompt: string; parts: string[]; target_marks: PunctuationMark[]; initial_marks: PunctuationMark[]; full_sentence: string; explanation: string };
 type CirculationStation = "RIGHT_HEART" | "LUNGS" | "LEFT_HEART" | "BODY";
 type CirculationLab = { prompt: string; circuit: "PULMONARY" | "SYSTEMIC" | "DOUBLE"; target_route: CirculationStation[]; explanation: string };
+type TimezoneLab = { prompt: string; utc_hour: number; target_local_hour: number; target_day_shift: -1 | 0 | 1; target_offset: number; initial_offset: number; destination_label: string; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -895,6 +897,27 @@ function CirculationExercise({ content, onSolved }: { content: CirculationLab; o
   </div>;
 }
 
+function TimezoneExercise({ content, onSolved }: { content: TimezoneLab; onSolved: (response: number) => void }) {
+  const [offset, setOffset] = useState(content.initial_offset);
+  const [checked, setChecked] = useState(false);
+  const rawHour = content.utc_hour + offset;
+  const localHour = ((rawHour % 24) + 24) % 24;
+  const dayShift = rawHour < 0 ? -1 : rawHour >= 24 ? 1 : 0;
+  const dayLabels = { [-1]: "Día anterior", 0: "Mismo día", 1: "Día siguiente" };
+  const signed = (value: number) => value > 0 ? `+${value}` : String(value);
+  const correct = offset === content.target_offset;
+  return <div className="interactiveExercise timezoneExercise">
+    <strong>{content.prompt}</strong>
+    <div className="timezoneTarget"><span><Gauge /> Destino conceptual</span><strong>{content.destination_label}</strong><small>{String(content.target_local_hour).padStart(2, "0")}:00 · {dayLabels[content.target_day_shift]}</small></div>
+    <Suspense fallback={<div className="timezoneScene loadingScene" aria-label="Preparando globo horario 3D" />}><TimezoneLab3D offset={offset} /></Suspense>
+    <div className="timezoneEquation" aria-live="polite"><span><small>Hora UTC</small><strong>{String(content.utc_hour).padStart(2, "0")}:00</strong></span><b>{signed(offset)} h</b><span><small>Hora local</small><strong>{String(localHour).padStart(2, "0")}:00</strong></span><em>{dayLabels[dayShift]}</em></div>
+    <div className="timezoneControl"><label htmlFor="timezone-offset">Desfase respecto a UTC</label><output>{signed(offset)}</output><input id="timezone-offset" aria-label="Desfase horario respecto a UTC" type="range" min="-11" max="12" step="1" value={offset} onInput={(event) => { setOffset(Number(event.currentTarget.value)); setChecked(false); }} /><div><button className="iconButton secondary" aria-label="Mover un huso al oeste" disabled={offset <= -11} onClick={() => { setOffset(offset - 1); setChecked(false); }}><Minus /></button><span>Oeste ← UTC → Este</span><button className="iconButton" aria-label="Mover un huso al este" disabled={offset >= 12} onClick={() => { setOffset(offset + 1); setChecked(false); }}><Plus /></button></div></div>
+    <p className="modelBoundary">Modelo escolar con desfases enteros de −11 a +12. Los husos reales pueden usar medias horas o cuartos de hora y cambiar por horario de verano; esta escena no indica la hora actual de ningún lugar real.</p>
+    <button onClick={() => { setChecked(true); if (correct) onSolved(offset); }}><Check /> Comprobar huso</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Huso localizado! ${content.explanation}` : `UTC ${signed(offset)} produce ${String(localHour).padStart(2, "0")}:00, ${dayLabels[dayShift].toLowerCase()}. Ajusta el desfase para igualar hora y día.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -904,7 +927,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB" || activity.type === "CITY_BUDGET_LAB" || activity.type === "BINARY_SIGNAL_LAB" || activity.type === "PUNCTUATION_LAB" || activity.type === "CIRCULATION_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB" || activity.type === "CITY_BUDGET_LAB" || activity.type === "BINARY_SIGNAL_LAB" || activity.type === "PUNCTUATION_LAB" || activity.type === "CIRCULATION_LAB" || activity.type === "TIMEZONE_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -961,6 +984,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "BINARY_SIGNAL_LAB" && <BinarySignalExercise key={activity.id} content={activity.content as BinarySignalLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "PUNCTUATION_LAB" && <PunctuationExercise key={activity.id} content={activity.content as PunctuationLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "CIRCULATION_LAB" && <CirculationExercise key={activity.id} content={activity.content as CirculationLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "TIMEZONE_LAB" && <TimezoneExercise key={activity.id} content={activity.content as TimezoneLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

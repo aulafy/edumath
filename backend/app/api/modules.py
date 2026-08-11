@@ -44,7 +44,7 @@ class ModuleJoinRequest(BaseModel):
 
 class ActivityCompleteRequest(BaseModel):
     student_id: str
-    response: str | dict | list[bool] | list[int] | list[str] | list[dict] | None = None
+    response: str | int | dict | list[bool] | list[int] | list[str] | list[dict] | None = None
 
 
 def _require_known_teacher(db: Session, teacher_key: str | None) -> None:
@@ -605,6 +605,10 @@ def complete_module_activity(
             or response != activity.content["target_route"]
         ):
             raise HTTPException(status_code=422, detail="The submitted blood route does not match the target circuit.")
+    if activity.type == "TIMEZONE_LAB":
+        response = data.response
+        if type(response) is not int or response != activity.content["target_offset"]:
+            raise HTTPException(status_code=422, detail="The submitted UTC offset does not produce the target local time.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,
