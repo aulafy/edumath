@@ -516,6 +516,29 @@ class StratigraphyLabContent(BaseModel):
         return self
 
 
+class DensityLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    target_state: Literal["FLOAT", "SINK", "SUSPEND"]
+    liquid_density: Literal[1.0]
+    initial_mass: int = Field(ge=1, le=20)
+    initial_volume: int = Field(ge=1, le=20)
+    example_mass: int = Field(ge=1, le=20)
+    example_volume: int = Field(ge=1, le=20)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @staticmethod
+    def state(mass: int, volume: int) -> str:
+        return "FLOAT" if mass < volume else "SINK" if mass > volume else "SUSPEND"
+
+    @model_validator(mode="after")
+    def validate_density(self):
+        if self.state(self.example_mass, self.example_volume) != self.target_state:
+            raise ValueError("The density example must create the target state.")
+        if self.state(self.initial_mass, self.initial_volume) == self.target_state:
+            raise ValueError("The initial density state must require an adjustment.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -537,6 +560,7 @@ class ModuleActivity(BaseModel):
         "REFLECTION_LAB",
         "DIFFUSION_LAB",
         "STRATIGRAPHY_LAB",
+        "DENSITY_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -586,4 +610,6 @@ class ModuleActivity(BaseModel):
             DiffusionLabContent.model_validate(self.content)
         elif self.type == "STRATIGRAPHY_LAB":
             StratigraphyLabContent.model_validate(self.content)
+        elif self.type == "DENSITY_LAB":
+            DensityLabContent.model_validate(self.content)
         return self

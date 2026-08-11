@@ -24,11 +24,12 @@ EduMath keeps its editable learning-content source in `content/open_modules.v1.j
 | ESO | 3 | Physics and Chemistry | The ray bench |
 | ESO | 3 | Biology and Geology | The molecular frontier |
 | ESO | 1 | Geography and History | The trench of time |
+| ESO | 2 | Physics and Chemistry | The density tank |
 | Primary | 5 | Spanish Language and Literature | The word laboratory |
 | ESO | 1 | Geography and History | Journey through Prehistory |
 | ESO | 2 | Physics and Chemistry | Forces in motion |
 
-The hand-maintained catalog currently contains 63 activities. Model-generated Primary drafts live separately in `content/generated/primary/` and are counted by the coverage report. Closed questions, classification challenges, balance laboratories, mosaic workshops, time paths, food-web laboratories, rhythm sequencers, sentence laboratories, orbital observatories, molecule workbenches, force benches, route laboratories, climate stations, probability machines, reflection benches, diffusion membranes, and stratigraphic trenches are interactive and checked by the backend before completion is recorded. Selected modules also contain declarative WebGL scenes.
+The hand-maintained catalog currently contains 66 activities. Model-generated Primary drafts live separately in `content/generated/primary/` and are counted by the coverage report. Closed questions, classification challenges, balance laboratories, mosaic workshops, time paths, food-web laboratories, rhythm sequencers, sentence laboratories, orbital observatories, molecule workbenches, force benches, route laboratories, climate stations, probability machines, reflection benches, diffusion membranes, stratigraphic trenches, and density tanks are interactive and checked by the backend before completion is recorded. Selected modules also contain declarative WebGL scenes.
 
 ## Model-assisted drafting
 
@@ -40,7 +41,7 @@ Some catalog drafts use local Qwen 3.5 through LM Studio or Grok CLI to reduce r
 4. Build the package and pass the package validator and automated tests.
 5. Request qualified educator review before classroom deployment.
 
-In the current catalog, Grok assisted with the initial forces-and-motion draft and reviewed safeguards for the probability, reflection, diffusion, and stratigraphy laboratories. Local Qwen assisted with the initial fractions draft and concepts for probability, reflection, diffusion, and stratigraphy missions. All model-assisted material required human correction before validation.
+In the current catalog, Grok assisted with the initial forces-and-motion draft and reviewed safeguards for the probability, reflection, diffusion, stratigraphy, and density laboratories. Local Qwen assisted with the initial fractions draft and concepts for probability, reflection, diffusion, stratigraphy, and density missions. All model-assisted material required human correction before validation.
 
 ## Build and validate
 

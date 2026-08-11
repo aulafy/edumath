@@ -1104,6 +1104,21 @@ select {
 .relativeTimeline button { display: flex; align-items: center; gap: 6px; background: #286f61; color: #fff; }
 .relativeTimeline button small { display: grid; width: 20px; height: 20px; place-items: center; border-radius: 50%; background: #fff; color: #286f61; }
 .relativeTimeline i { display: grid; place-items: center; border: 1px dashed #b7c4be; color: #6b7c75; font-style: normal; }
+.densityLabScene { width: 100%; height: clamp(290px, 43vh, 400px); overflow: hidden; border: 1px solid #c5d2cc; border-radius: 8px; background: #eaf3f1; }
+.densityLabScene canvas { display: block; width: 100% !important; height: 100% !important; }
+.densityTarget { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 2px 12px; padding: 10px 14px; border: 1px solid #c8d6cf; border-radius: 8px; background: #f7faf8; }
+.densityTarget strong { color: #21614e; font-size: 1.15rem; }
+.densityTarget small { grid-column: 1 / -1; color: #607269; }
+.densityFormula { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 5px 12px; padding: 11px 14px; border: 2px solid #bdc9c4; border-radius: 8px; background: #fff; }
+.densityFormula.ready { border-color: #2d8c68; background: #e3f5ec; }
+.densityFormula strong { font-size: 1.15rem; }
+.densityFormula b { grid-column: 1 / -1; color: #21614e; text-align: right; }
+.densityControls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.densityControls label { display: grid; min-width: 0; grid-template-columns: minmax(0, 1fr) auto; gap: 7px; padding: 12px; border: 2px solid #c8d6cf; border-radius: 8px; background: #fff; }
+.densityControls label > span { display: flex; align-items: center; gap: 7px; font-weight: 800; }
+.densityControls svg { width: 20px; height: 20px; }
+.densityControls output { color: #21614e; font-size: 1.2rem; font-weight: 900; }
+.densityControls input { grid-column: 1 / -1; width: 100%; min-height: 32px; padding: 0; accent-color: #287b63; }
 
 @media (max-width: 560px) {
   .climateTargets { grid-template-columns: 1fr; }
@@ -1117,6 +1132,9 @@ select {
   .netFlow strong { grid-column: 1 / -1; text-align: center; }
   .artifactTray { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .trenchHeader { align-items: start; flex-direction: column; }
+  .densityControls { grid-template-columns: 1fr; }
+  .densityFormula { grid-template-columns: 1fr; }
+  .densityFormula b { grid-column: auto; text-align: left; }
 }
 
 @media (max-width: 560px) {

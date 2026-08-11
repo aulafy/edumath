@@ -26,6 +26,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "REFLECTION_LAB": "org.edumath.tests.physics-reflection",
             "DIFFUSION_LAB": "org.edumath.tests.biology-diffusion",
             "STRATIGRAPHY_LAB": "org.edumath.tests.history-stratigraphy",
+            "DENSITY_LAB": "org.edumath.tests.physics-density",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -332,6 +333,19 @@ def make_stratigraphy_activity() -> dict:
                 {"id": "stone", "label": "Stone tool", "depth_rank": 4, "shape": "STONE"},
             ],
             "explanation": "In these undisturbed layers, deeper deposits formed earlier.",
+        }, "evidence": {},
+    }
+
+
+def make_density_activity() -> dict:
+    return {
+        "id": "float-the-block", "type": "DENSITY_LAB",
+        "title": "Float the block", "instructions": "Adjust mass and volume.",
+        "content": {
+            "prompt": "Make the block float.", "target_state": "FLOAT", "liquid_density": 1.0,
+            "initial_mass": 12, "initial_volume": 6,
+            "example_mass": 5, "example_volume": 10,
+            "explanation": "A block less dense than the liquid floats in this model.",
         }, "evidence": {},
     }
 
@@ -999,3 +1013,29 @@ def test_stratigraphy_lab_requires_oldest_to_newest_order() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": oldest_first})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["order-trench-finds"]
+
+
+def test_density_lab_requires_the_target_relative_density() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms", json={"name": "4M Physics", "stage": "PRIMARY", "grade": 4}
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import", headers=headers,
+            files={"package": ("density.edumath", make_package(make_density_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments", headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["float-the-block"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Teo"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/float-the-block/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"mass": 12, "volume": 6}}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"mass": True, "volume": 6}}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": {"mass": 5, "volume": 10}})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["float-the-block"]

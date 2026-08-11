@@ -471,3 +471,25 @@ def test_stratigraphy_lab_rejects_missing_depth_ranks() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_density_lab_rejects_a_witness_with_the_wrong_state() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "DENSITY_LAB",
+        "content": {
+            "prompt": "Float the block.", "target_state": "FLOAT", "liquid_density": 1.0,
+            "initial_mass": 12, "initial_volume": 6,
+            "example_mass": 10, "example_volume": 5,
+            "explanation": "The witness sinks instead of floating.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

@@ -450,6 +450,17 @@ def complete_module_activity(
         expected = [artifact["id"] for artifact in sorted(artifacts, key=lambda artifact: artifact["depth_rank"], reverse=True)]
         if data.response != expected:
             raise HTTPException(status_code=422, detail="The submitted relative chronology is not correct.")
+    if activity.type == "DENSITY_LAB":
+        response = data.response
+        if (
+            not isinstance(response, dict)
+            or set(response) != {"mass", "volume"}
+            or any(type(value) is not int or value < 1 or value > 20 for value in response.values())
+        ):
+            raise HTTPException(status_code=422, detail="The submitted mass and volume are invalid.")
+        state = "FLOAT" if response["mass"] < response["volume"] else "SINK" if response["mass"] > response["volume"] else "SUSPEND"
+        if state != activity.content["target_state"]:
+            raise HTTPException(status_code=422, detail="The submitted density does not create the target state.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

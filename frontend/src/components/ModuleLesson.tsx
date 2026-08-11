@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, Dices, FlaskConical, Gauge, ListChecks, Minus, Play, Plus, Shovel, Thermometer, Undo2, Volume2, X } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, Dices, FlaskConical, Gauge, ListChecks, Minus, Play, Plus, Shovel, Thermometer, Undo2, Volume2, Weight, X } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { api } from "../api/client";
 import type { ModuleAssignment, Student } from "../types/contracts";
@@ -20,6 +20,7 @@ const ProbabilityLab3D = lazy(() => import("./ProbabilityLab3D").then((module) =
 const ReflectionLab3D = lazy(() => import("./ReflectionLab3D").then((module) => ({ default: module.ReflectionLab3D })));
 const DiffusionLab3D = lazy(() => import("./DiffusionLab3D").then((module) => ({ default: module.DiffusionLab3D })));
 const StratigraphyLab3D = lazy(() => import("./StratigraphyLab3D").then((module) => ({ default: module.StratigraphyLab3D })));
+const DensityLab3D = lazy(() => import("./DensityLab3D").then((module) => ({ default: module.DensityLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -50,6 +51,8 @@ type NetFlow = "INWARD" | "OUTWARD" | "EQUILIBRIUM";
 type DiffusionLab = { prompt: string; target_net_flow: NetFlow; initial_outside: number; initial_inside: number; example_outside: number; example_inside: number; explanation: string };
 type StratumArtifact = { id: string; label: string; depth_rank: number; shape: "STONE" | "POTTERY" | "METAL" | "GLASS" | "BONE" | "WOOD" };
 type StratigraphyLab = { prompt: string; site_label: string; artifacts: StratumArtifact[]; explanation: string };
+type DensityState = "FLOAT" | "SINK" | "SUSPEND";
+type DensityLab = { prompt: string; target_state: DensityState; liquid_density: 1; initial_mass: number; initial_volume: number; example_mass: number; example_volume: number; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -492,6 +495,29 @@ function StratigraphyExercise({ content, onSolved }: { content: StratigraphyLab;
   </div>;
 }
 
+function densityState(mass: number, volume: number): DensityState { return mass < volume ? "FLOAT" : mass > volume ? "SINK" : "SUSPEND"; }
+const densityLabels: Record<DensityState, string> = { FLOAT: "Flota", SINK: "Se hunde", SUSPEND: "Queda suspendido" };
+
+function DensityExercise({ content, onSolved }: { content: DensityLab; onSolved: (response: { mass: number; volume: number }) => void }) {
+  const [mass, setMass] = useState(content.initial_mass);
+  const [volume, setVolume] = useState(content.initial_volume);
+  const [checked, setChecked] = useState(false);
+  const state = densityState(mass, volume); const correct = state === content.target_state; const density = mass / volume;
+  return <div className="interactiveExercise densityExercise">
+    <strong>{content.prompt}</strong>
+    <div className="densityTarget"><span>Comportamiento objetivo</span><strong>{densityLabels[content.target_state]}</strong><small>Líquido: {content.liquid_density.toFixed(1)} g/cm³</small></div>
+    <Suspense fallback={<div className="densityLabScene loadingScene" aria-label="Preparando tanque de densidad 3D" />}><DensityLab3D mass={mass} volume={volume} state={state} /></Suspense>
+    <div className={correct ? "densityFormula ready" : "densityFormula"} aria-live="polite"><span>ρ = masa ÷ volumen</span><strong>{mass} ÷ {volume} = {density.toFixed(2)} g/cm³</strong><b>{densityLabels[state]}</b></div>
+    <div className="densityControls">
+      <label><span><Weight /> Masa</span><output>{mass} g</output><input aria-label="Masa del bloque" type="range" min="1" max="20" step="1" value={mass} onInput={(event) => { setMass(Number(event.currentTarget.value)); setChecked(false); }} /></label>
+      <label><span><Volume2 /> Volumen</span><output>{volume} cm³</output><input aria-label="Volumen del bloque" type="range" min="1" max="20" step="1" value={volume} onInput={(event) => { setVolume(Number(event.currentTarget.value)); setChecked(false); }} /></label>
+    </div>
+    <p className="modelBoundary">Modelo estático simplificado: no calcula olas, viscosidad ni fracción sumergida. La densidad por sí sola no identifica un material.</p>
+    <button onClick={() => { setChecked(true); if (correct) onSolved({ mass, volume }); }}><Check /> Comparar densidades</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Comportamiento conseguido! ${content.explanation}` : `La densidad del bloque es ${density.toFixed(2)} g/cm³ y por eso ${densityLabels[state].toLowerCase()}. Ajusta masa o volumen para que ${densityLabels[content.target_state].toLowerCase()}.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -501,7 +527,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -545,6 +571,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "REFLECTION_LAB" && <ReflectionExercise key={activity.id} content={activity.content as ReflectionLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "DIFFUSION_LAB" && <DiffusionExercise key={activity.id} content={activity.content as DiffusionLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "STRATIGRAPHY_LAB" && <StratigraphyExercise key={activity.id} content={activity.content as StratigraphyLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "DENSITY_LAB" && <DensityExercise key={activity.id} content={activity.content as DensityLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>
