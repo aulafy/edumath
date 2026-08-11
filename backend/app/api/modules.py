@@ -509,6 +509,18 @@ def complete_module_activity(
             or not content["amplitude_min"] <= response["amplitude"] <= content["amplitude_max"]
         ):
             raise HTTPException(status_code=422, detail="The submitted sound wave is outside the target ranges.")
+    if activity.type == "ATOM_BUILDER_LAB":
+        response = data.response
+        content = activity.content
+        if (
+            not isinstance(response, dict)
+            or set(response) != {"protons", "neutrons", "electrons"}
+            or any(type(value) is not int for value in response.values())
+            or response["protons"] != content["target_protons"]
+            or response["neutrons"] != content["target_neutrons"]
+            or response["electrons"] != content["target_electrons"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted atomic composition does not match the target species.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

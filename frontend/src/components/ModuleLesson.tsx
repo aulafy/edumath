@@ -25,6 +25,7 @@ const TectonicLab3D = lazy(() => import("./TectonicLab3D").then((module) => ({ d
 const LunarPhaseLab3D = lazy(() => import("./LunarPhaseLab3D").then((module) => ({ default: module.LunarPhaseLab3D })));
 const FunctionMachineLab3D = lazy(() => import("./FunctionMachineLab3D").then((module) => ({ default: module.FunctionMachineLab3D })));
 const SoundWaveLab3D = lazy(() => import("./SoundWaveLab3D").then((module) => ({ default: module.SoundWaveLab3D })));
+const AtomBuilderLab3D = lazy(() => import("./AtomBuilderLab3D").then((module) => ({ default: module.AtomBuilderLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -65,6 +66,7 @@ type LunarPhaseLab = { prompt: string; target_phase: LunarPhase; initial_phase: 
 type FunctionCard = { id: string; kind: "ADD" | "MULTIPLY"; value: number };
 type FunctionMachineLab = { prompt: string; inputs: number[]; target_outputs: number[]; cards: FunctionCard[]; example_solution: string[]; explanation: string };
 type SoundWaveLab = { prompt: string; frequency_min: number; frequency_max: number; amplitude_min: number; amplitude_max: number; initial_frequency: number; initial_amplitude: number; example_frequency: number; example_amplitude: number; explanation: string };
+type AtomBuilderLab = { prompt: string; element_symbol: string; element_name: string; target_protons: number; target_neutrons: number; target_electrons: number; initial_protons: number; initial_neutrons: number; initial_electrons: number; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -645,6 +647,36 @@ function SoundWaveExercise({ content, onSolved }: { content: SoundWaveLab; onSol
   </div>;
 }
 
+const elementSymbols = ["", "H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S", "Cl", "Ar"];
+
+function AtomBuilderExercise({ content, onSolved }: { content: AtomBuilderLab; onSolved: (response: { protons: number; neutrons: number; electrons: number }) => void }) {
+  const [protons, setProtons] = useState(content.initial_protons);
+  const [neutrons, setNeutrons] = useState(content.initial_neutrons);
+  const [electrons, setElectrons] = useState(content.initial_electrons);
+  const [checked, setChecked] = useState(false);
+  const mass = protons + neutrons;
+  const charge = protons - electrons;
+  const targetMass = content.target_protons + content.target_neutrons;
+  const targetCharge = content.target_protons - content.target_electrons;
+  const correct = protons === content.target_protons && neutrons === content.target_neutrons && electrons === content.target_electrons;
+  const values = [
+    { key: "protons", label: "Protones", value: protons, min: 1, max: 18, set: setProtons, color: "proton" },
+    { key: "neutrons", label: "Neutrones", value: neutrons, min: 0, max: 22, set: setNeutrons, color: "neutron" },
+    { key: "electrons", label: "Electrones", value: electrons, min: 0, max: 18, set: setElectrons, color: "electron" },
+  ];
+  const signed = (value: number) => value > 0 ? `+${value}` : String(value);
+  return <div className="interactiveExercise atomBuilderExercise">
+    <strong>{content.prompt}</strong>
+    <div className="atomTarget"><div><sup>{targetMass}</sup><strong>{content.element_symbol}</strong><sup>{signed(targetCharge)}</sup></div><span><b>{content.element_name}</b><small>Número másico A = {targetMass} · carga q = {signed(targetCharge)}</small></span></div>
+    <Suspense fallback={<div className="atomBuilderScene loadingScene" aria-label="Preparando constructor atómico 3D" />}><AtomBuilderLab3D protons={protons} neutrons={neutrons} electrons={electrons} /></Suspense>
+    <div className="atomicEquations" aria-live="polite"><span><small>Identidad Z = p</small><strong>{elementSymbols[protons]} · Z = {protons}</strong></span><span className={mass === targetMass ? "ready" : ""}><small>A = p + n</small><strong>{protons} + {neutrons} = {mass}</strong></span><span className={charge === targetCharge ? "ready" : ""}><small>q = p − e</small><strong>{protons} − {electrons} = {signed(charge)}</strong></span></div>
+    <div className="particleControls">{values.map((item) => <div key={item.key} className={`particleCounter ${item.color}`}><span>{item.label}</span><div><button className="iconButton secondary" aria-label={`Quitar ${item.label.toLowerCase()}`} disabled={item.value <= item.min} onClick={() => { item.set(item.value - 1); setChecked(false); }}><Minus /></button><output aria-label={`${item.label}: ${item.value}`}>{item.value}</output><button className="iconButton" aria-label={`Añadir ${item.label.toLowerCase()}`} disabled={item.value >= item.max} onClick={() => { item.set(item.value + 1); setChecked(false); }}><Plus /></button></div></div>)}</div>
+    <p className="modelBoundary">Modelo de capas conceptual: partículas, distancias y trayectorias no están a escala y los electrones no recorren órbitas planetarias reales. Sirve aquí para contar composición, número másico y carga.</p>
+    <button onClick={() => { setChecked(true); if (correct) onSolved({ protons, neutrons, electrons }); }}><Check /> Analizar especie</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Especie construida! ${content.explanation}` : `${elementSymbols[protons]} tiene Z=${protons}, A=${mass} y carga ${signed(charge)}. Ajusta las partículas hasta obtener ${content.element_symbol}, A=${targetMass} y q=${signed(targetCharge)}.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -654,7 +686,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -703,6 +735,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "LUNAR_PHASE_LAB" && <LunarPhaseExercise key={activity.id} content={activity.content as LunarPhaseLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "FUNCTION_MACHINE_LAB" && <FunctionMachineExercise key={activity.id} content={activity.content as FunctionMachineLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "SOUND_WAVE_LAB" && <SoundWaveExercise key={activity.id} content={activity.content as SoundWaveLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "ATOM_BUILDER_LAB" && <AtomBuilderExercise key={activity.id} content={activity.content as AtomBuilderLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

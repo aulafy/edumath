@@ -658,6 +658,35 @@ class SoundWaveLabContent(BaseModel):
         return self
 
 
+ELEMENT_SYMBOLS = {
+    1: "H", 2: "He", 3: "Li", 4: "Be", 5: "B", 6: "C", 7: "N", 8: "O", 9: "F",
+    10: "Ne", 11: "Na", 12: "Mg", 13: "Al", 14: "Si", 15: "P", 16: "S", 17: "Cl", 18: "Ar",
+}
+
+
+class AtomBuilderLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    element_symbol: str = Field(pattern=r"^[A-Z][a-z]?$", max_length=2)
+    element_name: str = Field(min_length=2, max_length=40)
+    target_protons: int = Field(ge=1, le=18)
+    target_neutrons: int = Field(ge=0, le=22)
+    target_electrons: int = Field(ge=0, le=18)
+    initial_protons: int = Field(ge=1, le=18)
+    initial_neutrons: int = Field(ge=0, le=22)
+    initial_electrons: int = Field(ge=0, le=18)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_atom_builder(self):
+        if ELEMENT_SYMBOLS[self.target_protons] != self.element_symbol:
+            raise ValueError("The element symbol must match the target proton count.")
+        target = (self.target_protons, self.target_neutrons, self.target_electrons)
+        initial = (self.initial_protons, self.initial_neutrons, self.initial_electrons)
+        if target == initial:
+            raise ValueError("The initial atom-builder state must require an adjustment.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -684,6 +713,7 @@ class ModuleActivity(BaseModel):
         "LUNAR_PHASE_LAB",
         "FUNCTION_MACHINE_LAB",
         "SOUND_WAVE_LAB",
+        "ATOM_BUILDER_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -743,4 +773,6 @@ class ModuleActivity(BaseModel):
             FunctionMachineLabContent.model_validate(self.content)
         elif self.type == "SOUND_WAVE_LAB":
             SoundWaveLabContent.model_validate(self.content)
+        elif self.type == "ATOM_BUILDER_LAB":
+            AtomBuilderLabContent.model_validate(self.content)
         return self

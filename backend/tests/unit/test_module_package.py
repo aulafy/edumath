@@ -588,3 +588,25 @@ def test_sound_wave_lab_rejects_a_witness_outside_the_target() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_atom_builder_rejects_a_symbol_that_disagrees_with_protons() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "ATOM_BUILDER_LAB",
+        "content": {
+            "prompt": "Build carbon-12.", "element_symbol": "O", "element_name": "Carbon",
+            "target_protons": 6, "target_neutrons": 6, "target_electrons": 6,
+            "initial_protons": 4, "initial_neutrons": 5, "initial_electrons": 4,
+            "explanation": "Oxygen does not have six protons.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

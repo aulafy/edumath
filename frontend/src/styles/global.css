@@ -865,6 +865,32 @@ select {
   .soundControls { grid-template-columns: 1fr; }
 }
 
+.atomBuilderScene { width: 100%; height: clamp(300px, 44vh, 410px); overflow: hidden; border: 1px solid #c6ced8; border-radius: 8px; background: #eef2f6; }
+.atomBuilderScene canvas { display: block; width: 100% !important; height: 100% !important; }
+.atomTarget { display: flex; align-items: center; gap: 14px; border: 2px solid #556d8a; border-radius: 8px; background: #edf2fb; padding: 9px 14px; color: #293f5c; }
+.atomTarget > div { min-width: 78px; display: grid; grid-template-columns: auto auto auto; align-items: center; justify-content: center; }
+.atomTarget > div strong { font-size: 2rem; }
+.atomTarget > div sup { align-self: start; font-weight: 900; }
+.atomTarget > span { display: grid; }
+.atomTarget small { color: #53657b; font-weight: 700; }
+.atomicEquations { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.atomicEquations span { display: grid; border: 2px solid #ccd3da; border-radius: 8px; background: #f8f9fb; padding: 9px 11px; }
+.atomicEquations span.ready { border-color: #368069; background: #e4f3ec; }
+.atomicEquations small { color: #5a6673; font-weight: 700; }
+.particleControls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.particleCounter { display: grid; gap: 7px; border: 2px solid #cad1d5; border-radius: 8px; padding: 9px; text-align: center; }
+.particleCounter > span { font-weight: 800; }
+.particleCounter > div { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 5px; }
+.particleCounter output { font-size: 1.2rem; font-weight: 900; }
+.particleCounter.proton { border-color: #d68a85; }
+.particleCounter.neutron { border-color: #969fa3; }
+.particleCounter.electron { border-color: #75a8ca; }
+
+@media (max-width: 680px) {
+  .atomicEquations,
+  .particleControls { grid-template-columns: 1fr; }
+}
+
 .functionMachineScene { width: 100%; height: clamp(280px, 41vh, 380px); overflow: hidden; border: 1px solid #c5d2cc; border-radius: 8px; background: #edf3ef; }
 .functionMachineScene canvas { display: block; width: 100% !important; height: 100% !important; }
 .functionProgram { display: grid; grid-template-columns: auto minmax(100px, 1fr) minmax(100px, 1fr) auto 44px; align-items: center; gap: 8px; }

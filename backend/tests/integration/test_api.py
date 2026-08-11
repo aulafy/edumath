@@ -31,6 +31,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "LUNAR_PHASE_LAB": "org.edumath.tests.astronomy-lunar-phases",
             "FUNCTION_MACHINE_LAB": "org.edumath.tests.math-function-machine",
             "SOUND_WAVE_LAB": "org.edumath.tests.physics-sound-wave",
+            "ATOM_BUILDER_LAB": "org.edumath.tests.chemistry-atom-builder",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -409,6 +410,20 @@ def make_sound_wave_activity() -> dict:
             "initial_frequency": 700, "initial_amplitude": 5,
             "example_frequency": 350, "example_amplitude": 2,
             "explanation": "Frequency and amplitude describe different wave properties.",
+        }, "evidence": {},
+    }
+
+
+def make_atom_builder_activity() -> dict:
+    return {
+        "id": "build-carbon-12", "type": "ATOM_BUILDER_LAB",
+        "title": "Build carbon-12", "instructions": "Adjust all three particle counts.",
+        "content": {
+            "prompt": "Build neutral carbon-12.", "element_symbol": "C",
+            "element_name": "Carbon-12", "target_protons": 6,
+            "target_neutrons": 6, "target_electrons": 6,
+            "initial_protons": 4, "initial_neutrons": 5, "initial_electrons": 4,
+            "explanation": "Six protons identify carbon; six neutrons and electrons complete it.",
         }, "evidence": {},
     }
 
@@ -1208,3 +1223,29 @@ def test_sound_wave_lab_requires_both_values_inside_target_ranges() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": {"frequency": 350, "amplitude": 2}})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["tune-the-wave"]
+
+
+def test_atom_builder_requires_the_exact_atomic_composition() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms", json={"name": "2B Atoms", "stage": "PRIMARY", "grade": 4}
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import", headers=headers,
+            files={"package": ("atom.edumath", make_package(make_atom_builder_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments", headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["build-carbon-12"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Nora"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/build-carbon-12/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"protons": 6, "neutrons": 7, "electrons": 6}}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"protons": True, "neutrons": 6, "electrons": 6}}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": {"protons": 6, "neutrons": 6, "electrons": 6}})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["build-carbon-12"]
