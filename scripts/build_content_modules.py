@@ -29,7 +29,7 @@ def main() -> None:
             "format": "EDUMODULE",
             "format_version": "1.0",
             "id": module["id"],
-            "version": "1.0.0",
+            "version": module.get("version", "1.0.0"),
             "title": module["title"],
             "summary": module["summary"],
             "language": "es",
@@ -51,7 +51,7 @@ def main() -> None:
             "asset_files": [],
             "created_at": "2026-08-11T00:00:00Z",
         }
-        target = OUTPUT / f"{module['id']}-1.0.0.edumath"
+        target = OUTPUT / f"{module['id']}-{manifest['version']}.edumath"
         with ZipFile(target, "w") as archive:
             write_file(archive, "manifest.json", json.dumps(manifest, ensure_ascii=False))
             write_file(archive, "LICENSE", LICENSE_NOTICE)

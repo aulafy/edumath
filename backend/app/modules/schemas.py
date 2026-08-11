@@ -49,11 +49,23 @@ class EduModuleManifest(BaseModel):
     created_at: str
 
 
+class CoinValueScene(BaseModel):
+    type: Literal["COIN_VALUE"]
+    value: str = Field(min_length=1, max_length=40)
+    answer: str = Field(min_length=1, max_length=120)
+
+
+class FoodChainScene(BaseModel):
+    type: Literal["FOOD_CHAIN"]
+    answer: str = Field(min_length=1, max_length=120)
+
+
 class ClosedQuestionContent(BaseModel):
     prompt: str = Field(min_length=3, max_length=500)
     options: list[str] = Field(min_length=2, max_length=6)
     correct_option: str
     explanation: str = Field(min_length=3, max_length=500)
+    scene: CoinValueScene | FoodChainScene | None = None
 
     @model_validator(mode="after")
     def validate_answer(self):
@@ -61,6 +73,8 @@ class ClosedQuestionContent(BaseModel):
             raise ValueError("Closed-question options must be unique.")
         if self.correct_option not in self.options:
             raise ValueError("The correct option must appear in options.")
+        if self.scene and self.scene.answer != self.correct_option:
+            raise ValueError("The scene answer must match the correct option.")
         return self
 
 

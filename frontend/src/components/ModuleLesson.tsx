@@ -1,10 +1,12 @@
 import { ArrowLeft, Check, ChevronLeft, ChevronRight, FlaskConical, ListChecks } from "lucide-react";
-import { useMemo, useState } from "react";
+import { lazy, Suspense, useMemo, useState } from "react";
 import { api } from "../api/client";
 import type { ModuleAssignment, Student } from "../types/contracts";
 import { contentLabel, subjectLabel } from "../utils/labels";
 
-type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string };
+const LearningScene3D = lazy(() => import("./LearningScene3D").then((module) => ({ default: module.LearningScene3D })));
+
+type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
 
 function ContentValue({ value }: { value: unknown }) {
@@ -22,6 +24,7 @@ function ClosedQuestionExercise({ content, onSolved }: { content: ClosedQuestion
   const correct = selected === content.correct_option;
   return <div className="interactiveExercise">
     <strong>{content.prompt}</strong>
+    {content.scene && <Suspense fallback={<div className="learningScene loadingScene" aria-label="Preparando escena 3D" />}><LearningScene3D scene={content.scene} selected={selected} onSelect={(answer) => { setSelected(answer); setChecked(false); }} /></Suspense>}
     <div className="optionGrid">{content.options.map((option) => <button key={option} className={selected === option ? "exerciseOption selected" : "exerciseOption"} aria-pressed={selected === option} onClick={() => { setSelected(option); setChecked(false); }}>{option}</button>)}</div>
     <button disabled={!selected} onClick={() => { setChecked(true); if (correct) onSolved(selected); }}><Check /> Comprobar</button>
     {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Bien! ${content.explanation}` : "Todavía no. Prueba otra opción."}</p>}
@@ -72,7 +75,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         <span className="moduleProgressLabel">{assignment.completed_activity_ids.length}/{assignment.activities.length}</span>
       </header>
       <div className="moduleProgressTrack" aria-label={`${progress}% completado`}><span style={{ width: `${progress}%` }} /></div>
-      <section className="moduleActivity">
+      <section className={"scene" in activity.content ? "moduleActivity hasLearningScene" : "moduleActivity"}>
         <div className="activityEyebrow"><FlaskConical /> Actividad {index + 1}</div>
         <h1>{activity.title}</h1>
         <p className="activityInstructions">{activity.instructions}</p>

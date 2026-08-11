@@ -42,7 +42,7 @@ export function App() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
-  }, [session?.session_id]);
+  }, [session?.session_id, moduleAssignment?.id]);
 
   async function createProfile() {
     const created = await api.createStudent(name);

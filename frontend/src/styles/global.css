@@ -530,6 +530,28 @@ select {
   background: #ffffff;
 }
 
+.moduleActivity.hasLearningScene {
+  width: min(900px, 100%);
+  padding-inline: 0;
+  border: 0;
+  background: transparent;
+}
+
+.moduleActivity.hasLearningScene > :not(.interactiveExercise),
+.moduleActivity.hasLearningScene .interactiveExercise > :not(.learningScene) {
+  width: min(720px, calc(100% - 32px));
+  margin-inline: auto;
+}
+
+.moduleActivity.hasLearningScene .interactiveExercise {
+  border: 0;
+}
+
+.moduleActivity.hasLearningScene .learningScene {
+  height: min(360px, 42vh);
+  border-radius: 0;
+}
+
 .activityEyebrow {
   display: flex;
   align-items: center;
@@ -589,6 +611,46 @@ select {
   gap: 16px;
   padding-block: 18px;
   border-block: 1px solid #d5ddd8;
+}
+
+.learningScene {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.loadingScene {
+  background: #dff2e7;
+}
+
+.learningScene canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.learningScene canvas:active {
+  cursor: grabbing;
+}
+
+.sceneHotspot {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  min-height: 42px;
+  padding-inline: 18px;
+  transform: translateX(-50%);
+  border-color: #9b761c;
+  background: #f0c34a;
+  color: #211900;
+}
+
+.sceneHotspot:active {
+  transform: translate(-50%, 3px);
 }
 
 .optionGrid {
@@ -996,6 +1058,10 @@ pre {
 
   .moduleActivity {
     padding: 20px 16px;
+  }
+
+  .moduleActivity.hasLearningScene {
+    padding-inline: 0;
   }
 
   .classificationList label {
