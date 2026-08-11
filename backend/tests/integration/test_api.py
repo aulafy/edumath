@@ -28,6 +28,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "STRATIGRAPHY_LAB": "org.edumath.tests.history-stratigraphy",
             "DENSITY_LAB": "org.edumath.tests.physics-density",
             "TECTONIC_LAB": "org.edumath.tests.geology-tectonics",
+            "LUNAR_PHASE_LAB": "org.edumath.tests.astronomy-lunar-phases",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -359,6 +360,18 @@ def make_tectonic_activity() -> dict:
             "prompt": "Create a ridge.", "target_motion": "DIVERGENT",
             "target_feature": "RIDGE", "initial_motion": "CONVERGENT",
             "explanation": "Diverging plates create new lithosphere at a ridge.",
+        }, "evidence": {},
+    }
+
+
+def make_lunar_phase_activity() -> dict:
+    return {
+        "id": "find-full-moon", "type": "LUNAR_PHASE_LAB",
+        "title": "Find full Moon", "instructions": "Move the Moon around Earth.",
+        "content": {
+            "prompt": "Build the full Moon geometry.", "target_phase": "FULL",
+            "initial_phase": "NEW",
+            "explanation": "At full Moon, the Moon is approximately opposite the Sun.",
         }, "evidence": {},
     }
 
@@ -1078,3 +1091,29 @@ def test_tectonic_lab_requires_the_target_plate_motion() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": "DIVERGENT"})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["build-a-ridge"]
+
+
+def test_lunar_phase_lab_requires_the_target_orbit_position() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms", json={"name": "1B Astronomy", "stage": "PRIMARY", "grade": 4}
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import", headers=headers,
+            files={"package": ("lunar.edumath", make_package(make_lunar_phase_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments", headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["find-full-moon"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Vega"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/find-full-moon/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": "FIRST_QUARTER"}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"phase": "FULL"}}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": "FULL"})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["find-full-moon"]

@@ -514,3 +514,24 @@ def test_tectonic_lab_rejects_an_inconsistent_motion_and_feature() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_lunar_phase_lab_rejects_an_already_solved_initial_state() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "LUNAR_PHASE_LAB",
+        "content": {
+            "prompt": "Build a full Moon.", "target_phase": "FULL",
+            "initial_phase": "FULL",
+            "explanation": "This activity begins already solved.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

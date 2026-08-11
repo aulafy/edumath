@@ -467,6 +467,12 @@ def complete_module_activity(
             raise HTTPException(status_code=422, detail="The submitted plate motion is invalid.")
         if response != activity.content["target_motion"]:
             raise HTTPException(status_code=422, detail="The submitted plate motion does not create the target feature.")
+    if activity.type == "LUNAR_PHASE_LAB":
+        response = data.response
+        if not isinstance(response, str) or response not in {"NEW", "FIRST_QUARTER", "FULL", "LAST_QUARTER"}:
+            raise HTTPException(status_code=422, detail="The submitted lunar phase is invalid.")
+        if response != activity.content["target_phase"]:
+            raise HTTPException(status_code=422, detail="The Moon is not in the target phase position.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

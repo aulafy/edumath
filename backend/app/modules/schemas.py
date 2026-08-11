@@ -563,6 +563,19 @@ class TectonicLabContent(BaseModel):
         return self
 
 
+class LunarPhaseLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    target_phase: Literal["NEW", "FIRST_QUARTER", "FULL", "LAST_QUARTER"]
+    initial_phase: Literal["NEW", "FIRST_QUARTER", "FULL", "LAST_QUARTER"]
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_lunar_phase(self):
+        if self.initial_phase == self.target_phase:
+            raise ValueError("The initial lunar phase must require a change.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -586,6 +599,7 @@ class ModuleActivity(BaseModel):
         "STRATIGRAPHY_LAB",
         "DENSITY_LAB",
         "TECTONIC_LAB",
+        "LUNAR_PHASE_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -639,4 +653,6 @@ class ModuleActivity(BaseModel):
             DensityLabContent.model_validate(self.content)
         elif self.type == "TECTONIC_LAB":
             TectonicLabContent.model_validate(self.content)
+        elif self.type == "LUNAR_PHASE_LAB":
+            LunarPhaseLabContent.model_validate(self.content)
         return self

@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, Dices, FlaskConical, Gauge, ListChecks, Minus, Play, Plus, Shovel, Thermometer, Undo2, Volume2, Weight, X } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, Dices, FlaskConical, Gauge, ListChecks, Minus, Moon, Play, Plus, Shovel, Sun, Thermometer, Undo2, Volume2, Weight, X } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { api } from "../api/client";
 import type { ModuleAssignment, Student } from "../types/contracts";
@@ -22,6 +22,7 @@ const DiffusionLab3D = lazy(() => import("./DiffusionLab3D").then((module) => ({
 const StratigraphyLab3D = lazy(() => import("./StratigraphyLab3D").then((module) => ({ default: module.StratigraphyLab3D })));
 const DensityLab3D = lazy(() => import("./DensityLab3D").then((module) => ({ default: module.DensityLab3D })));
 const TectonicLab3D = lazy(() => import("./TectonicLab3D").then((module) => ({ default: module.TectonicLab3D })));
+const LunarPhaseLab3D = lazy(() => import("./LunarPhaseLab3D").then((module) => ({ default: module.LunarPhaseLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -57,6 +58,8 @@ type DensityLab = { prompt: string; target_state: DensityState; liquid_density: 
 type PlateMotion = "DIVERGENT" | "CONVERGENT" | "TRANSFORM";
 type TectonicFeature = "RIDGE" | "MOUNTAIN_RANGE" | "FAULT";
 type TectonicLab = { prompt: string; target_motion: PlateMotion; target_feature: TectonicFeature; initial_motion: PlateMotion; explanation: string };
+type LunarPhase = "NEW" | "FIRST_QUARTER" | "FULL" | "LAST_QUARTER";
+type LunarPhaseLab = { prompt: string; target_phase: LunarPhase; initial_phase: LunarPhase; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -545,6 +548,26 @@ function TectonicExercise({ content, onSolved }: { content: TectonicLab; onSolve
   </div>;
 }
 
+const lunarPhaseLabels: Record<LunarPhase, string> = { NEW: "Luna nueva", FIRST_QUARTER: "Cuarto creciente", FULL: "Luna llena", LAST_QUARTER: "Cuarto menguante" };
+
+function LunarPhaseExercise({ content, onSolved }: { content: LunarPhaseLab; onSolved: (response: LunarPhase) => void }) {
+  const [phase, setPhase] = useState<LunarPhase>(content.initial_phase);
+  const [checked, setChecked] = useState(false);
+  const correct = phase === content.target_phase;
+  return <div className="interactiveExercise lunarPhaseExercise">
+    <strong>{content.prompt}</strong>
+    <div className="lunarTarget"><span><Moon /> Fase objetivo</span><strong>{lunarPhaseLabels[content.target_phase]}</strong></div>
+    <Suspense fallback={<div className="lunarPhaseScene loadingScene" aria-label="Preparando observatorio lunar 3D" />}><LunarPhaseLab3D phase={phase} /></Suspense>
+    <div className="earthView" aria-live="polite"><div className={`phaseDisc phase-${phase.toLowerCase()}`} role="img" aria-label={`Desde la Tierra se observa ${lunarPhaseLabels[phase].toLowerCase()}`} /><span><small>Vista desde la Tierra</small><strong>{lunarPhaseLabels[phase]}</strong></span><b><Sun /> La luz llega desde el Sol</b></div>
+    <div className="lunarPhaseControls" role="group" aria-label="Posición de la Luna en su órbita">
+      {(Object.keys(lunarPhaseLabels) as LunarPhase[]).map((option) => <button key={option} className={phase === option ? "selected" : "secondary"} aria-pressed={phase === option} onClick={() => { setPhase(option); setChecked(false); }}><Moon />{lunarPhaseLabels[option]}</button>)}
+    </div>
+    <p className="modelBoundary">Modelo conceptual visto desde encima del polo norte. Las distancias y tamaños no están a escala. Las fases muestran cuánta parte iluminada vemos desde la Tierra; la sombra terrestre solo interviene en un eclipse lunar.</p>
+    <button onClick={() => { setChecked(true); if (correct) onSolved(phase); }}><Check /> Comprobar alineación</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Geometría resuelta! ${content.explanation}` : `Has construido ${lunarPhaseLabels[phase].toLowerCase()}. Cambia la posición orbital hasta observar ${lunarPhaseLabels[content.target_phase].toLowerCase()}.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -554,7 +577,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -600,6 +623,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "STRATIGRAPHY_LAB" && <StratigraphyExercise key={activity.id} content={activity.content as StratigraphyLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "DENSITY_LAB" && <DensityExercise key={activity.id} content={activity.content as DensityLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "TECTONIC_LAB" && <TectonicExercise key={activity.id} content={activity.content as TectonicLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "LUNAR_PHASE_LAB" && <LunarPhaseExercise key={activity.id} content={activity.content as LunarPhaseLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

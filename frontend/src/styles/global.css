@@ -820,6 +820,28 @@ select {
   }
 }
 
+.lunarPhaseScene { width: 100%; height: clamp(300px, 44vh, 410px); overflow: hidden; border: 1px solid #293852; border-radius: 8px; background: #10182b; }
+.lunarPhaseScene canvas { display: block; width: 100% !important; height: 100% !important; }
+.lunarTarget { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 2px solid #5969a2; border-radius: 8px; background: #eef0ff; padding: 10px 14px; color: #30385f; }
+.lunarTarget span { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; }
+.earthView { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; border: 1px solid #c7ccd9; border-radius: 8px; background: #f7f8fc; padding: 10px 13px; }
+.earthView span { display: grid; }
+.earthView small { color: #596174; font-weight: 700; }
+.earthView b { display: inline-flex; align-items: center; gap: 6px; color: #765313; }
+.phaseDisc { width: 48px; aspect-ratio: 1; flex: none; border: 2px solid #697080; border-radius: 50%; background: #171923; }
+.phase-full { background: #f7f2d7; }
+.phase-first_quarter { background: linear-gradient(90deg, #171923 50%, #f7f2d7 50%); }
+.phase-last_quarter { background: linear-gradient(90deg, #f7f2d7 50%, #171923 50%); }
+.lunarPhaseControls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.lunarPhaseControls button { min-width: 0; }
+.lunarPhaseControls button.selected { background: #3f4f8d; color: white; }
+
+@media (max-width: 680px) {
+  .lunarPhaseControls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .earthView { grid-template-columns: auto minmax(0, 1fr); }
+  .earthView b { grid-column: 1 / -1; }
+}
+
 .foodWebScene {
   width: 100%;
   height: clamp(250px, 36vh, 340px);

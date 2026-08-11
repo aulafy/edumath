@@ -154,6 +154,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 
 `TECTONIC_LAB` declares one target and one initial relative plate motion (`DIVERGENT`, `CONVERGENT`, or `TRANSFORM`) plus the corresponding target feature (`RIDGE`, `MOUNTAIN_RANGE`, or `FAULT`). The schema rejects inconsistent cause-and-feature pairs and already-solved initial states. The trusted 3D runner visualises only the dominant conceptual relationship; copy must state that real plates move slowly, convergent boundaries can include subduction, and real boundaries may combine processes.
 
+`LUNAR_PHASE_LAB` declares different initial and target positions among `NEW`, `FIRST_QUARTER`, `FULL`, and `LAST_QUARTER`. The trusted runner presents the orbital geometry and the corresponding Earth-view disk together. Content must name the viewing convention, avoid implying that the Moon emits light, distinguish ordinary phases from eclipses, and state that sizes and distances in the scene are not to scale.
+
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.
