@@ -24,6 +24,7 @@ const DensityLab3D = lazy(() => import("./DensityLab3D").then((module) => ({ def
 const TectonicLab3D = lazy(() => import("./TectonicLab3D").then((module) => ({ default: module.TectonicLab3D })));
 const LunarPhaseLab3D = lazy(() => import("./LunarPhaseLab3D").then((module) => ({ default: module.LunarPhaseLab3D })));
 const FunctionMachineLab3D = lazy(() => import("./FunctionMachineLab3D").then((module) => ({ default: module.FunctionMachineLab3D })));
+const SoundWaveLab3D = lazy(() => import("./SoundWaveLab3D").then((module) => ({ default: module.SoundWaveLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -63,6 +64,7 @@ type LunarPhase = "NEW" | "FIRST_QUARTER" | "FULL" | "LAST_QUARTER";
 type LunarPhaseLab = { prompt: string; target_phase: LunarPhase; initial_phase: LunarPhase; explanation: string };
 type FunctionCard = { id: string; kind: "ADD" | "MULTIPLY"; value: number };
 type FunctionMachineLab = { prompt: string; inputs: number[]; target_outputs: number[]; cards: FunctionCard[]; example_solution: string[]; explanation: string };
+type SoundWaveLab = { prompt: string; frequency_min: number; frequency_max: number; amplitude_min: number; amplitude_max: number; initial_frequency: number; initial_amplitude: number; example_frequency: number; example_amplitude: number; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -603,6 +605,46 @@ function FunctionMachineExercise({ content, onSolved }: { content: FunctionMachi
   </div>;
 }
 
+function SoundWaveExercise({ content, onSolved }: { content: SoundWaveLab; onSolved: (response: { frequency: number; amplitude: number }) => void }) {
+  const [frequency, setFrequency] = useState(content.initial_frequency);
+  const [amplitude, setAmplitude] = useState(content.initial_amplitude);
+  const [checked, setChecked] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const frequencyReady = frequency >= content.frequency_min && frequency <= content.frequency_max;
+  const amplitudeReady = amplitude >= content.amplitude_min && amplitude <= content.amplitude_max;
+  const correct = frequencyReady && amplitudeReady;
+  const pitch = frequency < 350 ? "Más grave" : frequency > 600 ? "Más agudo" : "Tono intermedio";
+  async function playTone() {
+    if (playing) return;
+    const context = new AudioContext();
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    const now = context.currentTime;
+    oscillator.type = "sine"; oscillator.frequency.value = frequency;
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.linearRampToValueAtTime(amplitude * 0.015, now + 0.04);
+    gain.gain.linearRampToValueAtTime(0.0001, now + 0.58);
+    oscillator.connect(gain).connect(context.destination);
+    oscillator.start(now); oscillator.stop(now + 0.6);
+    setPlaying(true);
+    window.setTimeout(() => { setPlaying(false); void context.close(); }, 650);
+  }
+  return <div className="interactiveExercise soundWaveExercise">
+    <strong>{content.prompt}</strong>
+    <div className="soundTargets"><span>Frecuencia objetivo <strong>{content.frequency_min}–{content.frequency_max} Hz</strong></span><span>Amplitud objetivo <strong>{content.amplitude_min}–{content.amplitude_max}</strong></span></div>
+    <Suspense fallback={<div className="soundWaveScene loadingScene" aria-label="Preparando estudio de ondas 3D" />}><SoundWaveLab3D frequency={frequency} amplitude={amplitude} /></Suspense>
+    <div className="soundReadout" aria-live="polite"><span><small>Frecuencia</small><strong>{frequency} Hz</strong><b>{pitch}</b></span><span><small>Amplitud visual</small><strong>{amplitude}/5</strong><b>{amplitude < 3 ? "Crestas bajas" : amplitude > 3 ? "Crestas altas" : "Crestas medias"}</b></span></div>
+    <div className="soundControls">
+      <label className={frequencyReady ? "ready" : ""}><span>Frecuencia</span><output>{frequency} Hz</output><input aria-label="Frecuencia de la onda" type="range" min="200" max="800" step="25" value={frequency} onInput={(event) => { setFrequency(Number(event.currentTarget.value)); setChecked(false); }} /></label>
+      <label className={amplitudeReady ? "ready" : ""}><span>Amplitud visual</span><output>{amplitude}</output><input aria-label="Amplitud visual de la onda" type="range" min="1" max="5" step="1" value={amplitude} onInput={(event) => { setAmplitude(Number(event.currentTarget.value)); setChecked(false); }} /></label>
+    </div>
+    <button className="secondary soundPreview" disabled={playing} onClick={() => void playTone()}>{playing ? <Volume2 /> : <Play />}{playing ? "Reproduciendo tono breve" : "Escuchar 0,6 segundos"}</button>
+    <p className="modelBoundary">Audio opcional y limitado a una ganancia máxima de 0,075. La escena es una representación transversal idealizada, no muestra moléculas de aire ni mide intensidad en decibelios. El reto se resuelve sin escuchar.</p>
+    <button onClick={() => { setChecked(true); if (correct) onSolved({ frequency, amplitude }); }}><Check /> Analizar la onda</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Onda ajustada! ${content.explanation}` : `Ajusta ${!frequencyReady && !amplitudeReady ? "frecuencia y amplitud" : !frequencyReady ? "la frecuencia" : "la amplitud"} hasta entrar en la zona objetivo.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -612,7 +654,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -660,6 +702,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "TECTONIC_LAB" && <TectonicExercise key={activity.id} content={activity.content as TectonicLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "LUNAR_PHASE_LAB" && <LunarPhaseExercise key={activity.id} content={activity.content as LunarPhaseLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "FUNCTION_MACHINE_LAB" && <FunctionMachineExercise key={activity.id} content={activity.content as FunctionMachineLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "SOUND_WAVE_LAB" && <SoundWaveExercise key={activity.id} content={activity.content as SoundWaveLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

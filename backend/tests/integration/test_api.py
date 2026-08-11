@@ -30,6 +30,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "TECTONIC_LAB": "org.edumath.tests.geology-tectonics",
             "LUNAR_PHASE_LAB": "org.edumath.tests.astronomy-lunar-phases",
             "FUNCTION_MACHINE_LAB": "org.edumath.tests.math-function-machine",
+            "SOUND_WAVE_LAB": "org.edumath.tests.physics-sound-wave",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -393,6 +394,21 @@ def make_function_machine_activity() -> dict:
             ],
             "example_solution": ["times-two", "plus-three"],
             "explanation": "The rule doubles each input and then adds three.",
+        }, "evidence": {},
+    }
+
+
+def make_sound_wave_activity() -> dict:
+    return {
+        "id": "tune-the-wave", "type": "SOUND_WAVE_LAB",
+        "title": "Tune the wave", "instructions": "Adjust frequency and amplitude.",
+        "content": {
+            "prompt": "Build a medium-frequency wave with low amplitude.",
+            "frequency_min": 300, "frequency_max": 400,
+            "amplitude_min": 1, "amplitude_max": 2,
+            "initial_frequency": 700, "initial_amplitude": 5,
+            "example_frequency": 350, "example_amplitude": 2,
+            "explanation": "Frequency and amplitude describe different wave properties.",
         }, "evidence": {},
     }
 
@@ -1166,3 +1182,29 @@ def test_function_machine_requires_one_program_matching_all_probes() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": ["times-two", "plus-three"]})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["build-linear-rule"]
+
+
+def test_sound_wave_lab_requires_both_values_inside_target_ranges() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms", json={"name": "2A Sound", "stage": "PRIMARY", "grade": 4}
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import", headers=headers,
+            files={"package": ("sound.edumath", make_package(make_sound_wave_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments", headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["tune-the-wave"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Iris"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/tune-the-wave/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"frequency": 350, "amplitude": 5}}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"frequency": True, "amplitude": 2}}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": {"frequency": 350, "amplitude": 2}})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["tune-the-wave"]

@@ -842,6 +842,29 @@ select {
   .earthView b { grid-column: 1 / -1; }
 }
 
+.soundWaveScene { width: 100%; height: clamp(280px, 41vh, 380px); overflow: hidden; border: 1px solid #c5d2cc; border-radius: 8px; background: #eef4f1; }
+.soundWaveScene canvas { display: block; width: 100% !important; height: 100% !important; }
+.soundTargets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.soundTargets span { display: flex; align-items: center; justify-content: space-between; gap: 8px; border: 2px solid #587c72; border-radius: 8px; background: #e8f3ee; padding: 9px 12px; }
+.soundReadout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.soundReadout span { display: grid; border: 1px solid #c7d1cd; border-radius: 8px; background: #f8faf9; padding: 9px 12px; }
+.soundReadout small { color: #5f6e68; font-weight: 700; }
+.soundReadout strong { font-size: 1.25rem; }
+.soundReadout b { color: #3d665a; }
+.soundControls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.soundControls label { display: grid; grid-template-columns: 1fr auto; gap: 8px; border: 2px solid #ccd5d1; border-radius: 8px; padding: 10px 12px; }
+.soundControls label.ready { border-color: #388269; background: #e7f4ed; }
+.soundControls label span,
+.soundControls output { font-weight: 800; }
+.soundControls input { grid-column: 1 / -1; width: 100%; accent-color: #327863; }
+.soundPreview { width: 100%; }
+
+@media (max-width: 620px) {
+  .soundTargets,
+  .soundReadout,
+  .soundControls { grid-template-columns: 1fr; }
+}
+
 .functionMachineScene { width: 100%; height: clamp(280px, 41vh, 380px); overflow: hidden; border: 1px solid #c5d2cc; border-radius: 8px; background: #edf3ef; }
 .functionMachineScene canvas { display: block; width: 100% !important; height: 100% !important; }
 .functionProgram { display: grid; grid-template-columns: auto minmax(100px, 1fr) minmax(100px, 1fr) auto 44px; align-items: center; gap: 8px; }

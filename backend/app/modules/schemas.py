@@ -629,6 +629,35 @@ class FunctionMachineLabContent(BaseModel):
         return self
 
 
+class SoundWaveLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    frequency_min: int = Field(ge=200, le=800)
+    frequency_max: int = Field(ge=200, le=800)
+    amplitude_min: int = Field(ge=1, le=5)
+    amplitude_max: int = Field(ge=1, le=5)
+    initial_frequency: int = Field(ge=200, le=800)
+    initial_amplitude: int = Field(ge=1, le=5)
+    example_frequency: int = Field(ge=200, le=800)
+    example_amplitude: int = Field(ge=1, le=5)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    def matches(self, frequency: int, amplitude: int) -> bool:
+        return (
+            self.frequency_min <= frequency <= self.frequency_max
+            and self.amplitude_min <= amplitude <= self.amplitude_max
+        )
+
+    @model_validator(mode="after")
+    def validate_sound_wave(self):
+        if self.frequency_min > self.frequency_max or self.amplitude_min > self.amplitude_max:
+            raise ValueError("Sound-wave target ranges must be ordered.")
+        if not self.matches(self.example_frequency, self.example_amplitude):
+            raise ValueError("The sound-wave example must be inside both target ranges.")
+        if self.matches(self.initial_frequency, self.initial_amplitude):
+            raise ValueError("The initial sound-wave state must require an adjustment.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -654,6 +683,7 @@ class ModuleActivity(BaseModel):
         "TECTONIC_LAB",
         "LUNAR_PHASE_LAB",
         "FUNCTION_MACHINE_LAB",
+        "SOUND_WAVE_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -711,4 +741,6 @@ class ModuleActivity(BaseModel):
             LunarPhaseLabContent.model_validate(self.content)
         elif self.type == "FUNCTION_MACHINE_LAB":
             FunctionMachineLabContent.model_validate(self.content)
+        elif self.type == "SOUND_WAVE_LAB":
+            SoundWaveLabContent.model_validate(self.content)
         return self

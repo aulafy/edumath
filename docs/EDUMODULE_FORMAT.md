@@ -158,6 +158,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 
 `FUNCTION_MACHINE_LAB` declares exactly three unique integer inputs, three target outputs, five or six `ADD`/`MULTIPLY` cards, and one two-card witness program. Cards use non-trivial integer values from −5 to 5. The package validator executes every ordered pair of distinct cards and accepts the activity only when exactly one pair produces all three targets. The learner sees live output for every probe, while the backend independently executes the submitted card IDs in order.
 
+`SOUND_WAVE_LAB` declares inclusive target ranges, initial values, and one witness for frequency (200–800 Hz) and a unitless visual amplitude level (1–5). The trusted runner renders both values and may play a 0.6-second sine tone only after explicit activation, with gain capped at 0.075. Audio is optional: all targets, controls, state, and feedback remain textual and visual. Content must distinguish physical frequency and amplitude from perceived pitch and loudness and must not present the visual level as decibels or a molecular simulation.
+
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.

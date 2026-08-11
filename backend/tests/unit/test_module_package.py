@@ -564,3 +564,27 @@ def test_function_machine_rejects_an_ambiguous_challenge() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_sound_wave_lab_rejects_a_witness_outside_the_target() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "SOUND_WAVE_LAB",
+        "content": {
+            "prompt": "Tune the wave.",
+            "frequency_min": 300, "frequency_max": 400,
+            "amplitude_min": 2, "amplitude_max": 3,
+            "initial_frequency": 700, "initial_amplitude": 5,
+            "example_frequency": 500, "example_amplitude": 3,
+            "explanation": "The example frequency misses the target range.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

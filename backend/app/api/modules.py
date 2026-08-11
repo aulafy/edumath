@@ -496,6 +496,19 @@ def complete_module_activity(
         outputs = [apply_function_cards(value, cards) for value in content["inputs"]]
         if outputs != content["target_outputs"]:
             raise HTTPException(status_code=422, detail="The submitted function program does not match every output.")
+    if activity.type == "SOUND_WAVE_LAB":
+        response = data.response
+        content = activity.content
+        if (
+            not isinstance(response, dict)
+            or set(response) != {"frequency", "amplitude"}
+            or any(type(value) is not int for value in response.values())
+            or not 200 <= response["frequency"] <= 800
+            or not 1 <= response["amplitude"] <= 5
+            or not content["frequency_min"] <= response["frequency"] <= content["frequency_max"]
+            or not content["amplitude_min"] <= response["amplitude"] <= content["amplitude_max"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted sound wave is outside the target ranges.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,
