@@ -446,3 +446,28 @@ def test_diffusion_lab_rejects_a_witness_with_the_wrong_gradient() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_stratigraphy_lab_rejects_missing_depth_ranks() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "STRATIGRAPHY_LAB",
+        "content": {
+            "prompt": "Order the finds.", "site_label": "Test trench",
+            "artifacts": [
+                {"id": "a", "label": "Find A", "depth_rank": 1, "shape": "STONE"},
+                {"id": "b", "label": "Find B", "depth_rank": 2, "shape": "POTTERY"},
+                {"id": "c", "label": "Find C", "depth_rank": 4, "shape": "METAL"},
+                {"id": "d", "label": "Find D", "depth_rank": 5, "shape": "GLASS"},
+            ], "explanation": "Ranks three and four are not a complete sequence.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

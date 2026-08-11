@@ -492,6 +492,30 @@ class DiffusionLabContent(BaseModel):
         return self
 
 
+class StratumArtifact(BaseModel):
+    id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=80)
+    label: str = Field(min_length=2, max_length=80)
+    depth_rank: int = Field(ge=1, le=6)
+    shape: Literal["STONE", "POTTERY", "METAL", "GLASS", "BONE", "WOOD"]
+
+
+class StratigraphyLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    site_label: str = Field(min_length=2, max_length=100)
+    artifacts: list[StratumArtifact] = Field(min_length=4, max_length=6)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_stratigraphy(self):
+        ids = [artifact.id for artifact in self.artifacts]
+        ranks = [artifact.depth_rank for artifact in self.artifacts]
+        if len(ids) != len(set(ids)):
+            raise ValueError("Stratigraphy artifact IDs must be unique.")
+        if sorted(ranks) != list(range(1, len(self.artifacts) + 1)):
+            raise ValueError("Stratigraphy depth ranks must form a complete sequence from one.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -512,6 +536,7 @@ class ModuleActivity(BaseModel):
         "PROBABILITY_LAB",
         "REFLECTION_LAB",
         "DIFFUSION_LAB",
+        "STRATIGRAPHY_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -559,4 +584,6 @@ class ModuleActivity(BaseModel):
             ReflectionLabContent.model_validate(self.content)
         elif self.type == "DIFFUSION_LAB":
             DiffusionLabContent.model_validate(self.content)
+        elif self.type == "STRATIGRAPHY_LAB":
+            StratigraphyLabContent.model_validate(self.content)
         return self

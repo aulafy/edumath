@@ -25,6 +25,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "PROBABILITY_LAB": "org.edumath.tests.math-probability",
             "REFLECTION_LAB": "org.edumath.tests.physics-reflection",
             "DIFFUSION_LAB": "org.edumath.tests.biology-diffusion",
+            "STRATIGRAPHY_LAB": "org.edumath.tests.history-stratigraphy",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -314,6 +315,23 @@ def make_diffusion_activity() -> dict:
             "initial_outside": 2, "initial_inside": 7,
             "example_outside": 8, "example_inside": 3,
             "explanation": "Net flow goes from higher to lower concentration.",
+        }, "evidence": {},
+    }
+
+
+def make_stratigraphy_activity() -> dict:
+    return {
+        "id": "order-trench-finds", "type": "STRATIGRAPHY_LAB",
+        "title": "Order the trench finds", "instructions": "Read depth before ordering.",
+        "content": {
+            "prompt": "Order from oldest to newest.", "site_label": "Undisturbed trench",
+            "artifacts": [
+                {"id": "glass", "label": "Glass fragment", "depth_rank": 1, "shape": "GLASS"},
+                {"id": "metal", "label": "Metal buckle", "depth_rank": 2, "shape": "METAL"},
+                {"id": "pottery", "label": "Pottery sherd", "depth_rank": 3, "shape": "POTTERY"},
+                {"id": "stone", "label": "Stone tool", "depth_rank": 4, "shape": "STONE"},
+            ],
+            "explanation": "In these undisturbed layers, deeper deposits formed earlier.",
         }, "evidence": {},
     }
 
@@ -954,3 +972,30 @@ def test_diffusion_lab_requires_the_target_concentration_relation() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": {"outside_count": 9, "inside_count": 2}})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["create-inward-flow"]
+
+
+def test_stratigraphy_lab_requires_oldest_to_newest_order() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms", json={"name": "4L History", "stage": "PRIMARY", "grade": 4}
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import", headers=headers,
+            files={"package": ("stratigraphy.edumath", make_package(make_stratigraphy_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments", headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["order-trench-finds"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Aroa"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/order-trench-finds/complete"
+        newest_first = ["glass", "metal", "pottery", "stone"]
+        assert client.post(endpoint, json={"student_id": student["id"], "response": newest_first}).status_code == 422
+        oldest_first = ["stone", "pottery", "metal", "glass"]
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": oldest_first})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["order-trench-finds"]

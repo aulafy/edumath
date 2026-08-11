@@ -1085,6 +1085,25 @@ select {
 .diffusionRule, .modelBoundary { margin: 0; text-align: center; font-size: 0.84rem; font-weight: 700; }
 .diffusionRule { color: #425d55; }
 .modelBoundary { padding: 8px 10px; border-radius: 6px; background: #f3eee4; color: #65573f; }
+.stratigraphyLabScene { width: 100%; height: clamp(300px, 44vh, 410px); overflow: hidden; border: 1px solid #c5d2cc; border-radius: 8px; background: #edf3ef; }
+.stratigraphyLabScene canvas { display: block; width: 100% !important; height: 100% !important; }
+.trenchHeader { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid #c8d6cf; border-radius: 8px; background: #f7faf8; }
+.trenchHeader span { display: flex; align-items: center; gap: 7px; }
+.trenchHeader svg { width: 20px; height: 20px; }
+.trenchHeader strong { color: #21614e; }
+.stratigraphyRule { display: grid; gap: 2px; padding: 10px 12px; border-left: 4px solid #3f7f72; background: #edf5f1; }
+.stratigraphyRule span { color: #5a6d65; font-size: 0.82rem; }
+.artifactTray { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.artifactChoice { display: grid; min-height: 88px; gap: 2px; padding: 9px; border-color: #9eaaa5; background: #fff; color: #20342c; }
+.artifactChoice > span { display: grid; width: 28px; height: 28px; place-items: center; justify-self: center; border-radius: 50%; background: #dfe8e3; }
+.artifactChoice small { font-size: 0.72rem; }
+.artifactChoice.selected { border-color: #287b63; background: #e1f2ea; box-shadow: inset 0 -4px 0 #73b598; }
+.relativeTimeline { display: flex; min-height: 58px; align-items: center; gap: 6px; padding: 8px; overflow-x: auto; border: 2px dashed #9baba4; border-radius: 8px; background: #f7faf8; }
+.relativeTimeline > span { flex: 0 0 auto; color: #4b6259; font-size: 0.75rem; font-weight: 800; }
+.relativeTimeline button, .relativeTimeline i { flex: 0 0 auto; min-width: 105px; min-height: 40px; padding: 7px 9px; border-radius: 6px; font-size: 0.78rem; }
+.relativeTimeline button { display: flex; align-items: center; gap: 6px; background: #286f61; color: #fff; }
+.relativeTimeline button small { display: grid; width: 20px; height: 20px; place-items: center; border-radius: 50%; background: #fff; color: #286f61; }
+.relativeTimeline i { display: grid; place-items: center; border: 1px dashed #b7c4be; color: #6b7c75; font-style: normal; }
 
 @media (max-width: 560px) {
   .climateTargets { grid-template-columns: 1fr; }
@@ -1096,6 +1115,8 @@ select {
   .diffusionControls { grid-template-columns: 1fr; }
   .netFlow { grid-template-columns: auto minmax(0, 1fr); }
   .netFlow strong { grid-column: 1 / -1; text-align: center; }
+  .artifactTray { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trenchHeader { align-items: start; flex-direction: column; }
 }
 
 @media (max-width: 560px) {

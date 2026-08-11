@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, Dices, FlaskConical, Gauge, ListChecks, Minus, Play, Plus, Thermometer, Undo2, Volume2, X } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, Dices, FlaskConical, Gauge, ListChecks, Minus, Play, Plus, Shovel, Thermometer, Undo2, Volume2, X } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { api } from "../api/client";
 import type { ModuleAssignment, Student } from "../types/contracts";
@@ -19,6 +19,7 @@ const ClimateLab3D = lazy(() => import("./ClimateLab3D").then((module) => ({ def
 const ProbabilityLab3D = lazy(() => import("./ProbabilityLab3D").then((module) => ({ default: module.ProbabilityLab3D })));
 const ReflectionLab3D = lazy(() => import("./ReflectionLab3D").then((module) => ({ default: module.ReflectionLab3D })));
 const DiffusionLab3D = lazy(() => import("./DiffusionLab3D").then((module) => ({ default: module.DiffusionLab3D })));
+const StratigraphyLab3D = lazy(() => import("./StratigraphyLab3D").then((module) => ({ default: module.StratigraphyLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -47,6 +48,8 @@ type ProbabilityLab = { prompt: string; target_numerator: number; target_denomin
 type ReflectionLab = { prompt: string; target_normal_angle: number; initial_normal_angle: number; explanation: string };
 type NetFlow = "INWARD" | "OUTWARD" | "EQUILIBRIUM";
 type DiffusionLab = { prompt: string; target_net_flow: NetFlow; initial_outside: number; initial_inside: number; example_outside: number; example_inside: number; explanation: string };
+type StratumArtifact = { id: string; label: string; depth_rank: number; shape: "STONE" | "POTTERY" | "METAL" | "GLASS" | "BONE" | "WOOD" };
+type StratigraphyLab = { prompt: string; site_label: string; artifacts: StratumArtifact[]; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -469,6 +472,26 @@ function DiffusionExercise({ content, onSolved }: { content: DiffusionLab; onSol
   </div>;
 }
 
+function StratigraphyExercise({ content, onSolved }: { content: StratigraphyLab; onSolved: (response: string[]) => void }) {
+  const [selected, setSelected] = useState<string[]>([]);
+  const [checked, setChecked] = useState(false);
+  const expected = [...content.artifacts].sort((a, b) => b.depth_rank - a.depth_rank).map((artifact) => artifact.id);
+  const correct = selected.length === expected.length && selected.every((id, index) => id === expected[index]);
+  const byId = new Map(content.artifacts.map((artifact) => [artifact.id, artifact]));
+  function toggle(id: string) { setSelected((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]); setChecked(false); }
+  return <div className="interactiveExercise stratigraphyExercise">
+    <strong>{content.prompt}</strong>
+    <div className="trenchHeader"><span><Shovel /> {content.site_label}</span><strong>Capas intactas</strong></div>
+    <Suspense fallback={<div className="stratigraphyLabScene loadingScene" aria-label="Preparando excavación 3D" />}><StratigraphyLab3D artifacts={content.artifacts} selectedIds={selected} /></Suspense>
+    <div className="stratigraphyRule"><strong>Más profundo = más antiguo, en esta trinchera</strong><span>Cronología relativa · no proporciona fechas exactas</span></div>
+    <div className="artifactTray" role="group" aria-label="Objetos encontrados">{content.artifacts.map((artifact) => <button key={artifact.id} className={selected.includes(artifact.id) ? "artifactChoice selected" : "artifactChoice"} aria-pressed={selected.includes(artifact.id)} onClick={() => toggle(artifact.id)}><span>{selected.includes(artifact.id) ? selected.indexOf(artifact.id) + 1 : "?"}</span><strong>{artifact.label}</strong><small>Estrato {artifact.depth_rank}</small></button>)}</div>
+    <div className="relativeTimeline" aria-label="Cronología de más antiguo a más reciente"><span>Más antiguo</span>{selected.map((id, index) => <button key={id} onClick={() => toggle(id)} aria-label={`Retirar ${byId.get(id)?.label}`}><small>{index + 1}</small>{byId.get(id)?.label}</button>)}{Array.from({ length: content.artifacts.length - selected.length }, (_, index) => <i key={index}>Vacío</i>)}<span>Más reciente</span></div>
+    <p className="modelBoundary">Modelo ideal: las capas no han sido removidas. En un yacimiento real, hoyos, raíces, erosión u obras pueden alterar el orden.</p>
+    <button disabled={selected.length !== content.artifacts.length} onClick={() => { setChecked(true); if (correct) onSolved(selected); }}><Check /> Reconstruir cronología</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Secuencia reconstruida! ${content.explanation}` : "Revisa la profundidad: empieza por el objeto de la capa inferior y avanza hacia la superficie."}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -478,7 +501,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -521,6 +544,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "PROBABILITY_LAB" && <ProbabilityExercise key={activity.id} content={activity.content as ProbabilityLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "REFLECTION_LAB" && <ReflectionExercise key={activity.id} content={activity.content as ReflectionLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "DIFFUSION_LAB" && <DiffusionExercise key={activity.id} content={activity.content as DiffusionLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "STRATIGRAPHY_LAB" && <StratigraphyExercise key={activity.id} content={activity.content as StratigraphyLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

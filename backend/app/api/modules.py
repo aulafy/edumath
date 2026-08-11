@@ -445,6 +445,11 @@ def complete_module_activity(
         net_flow = "INWARD" if response["outside_count"] > response["inside_count"] else "OUTWARD" if response["inside_count"] > response["outside_count"] else "EQUILIBRIUM"
         if net_flow != activity.content["target_net_flow"]:
             raise HTTPException(status_code=422, detail="The submitted concentrations do not create the target net flow.")
+    if activity.type == "STRATIGRAPHY_LAB":
+        artifacts = activity.content["artifacts"]
+        expected = [artifact["id"] for artifact in sorted(artifacts, key=lambda artifact: artifact["depth_rank"], reverse=True)]
+        if data.response != expected:
+            raise HTTPException(status_code=422, detail="The submitted relative chronology is not correct.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,
