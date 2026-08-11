@@ -14,7 +14,14 @@ from app.db.models import (
 )
 from app.db.session import get_db
 from app.modules.package import MAX_PACKAGE_BYTES, ModulePackageError, validate_module_package
-from app.modules.schemas import RouteCell, TileCell, simulate_route, tile_shape_metrics
+from app.modules.schemas import (
+    FunctionCard,
+    RouteCell,
+    TileCell,
+    apply_function_cards,
+    simulate_route,
+    tile_shape_metrics,
+)
 from fastapi import APIRouter, Depends, File, Header, HTTPException, UploadFile
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
@@ -473,6 +480,22 @@ def complete_module_activity(
             raise HTTPException(status_code=422, detail="The submitted lunar phase is invalid.")
         if response != activity.content["target_phase"]:
             raise HTTPException(status_code=422, detail="The Moon is not in the target phase position.")
+    if activity.type == "FUNCTION_MACHINE_LAB":
+        response = data.response
+        content = activity.content
+        cards_by_id = {card["id"]: FunctionCard.model_validate(card) for card in content["cards"]}
+        if (
+            not isinstance(response, list)
+            or len(response) != 2
+            or any(not isinstance(card_id, str) for card_id in response)
+            or len(set(response)) != 2
+            or any(card_id not in cards_by_id for card_id in response)
+        ):
+            raise HTTPException(status_code=422, detail="The submitted function program is invalid.")
+        cards = [cards_by_id[card_id] for card_id in response]
+        outputs = [apply_function_cards(value, cards) for value in content["inputs"]]
+        if outputs != content["target_outputs"]:
+            raise HTTPException(status_code=422, detail="The submitted function program does not match every output.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

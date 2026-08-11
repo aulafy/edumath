@@ -29,6 +29,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "DENSITY_LAB": "org.edumath.tests.physics-density",
             "TECTONIC_LAB": "org.edumath.tests.geology-tectonics",
             "LUNAR_PHASE_LAB": "org.edumath.tests.astronomy-lunar-phases",
+            "FUNCTION_MACHINE_LAB": "org.edumath.tests.math-function-machine",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -372,6 +373,26 @@ def make_lunar_phase_activity() -> dict:
             "prompt": "Build the full Moon geometry.", "target_phase": "FULL",
             "initial_phase": "NEW",
             "explanation": "At full Moon, the Moon is approximately opposite the Sun.",
+        }, "evidence": {},
+    }
+
+
+def make_function_machine_activity() -> dict:
+    return {
+        "id": "build-linear-rule", "type": "FUNCTION_MACHINE_LAB",
+        "title": "Build a linear rule", "instructions": "Install two cards in order.",
+        "content": {
+            "prompt": "Transform 0, 2 and 5 into 3, 7 and 13.",
+            "inputs": [0, 2, 5], "target_outputs": [3, 7, 13],
+            "cards": [
+                {"id": "times-two", "kind": "MULTIPLY", "value": 2},
+                {"id": "plus-three", "kind": "ADD", "value": 3},
+                {"id": "plus-two", "kind": "ADD", "value": 2},
+                {"id": "times-three", "kind": "MULTIPLY", "value": 3},
+                {"id": "plus-five", "kind": "ADD", "value": 5},
+            ],
+            "example_solution": ["times-two", "plus-three"],
+            "explanation": "The rule doubles each input and then adds three.",
         }, "evidence": {},
     }
 
@@ -1117,3 +1138,31 @@ def test_lunar_phase_lab_requires_the_target_orbit_position() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": "FULL"})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["find-full-moon"]
+
+
+def test_function_machine_requires_one_program_matching_all_probes() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms", json={"name": "1C Algebra", "stage": "PRIMARY", "grade": 4}
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import", headers=headers,
+            files={"package": ("functions.edumath", make_package(make_function_machine_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments", headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["build-linear-rule"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Leo"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/build-linear-rule/complete"
+        wrong_order = ["plus-three", "times-two"]
+        assert client.post(endpoint, json={"student_id": student["id"], "response": wrong_order}).status_code == 422
+        repeated = ["times-two", "times-two"]
+        assert client.post(endpoint, json={"student_id": student["id"], "response": repeated}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": ["times-two", "plus-three"]})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["build-linear-rule"]

@@ -23,6 +23,7 @@ const StratigraphyLab3D = lazy(() => import("./StratigraphyLab3D").then((module)
 const DensityLab3D = lazy(() => import("./DensityLab3D").then((module) => ({ default: module.DensityLab3D })));
 const TectonicLab3D = lazy(() => import("./TectonicLab3D").then((module) => ({ default: module.TectonicLab3D })));
 const LunarPhaseLab3D = lazy(() => import("./LunarPhaseLab3D").then((module) => ({ default: module.LunarPhaseLab3D })));
+const FunctionMachineLab3D = lazy(() => import("./FunctionMachineLab3D").then((module) => ({ default: module.FunctionMachineLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -60,6 +61,8 @@ type TectonicFeature = "RIDGE" | "MOUNTAIN_RANGE" | "FAULT";
 type TectonicLab = { prompt: string; target_motion: PlateMotion; target_feature: TectonicFeature; initial_motion: PlateMotion; explanation: string };
 type LunarPhase = "NEW" | "FIRST_QUARTER" | "FULL" | "LAST_QUARTER";
 type LunarPhaseLab = { prompt: string; target_phase: LunarPhase; initial_phase: LunarPhase; explanation: string };
+type FunctionCard = { id: string; kind: "ADD" | "MULTIPLY"; value: number };
+type FunctionMachineLab = { prompt: string; inputs: number[]; target_outputs: number[]; cards: FunctionCard[]; example_solution: string[]; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -568,6 +571,38 @@ function LunarPhaseExercise({ content, onSolved }: { content: LunarPhaseLab; onS
   </div>;
 }
 
+function applyFunctionCards(value: number, cards: FunctionCard[]) {
+  return cards.reduce((current, card) => card.kind === "ADD" ? current + card.value : current * card.value, value);
+}
+
+function functionCardLabel(card: FunctionCard) {
+  if (card.kind === "MULTIPLY") return `× ${card.value}`;
+  return card.value > 0 ? `+ ${card.value}` : `− ${Math.abs(card.value)}`;
+}
+
+function FunctionMachineExercise({ content, onSolved }: { content: FunctionMachineLab; onSolved: (response: string[]) => void }) {
+  const [program, setProgram] = useState<string[]>([]);
+  const [checked, setChecked] = useState(false);
+  const cardsById = new Map(content.cards.map((card) => [card.id, card]));
+  const selectedCards = program.map((id) => cardsById.get(id)!);
+  const outputs = content.inputs.map((value) => applyFunctionCards(value, selectedCards));
+  const correct = program.length === 2 && outputs.every((value, index) => value === content.target_outputs[index]);
+  function toggle(cardId: string) {
+    setProgram((current) => current.includes(cardId) ? current.filter((id) => id !== cardId) : current.length < 2 ? [...current, cardId] : current);
+    setChecked(false);
+  }
+  return <div className="interactiveExercise functionMachineExercise">
+    <strong>{content.prompt}</strong>
+    <Suspense fallback={<div className="functionMachineScene loadingScene" aria-label="Preparando máquina de funciones 3D" />}><FunctionMachineLab3D slots={program.length} /></Suspense>
+    <div className="functionProgram" aria-label="Programa de la máquina"><span>Entrada x</span>{[0, 1].map((slot) => <strong key={slot} className={program[slot] ? "filled" : ""}>{program[slot] ? functionCardLabel(cardsById.get(program[slot])!) : `Operación ${slot + 1}`}</strong>)}<span>Salida y</span><button className="iconButton secondary" aria-label="Quitar última operación" title="Quitar última operación" disabled={program.length === 0} onClick={() => { setProgram((current) => current.slice(0, -1)); setChecked(false); }}><Undo2 /></button></div>
+    <div className="functionCardTray" role="group" aria-label="Tarjetas de operaciones disponibles">{content.cards.map((card) => <button key={card.id} className={program.includes(card.id) ? "selected" : "secondary"} aria-pressed={program.includes(card.id)} disabled={!program.includes(card.id) && program.length === 2} onClick={() => toggle(card.id)}><span>{functionCardLabel(card)}</span><small>{card.kind === "ADD" ? "Sumar" : "Multiplicar"}</small></button>)}</div>
+    <div className="functionProbeTable" aria-live="polite"><span>Entrada</span><span>Tu salida</span><span>Objetivo</span>{content.inputs.map((input, index) => <div key={input} className={outputs[index] === content.target_outputs[index] && program.length === 2 ? "ready" : ""}><strong>{input}</strong><b>{outputs[index]}</b><strong>{content.target_outputs[index]}</strong></div>)}</div>
+    <p className="machineRule">La máquina aplica primero la tarjeta izquierda y después la derecha.</p>
+    <button disabled={program.length !== 2} onClick={() => { setChecked(true); if (correct) onSolved(program); }}><Check /> Probar las tres entradas</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Programa descubierto! ${content.explanation}` : `La máquina no coincide en ${outputs.filter((value, index) => value !== content.target_outputs[index]).length} de las 3 pruebas. Cambia una tarjeta o invierte el orden.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -577,7 +612,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -624,6 +659,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "DENSITY_LAB" && <DensityExercise key={activity.id} content={activity.content as DensityLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "TECTONIC_LAB" && <TectonicExercise key={activity.id} content={activity.content as TectonicLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "LUNAR_PHASE_LAB" && <LunarPhaseExercise key={activity.id} content={activity.content as LunarPhaseLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "FUNCTION_MACHINE_LAB" && <FunctionMachineExercise key={activity.id} content={activity.content as FunctionMachineLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

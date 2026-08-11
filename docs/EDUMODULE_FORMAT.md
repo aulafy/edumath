@@ -156,6 +156,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 
 `LUNAR_PHASE_LAB` declares different initial and target positions among `NEW`, `FIRST_QUARTER`, `FULL`, and `LAST_QUARTER`. The trusted runner presents the orbital geometry and the corresponding Earth-view disk together. Content must name the viewing convention, avoid implying that the Moon emits light, distinguish ordinary phases from eclipses, and state that sizes and distances in the scene are not to scale.
 
+`FUNCTION_MACHINE_LAB` declares exactly three unique integer inputs, three target outputs, five or six `ADD`/`MULTIPLY` cards, and one two-card witness program. Cards use non-trivial integer values from −5 to 5. The package validator executes every ordered pair of distinct cards and accepts the activity only when exactly one pair produces all three targets. The learner sees live output for every probe, while the backend independently executes the submitted card IDs in order.
+
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.

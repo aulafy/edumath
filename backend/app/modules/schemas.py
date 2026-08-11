@@ -1,3 +1,4 @@
+from itertools import permutations
 from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator, model_validator
@@ -576,6 +577,58 @@ class LunarPhaseLabContent(BaseModel):
         return self
 
 
+class FunctionCard(BaseModel):
+    id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=40)
+    kind: Literal["ADD", "MULTIPLY"]
+    value: int = Field(ge=-5, le=5)
+
+    @model_validator(mode="after")
+    def validate_function_card(self):
+        if self.kind == "MULTIPLY" and self.value in {0, 1}:
+            raise ValueError("A multiplication card cannot multiply by zero or one.")
+        if self.kind == "ADD" and self.value == 0:
+            raise ValueError("An addition card cannot add zero.")
+        return self
+
+
+def apply_function_cards(value: int, cards: list[FunctionCard]) -> int:
+    for card in cards:
+        value = value + card.value if card.kind == "ADD" else value * card.value
+    return value
+
+
+class FunctionMachineLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    inputs: list[int] = Field(min_length=3, max_length=3)
+    target_outputs: list[int] = Field(min_length=3, max_length=3)
+    cards: list[FunctionCard] = Field(min_length=5, max_length=6)
+    example_solution: list[str] = Field(min_length=2, max_length=2)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_function_machine(self):
+        if len(set(self.inputs)) != len(self.inputs):
+            raise ValueError("Function-machine inputs must be unique.")
+        if any(abs(value) > 50 for value in [*self.inputs, *self.target_outputs]):
+            raise ValueError("Function-machine values must stay between minus and plus fifty.")
+        ids = [card.id for card in self.cards]
+        if len(ids) != len(set(ids)):
+            raise ValueError("Function-machine card IDs must be unique.")
+        if len(set(self.example_solution)) != 2 or any(card_id not in ids for card_id in self.example_solution):
+            raise ValueError("The function-machine solution must use two distinct available cards.")
+        cards_by_id = {card.id: card for card in self.cards}
+        witness = [cards_by_id[card_id] for card_id in self.example_solution]
+        if [apply_function_cards(value, witness) for value in self.inputs] != self.target_outputs:
+            raise ValueError("The function-machine example must produce every target output.")
+        solutions = [
+            pair for pair in permutations(self.cards, 2)
+            if [apply_function_cards(value, list(pair)) for value in self.inputs] == self.target_outputs
+        ]
+        if len(solutions) != 1:
+            raise ValueError("A function-machine challenge must have exactly one ordered solution.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -600,6 +653,7 @@ class ModuleActivity(BaseModel):
         "DENSITY_LAB",
         "TECTONIC_LAB",
         "LUNAR_PHASE_LAB",
+        "FUNCTION_MACHINE_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -655,4 +709,6 @@ class ModuleActivity(BaseModel):
             TectonicLabContent.model_validate(self.content)
         elif self.type == "LUNAR_PHASE_LAB":
             LunarPhaseLabContent.model_validate(self.content)
+        elif self.type == "FUNCTION_MACHINE_LAB":
+            FunctionMachineLabContent.model_validate(self.content)
         return self

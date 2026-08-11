@@ -842,6 +842,29 @@ select {
   .earthView b { grid-column: 1 / -1; }
 }
 
+.functionMachineScene { width: 100%; height: clamp(280px, 41vh, 380px); overflow: hidden; border: 1px solid #c5d2cc; border-radius: 8px; background: #edf3ef; }
+.functionMachineScene canvas { display: block; width: 100% !important; height: 100% !important; }
+.functionProgram { display: grid; grid-template-columns: auto minmax(100px, 1fr) minmax(100px, 1fr) auto 44px; align-items: center; gap: 8px; }
+.functionProgram > span { font-weight: 800; }
+.functionProgram > strong { min-height: 48px; display: grid; place-items: center; border: 2px dashed #9ca9a4; border-radius: 8px; color: #67726e; }
+.functionProgram > strong.filled { border-style: solid; border-color: #4d7b70; background: #dff0e9; color: #244c42; font-size: 1.18rem; }
+.functionCardTray { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.functionCardTray button { min-width: 0; display: grid; gap: 1px; }
+.functionCardTray button span { font-size: 1.15rem; font-weight: 900; }
+.functionCardTray button small { font-weight: 700; }
+.functionCardTray button.selected { background: #3f7467; color: white; }
+.functionProbeTable { display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; border: 1px solid #c4cec9; border-radius: 8px; }
+.functionProbeTable > span { background: #e9eeeb; padding: 7px 10px; text-align: center; font-size: 0.82rem; font-weight: 800; }
+.functionProbeTable > div { display: contents; }
+.functionProbeTable > div > * { padding: 9px 10px; border-top: 1px solid #d4dcd8; text-align: center; }
+.functionProbeTable > div.ready > * { background: #e0f3e9; color: #245b49; }
+
+@media (max-width: 680px) {
+  .functionProgram { grid-template-columns: auto 1fr 1fr auto; }
+  .functionProgram .iconButton { grid-column: 1 / -1; width: 100%; }
+  .functionCardTray { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 .foodWebScene {
   width: 100%;
   height: clamp(250px, 36vh, 340px);

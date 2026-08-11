@@ -535,3 +535,32 @@ def test_lunar_phase_lab_rejects_an_already_solved_initial_state() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_function_machine_rejects_an_ambiguous_challenge() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "FUNCTION_MACHINE_LAB",
+        "content": {
+            "prompt": "Build the rule y = 2x + 4.",
+            "inputs": [0, 1, 2], "target_outputs": [4, 6, 8],
+            "cards": [
+                {"id": "times-two", "kind": "MULTIPLY", "value": 2},
+                {"id": "plus-four", "kind": "ADD", "value": 4},
+                {"id": "plus-two", "kind": "ADD", "value": 2},
+                {"id": "times-three", "kind": "MULTIPLY", "value": 3},
+                {"id": "plus-one", "kind": "ADD", "value": 1},
+            ],
+            "example_solution": ["plus-two", "times-two"],
+            "explanation": "Another pair is intentionally equivalent.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())
