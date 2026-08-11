@@ -50,9 +50,9 @@ assets/
 
 ## Activities
 
-Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructions`, `content`, and `evidence`. Version 1.0 supports `EXPLANATION`, `CLOSED_QUESTION`, `OPEN_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `FOOD_WEB_LAB`, `RHYTHM_LAB`, `SENTENCE_LAB`, `ORBIT_LAB`, `MOLECULE_LAB`, `FORCE_LAB`, `ROUTE_LAB`, `CLIMATE_LAB`, `TIMELINE`, `MAP`, `SIMULATION`, `GUIDED_EXPERIMENT`, `READING`, `WRITING`, and `ASSESSMENT`.
+Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructions`, `content`, and `evidence`. Version 1.0 supports `EXPLANATION`, `CLOSED_QUESTION`, `OPEN_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `FOOD_WEB_LAB`, `RHYTHM_LAB`, `SENTENCE_LAB`, `ORBIT_LAB`, `MOLECULE_LAB`, `FORCE_LAB`, `ROUTE_LAB`, `CLIMATE_LAB`, `PROBABILITY_LAB`, `TIMELINE`, `MAP`, `SIMULATION`, `GUIDED_EXPERIMENT`, `READING`, `WRITING`, and `ASSESSMENT`.
 
-`CLOSED_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `FOOD_WEB_LAB`, `RHYTHM_LAB`, `SENTENCE_LAB`, `ORBIT_LAB`, `MOLECULE_LAB`, `FORCE_LAB`, `ROUTE_LAB`, `CLIMATE_LAB`, and `TIMELINE` are interactive in the learner runner. Their solutions are schema-validated on import and checked again by the backend before progress is recorded. The browser provides immediate feedback, but it is not authoritative.
+`CLOSED_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `FOOD_WEB_LAB`, `RHYTHM_LAB`, `SENTENCE_LAB`, `ORBIT_LAB`, `MOLECULE_LAB`, `FORCE_LAB`, `ROUTE_LAB`, `CLIMATE_LAB`, `PROBABILITY_LAB`, and `TIMELINE` are interactive in the learner runner. Their solutions are schema-validated on import and checked again by the backend before progress is recorded. The browser provides immediate feedback, but it is not authoritative.
 
 `BALANCE_LAB` turns additive decomposition into direct manipulation. Its content declares a positive `left_value`, two to eight unique positive `weights`, one valid `example_solution`, and a short explanation. The learner may discover any non-repeating combination of the declared weights that reaches the target; the example is a validation witness, not the only accepted answer. Trusted EduMath code renders and grades the 3D balance.
 
@@ -141,6 +141,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 `ROUTE_LAB` declares a 3×3 to 6×6 grid, start and target cells, unique obstacles, a move limit and one collision-free example route. Learners build a program from `UP`, `DOWN`, `LEFT`, and `RIGHT`; trusted code simulates every step and accepts any route that stays in bounds, avoids blocked cells, respects the limit and reaches the target.
 
 `CLIMATE_LAB` declares inclusive target intervals for mean temperature and annual precipitation, an initial state outside the combined target, and one valid witness pair. Learners tune both integer values while a trusted WebGL landscape responds conceptually. The scene must be described as a simplified model rather than a forecast, biome classifier or exact representation of a real locality.
+
+`PROBABILITY_LAB` declares a target fraction strictly between zero and one, a machine capacity, initial and witness counts for two ball colours, a draw count, and a visible integer seed. Learners must build an equivalent theoretical fraction and then run a reproducible experiment with replacement. Experimental frequency is presented for comparison and is never validated as though it must equal the theoretical probability.
 
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 

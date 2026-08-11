@@ -381,3 +381,25 @@ def test_climate_lab_rejects_an_example_outside_the_target_range() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_probability_lab_rejects_a_false_witness_fraction() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "PROBABILITY_LAB",
+        "content": {
+            "prompt": "Build one half.", "target_numerator": 1, "target_denominator": 2,
+            "max_balls": 10, "initial_blue": 2, "initial_gold": 6,
+            "example_blue": 3, "example_gold": 5, "draws": 20, "seed": 12,
+            "explanation": "The witness does not represent one half.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

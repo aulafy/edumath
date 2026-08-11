@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, FlaskConical, ListChecks, Minus, Play, Plus, Thermometer, Undo2, Volume2, X } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, Dices, FlaskConical, ListChecks, Minus, Play, Plus, Thermometer, Undo2, Volume2, X } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { api } from "../api/client";
 import type { ModuleAssignment, Student } from "../types/contracts";
@@ -16,6 +16,7 @@ const MoleculeLab3D = lazy(() => import("./MoleculeLab3D").then((module) => ({ d
 const ForceLab3D = lazy(() => import("./ForceLab3D").then((module) => ({ default: module.ForceLab3D })));
 const RouteLab3D = lazy(() => import("./RouteLab3D").then((module) => ({ default: module.RouteLab3D })));
 const ClimateLab3D = lazy(() => import("./ClimateLab3D").then((module) => ({ default: module.ClimateLab3D })));
+const ProbabilityLab3D = lazy(() => import("./ProbabilityLab3D").then((module) => ({ default: module.ProbabilityLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -39,6 +40,8 @@ type RouteCell = { row: number; col: number };
 type RouteMove = "UP" | "DOWN" | "LEFT" | "RIGHT";
 type RouteLab = { prompt: string; rows: number; cols: number; start: RouteCell; target: RouteCell; blocked: RouteCell[]; max_moves: number; example_moves: RouteMove[]; explanation: string };
 type ClimateLab = { prompt: string; profile_label: string; temperature_min: number; temperature_max: number; rainfall_min: number; rainfall_max: number; initial_temperature: number; initial_rainfall: number; example_temperature: number; example_rainfall: number; explanation: string };
+type ProbabilityDraw = "BLUE" | "GOLD";
+type ProbabilityLab = { prompt: string; target_numerator: number; target_denominator: number; max_balls: number; initial_blue: number; initial_gold: number; example_blue: number; example_gold: number; draws: number; seed: number; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -374,6 +377,46 @@ function ClimateExercise({ content, onSolved }: { content: ClimateLab; onSolved:
   </div>;
 }
 
+function probabilityDraws(seed: number, blue: number, gold: number, count: number): ProbabilityDraw[] {
+  let state = seed >>> 0;
+  return Array.from({ length: count }, () => {
+    state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+    return state / 4294967296 * (blue + gold) < blue ? "BLUE" : "GOLD";
+  });
+}
+
+function ProbabilityExercise({ content, onSolved }: { content: ProbabilityLab; onSolved: (response: { blue_count: number; gold_count: number }) => void }) {
+  const [blue, setBlue] = useState(content.initial_blue);
+  const [gold, setGold] = useState(content.initial_gold);
+  const [results, setResults] = useState<ProbabilityDraw[]>([]);
+  const [checked, setChecked] = useState(false);
+  const total = blue + gold;
+  const correct = blue * content.target_denominator === content.target_numerator * total;
+  const blueResults = results.filter((result) => result === "BLUE").length;
+  const change = (color: "BLUE" | "GOLD", delta: number) => {
+    if (delta > 0 && total >= content.max_balls) return;
+    if (color === "BLUE" && blue + delta >= 1) setBlue(blue + delta);
+    if (color === "GOLD" && gold + delta >= 1) setGold(gold + delta);
+    setResults([]); setChecked(false);
+  };
+  return <div className="interactiveExercise probabilityExercise">
+    <strong>{content.prompt}</strong>
+    <div className="probabilityTarget"><span>Probabilidad objetivo de azul</span><strong>{content.target_numerator}/{content.target_denominator}</strong></div>
+    <Suspense fallback={<div className="probabilityLabScene loadingScene" aria-label="Preparando máquina de probabilidad 3D" />}>
+      <ProbabilityLab3D blueCount={blue} goldCount={gold} results={results} />
+    </Suspense>
+    <div className="probabilityEquation" aria-live="polite"><span>P(azul)</span><strong>{blue}/{total}</strong><small>{Math.round(blue / total * 100)}%</small></div>
+    <div className="probabilityControls">
+      {(["BLUE", "GOLD"] as const).map((color) => { const value = color === "BLUE" ? blue : gold; const label = color === "BLUE" ? "Azules" : "Doradas"; return <div key={color} className={`ballCounter ${color.toLowerCase()}`}><span>{label}</span><div><button className="iconButton secondary" aria-label={`Quitar bola ${label.toLowerCase()}`} disabled={value <= 1} onClick={() => change(color, -1)}><Minus /></button><output aria-label={`${label}: ${value}`}>{value}</output><button className="iconButton" aria-label={`Añadir bola ${label.toLowerCase()}`} disabled={total >= content.max_balls} onClick={() => change(color, 1)}><Plus /></button></div></div>; })}
+    </div>
+    <p className="machineRule">Extracciones con reposición · {content.draws} intentos · semilla {content.seed}</p>
+    <button className="secondary" onClick={() => { setResults(probabilityDraws(content.seed, blue, gold, content.draws)); setChecked(false); }}><Dices /> Ejecutar experimento</button>
+    {results.length > 0 && <div className="experimentResult" aria-live="polite"><span>Predicción teórica: aproximadamente {(content.draws * blue / total).toFixed(1)} azules</span><strong>Observado: {blueResults} de {content.draws}</strong></div>}
+    <button disabled={results.length === 0} onClick={() => { setChecked(true); if (correct) onSolved({ blue_count: blue, gold_count: gold }); }}><Check /> Comparar y comprobar</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Máquina bien diseñada! ${content.explanation}` : `El experimento puede variar, pero la fracción teórica todavía es ${blue}/${total}. Ajusta las bolas hasta obtener ${content.target_numerator}/${content.target_denominator}.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -383,7 +426,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -423,6 +466,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "FORCE_LAB" && <ForceExercise key={activity.id} content={activity.content as ForceLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "ROUTE_LAB" && <RouteExercise key={activity.id} content={activity.content as RouteLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "CLIMATE_LAB" && <ClimateExercise key={activity.id} content={activity.content as ClimateLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "PROBABILITY_LAB" && <ProbabilityExercise key={activity.id} content={activity.content as ProbabilityLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

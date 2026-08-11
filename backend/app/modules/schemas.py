@@ -429,6 +429,34 @@ class ClimateLabContent(BaseModel):
         return self
 
 
+class ProbabilityLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    target_numerator: int = Field(ge=1, le=11)
+    target_denominator: int = Field(ge=2, le=12)
+    max_balls: int = Field(ge=4, le=12)
+    initial_blue: int = Field(ge=1, le=11)
+    initial_gold: int = Field(ge=1, le=11)
+    example_blue: int = Field(ge=1, le=11)
+    example_gold: int = Field(ge=1, le=11)
+    draws: int = Field(ge=10, le=40)
+    seed: int = Field(ge=1, le=999999)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_probability(self):
+        if self.target_numerator >= self.target_denominator:
+            raise ValueError("The target probability must be strictly between zero and one.")
+        if self.initial_blue + self.initial_gold > self.max_balls:
+            raise ValueError("The initial probability machine exceeds its ball capacity.")
+        if self.example_blue + self.example_gold > self.max_balls:
+            raise ValueError("The probability example exceeds the machine capacity.")
+        if self.example_blue * self.target_denominator != self.target_numerator * (self.example_blue + self.example_gold):
+            raise ValueError("The probability example must match the target fraction.")
+        if self.initial_blue * self.target_denominator == self.target_numerator * (self.initial_blue + self.initial_gold):
+            raise ValueError("The initial probability state must require an adjustment.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -446,6 +474,7 @@ class ModuleActivity(BaseModel):
         "FORCE_LAB",
         "ROUTE_LAB",
         "CLIMATE_LAB",
+        "PROBABILITY_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -487,4 +516,6 @@ class ModuleActivity(BaseModel):
             RouteLabContent.model_validate(self.content)
         elif self.type == "CLIMATE_LAB":
             ClimateLabContent.model_validate(self.content)
+        elif self.type == "PROBABILITY_LAB":
+            ProbabilityLabContent.model_validate(self.content)
         return self

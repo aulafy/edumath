@@ -411,6 +411,20 @@ def complete_module_activity(
             or not content["rainfall_min"] <= response["rainfall"] <= content["rainfall_max"]
         ):
             raise HTTPException(status_code=422, detail="The submitted climate profile is outside the target ranges.")
+    if activity.type == "PROBABILITY_LAB":
+        response = data.response
+        content = activity.content
+        if (
+            not isinstance(response, dict)
+            or set(response) != {"blue_count", "gold_count"}
+            or any(type(value) is not int for value in response.values())
+            or response["blue_count"] < 1
+            or response["gold_count"] < 1
+            or response["blue_count"] + response["gold_count"] > content["max_balls"]
+            or response["blue_count"] * content["target_denominator"]
+            != content["target_numerator"] * (response["blue_count"] + response["gold_count"])
+        ):
+            raise HTTPException(status_code=422, detail="The submitted probability machine does not match the target fraction.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

@@ -22,6 +22,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "FORCE_LAB": "org.edumath.tests.physics-forces",
             "ROUTE_LAB": "org.edumath.tests.math-routes",
             "CLIMATE_LAB": "org.edumath.tests.geography-climate",
+            "PROBABILITY_LAB": "org.edumath.tests.math-probability",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -271,6 +272,21 @@ def make_climate_activity() -> dict:
             "initial_temperature": 25, "initial_rainfall": 300,
             "example_temperature": 14, "example_rainfall": 1100,
             "explanation": "Both variables must fall inside their intervals.",
+        }, "evidence": {},
+    }
+
+
+def make_probability_activity() -> dict:
+    return {
+        "id": "build-even-chance", "type": "PROBABILITY_LAB",
+        "title": "Build an even chance", "instructions": "Tune and test the machine.",
+        "content": {
+            "prompt": "Make blue have probability one half.",
+            "target_numerator": 1, "target_denominator": 2, "max_balls": 10,
+            "initial_blue": 2, "initial_gold": 6,
+            "example_blue": 5, "example_gold": 5,
+            "draws": 20, "seed": 1205,
+            "explanation": "Equal counts give equal theoretical probabilities.",
         }, "evidence": {},
     }
 
@@ -833,3 +849,29 @@ def test_climate_lab_accepts_inclusive_range_boundaries() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": boundary})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["tune-humid-profile"]
+
+
+def test_probability_lab_accepts_equivalent_target_ratios() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms", json={"name": "4I Maths", "stage": "PRIMARY", "grade": 4}
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import", headers=headers,
+            files={"package": ("probability.edumath", make_package(make_probability_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments", headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["build-even-chance"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Luz"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/build-even-chance/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"blue_count": 3, "gold_count": 5}}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"blue_count": True, "gold_count": 1}}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": {"blue_count": 4, "gold_count": 4}})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["build-even-chance"]
