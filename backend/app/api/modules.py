@@ -37,7 +37,7 @@ class ModuleJoinRequest(BaseModel):
 
 class ActivityCompleteRequest(BaseModel):
     student_id: str
-    response: str | dict | list[int] | list[str] | list[dict] | None = None
+    response: str | dict | list[bool] | list[int] | list[str] | list[dict] | None = None
 
 
 def _require_known_teacher(db: Session, teacher_key: str | None) -> None:
@@ -349,6 +349,14 @@ def complete_module_activity(
         expected = {(link["source"], link["target"]) for link in activity.content["links"]}
         if len(submitted) != len(data.response) or submitted != expected:
             raise HTTPException(status_code=422, detail="The submitted food web is not correct.")
+    if activity.type == "RHYTHM_LAB":
+        pattern = data.response
+        if (
+            not isinstance(pattern, list)
+            or any(type(value) is not bool for value in pattern)
+            or pattern != activity.content["target_pattern"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted rhythm is not correct.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

@@ -15,6 +15,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "TILE_LAB": "org.edumath.tests.math-tiles",
             "TIMELINE": "org.edumath.tests.history-timeline",
             "FOOD_WEB_LAB": "org.edumath.tests.science-food-web",
+            "RHYTHM_LAB": "org.edumath.tests.music-rhythm",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -134,6 +135,24 @@ def make_food_web_activity() -> dict:
                 {"source": "oak", "target": "fungus"},
             ],
             "explanation": "Energy moves from food to consumers, while fungi break down remains.",
+        },
+        "evidence": {},
+    }
+
+
+def make_rhythm_activity() -> dict:
+    return {
+        "id": "four-beat-rhythm",
+        "type": "RHYTHM_LAB",
+        "title": "Four beat rhythm",
+        "instructions": "Listen and rebuild sounds and rests.",
+        "content": {
+            "prompt": "Rebuild the four-beat pattern.",
+            "beats": 4,
+            "bpm": 80,
+            "target_pattern": [True, False, True, False],
+            "visual_cue": "● ○ ● ○",
+            "explanation": "Sounds fall on beats one and three.",
         },
         "evidence": {},
     }
@@ -479,3 +498,36 @@ def test_food_web_requires_the_exact_directed_links() -> None:
         )
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["forest-food-web"]
+
+
+def test_rhythm_lab_requires_the_exact_boolean_pattern() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms",
+            json={"name": "4B Music", "stage": "PRIMARY", "grade": 4},
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import",
+            headers=headers,
+            files={"package": ("rhythm.edumath", make_package(make_rhythm_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments",
+            headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["four-beat-rhythm"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Noa"}).json()
+        client.post(
+            f"/api/modules/assignments/{assignment['join_code']}/join",
+            json={"student_id": student["id"]},
+        )
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/four-beat-rhythm/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": [1, 0, 1, 0]}).status_code == 422
+        completed = client.post(
+            endpoint, json={"student_id": student["id"], "response": [True, False, True, False]}
+        )
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["four-beat-rhythm"]

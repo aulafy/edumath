@@ -205,3 +205,29 @@ def test_food_web_rejects_links_to_unknown_organisms() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_rhythm_rejects_a_pattern_with_the_wrong_length() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update(
+        {
+            "type": "RHYTHM_LAB",
+            "content": {
+                "prompt": "Rebuild the rhythm.",
+                "beats": 6,
+                "bpm": 80,
+                "target_pattern": [True, False, True, False],
+                "visual_cue": "● ○ ● ○",
+                "explanation": "The pattern must contain six beats.",
+            },
+        }
+    )
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

@@ -234,6 +234,23 @@ class FoodWebLabContent(BaseModel):
         return self
 
 
+class RhythmLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    beats: int = Field(ge=4, le=12)
+    bpm: int = Field(ge=50, le=120)
+    target_pattern: list[bool] = Field(min_length=4, max_length=12)
+    visual_cue: str = Field(min_length=4, max_length=80)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_rhythm(self):
+        if len(self.target_pattern) != self.beats:
+            raise ValueError("The rhythm pattern length must match the beat count.")
+        if not any(self.target_pattern) or all(self.target_pattern):
+            raise ValueError("A rhythm must contain both sounds and rests.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -244,6 +261,7 @@ class ModuleActivity(BaseModel):
         "BALANCE_LAB",
         "TILE_LAB",
         "FOOD_WEB_LAB",
+        "RHYTHM_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -271,4 +289,6 @@ class ModuleActivity(BaseModel):
             TimelineContent.model_validate(self.content)
         elif self.type == "FOOD_WEB_LAB":
             FoodWebLabContent.model_validate(self.content)
+        elif self.type == "RHYTHM_LAB":
+            RhythmLabContent.model_validate(self.content)
         return self

@@ -3,6 +3,10 @@ const SUBJECTS: Record<string, string> = {
   NATURAL_SCIENCE: "Ciencias Naturales",
   KNOWLEDGE_OF_THE_NATURAL_SOCIAL_AND_CULTURAL_ENVIRONMENT: "Conocimiento del Medio",
   SPANISH_LANGUAGE_AND_LITERATURE: "Lengua Castellana y Literatura",
+  FOREIGN_LANGUAGE_ENGLISH: "Lengua Extranjera: Inglés",
+  ART_EDUCATION: "Educación Artística",
+  PHYSICAL_EDUCATION: "Educación Física",
+  CIVIC_AND_ETHICAL_VALUES: "Educación en Valores Cívicos y Éticos",
   GEOGRAPHY_AND_HISTORY: "Geografía e Historia",
   PHYSICS_AND_CHEMISTRY: "Física y Química",
 };

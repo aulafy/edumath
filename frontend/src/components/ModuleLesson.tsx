@@ -1,4 +1,4 @@
-import { ArrowLeft, Check, ChevronLeft, ChevronRight, FlaskConical, ListChecks, X } from "lucide-react";
+import { ArrowLeft, Check, ChevronLeft, ChevronRight, FlaskConical, ListChecks, Play, Volume2, X } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { api } from "../api/client";
 import type { ModuleAssignment, Student } from "../types/contracts";
@@ -9,6 +9,7 @@ const BalanceLab3D = lazy(() => import("./BalanceLab3D").then((module) => ({ def
 const TileLab3D = lazy(() => import("./TileLab3D").then((module) => ({ default: module.TileLab3D })));
 const TimePath3D = lazy(() => import("./TimePath3D").then((module) => ({ default: module.TimePath3D })));
 const FoodWebLab3D = lazy(() => import("./FoodWebLab3D").then((module) => ({ default: module.FoodWebLab3D })));
+const RhythmLab3D = lazy(() => import("./RhythmLab3D").then((module) => ({ default: module.RhythmLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -20,6 +21,7 @@ type Timeline = { prompt: string; era_label: string; events: TimelineEvent[]; ex
 type FoodWebOrganism = { id: string; label: string; role: "PRODUCER" | "CONSUMER" | "DECOMPOSER" };
 type FoodWebLink = { source: string; target: string };
 type FoodWebLab = { prompt: string; habitat: string; organisms: FoodWebOrganism[]; links: FoodWebLink[]; explanation: string };
+type RhythmLab = { prompt: string; beats: number; bpm: number; target_pattern: boolean[]; visual_cue: string; explanation: string };
 
 function tileMetrics(cells: TileCell[]) {
   const points = new Set(cells.map((cell) => `${cell.row}:${cell.col}`));
@@ -173,6 +175,39 @@ function FoodWebExercise({ content, onSolved }: { content: FoodWebLab; onSolved:
   </div>;
 }
 
+function RhythmExercise({ content, onSolved }: { content: RhythmLab; onSolved: (response: boolean[]) => void }) {
+  const [pattern, setPattern] = useState<boolean[]>(Array(content.beats).fill(false));
+  const [activeBeat, setActiveBeat] = useState(-1);
+  const [checked, setChecked] = useState(false);
+  const correct = pattern.every((value, index) => value === content.target_pattern[index]);
+  function playRhythm(sequence: boolean[]) {
+    const context = new AudioContext();
+    const interval = 60 / content.bpm;
+    sequence.forEach((enabled, index) => {
+      window.setTimeout(() => { setActiveBeat(index); if (index === sequence.length - 1) window.setTimeout(() => setActiveBeat(-1), interval * 800); }, index * interval * 1000);
+      if (!enabled) return;
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      const startsAt = context.currentTime + index * interval;
+      oscillator.type = "triangle"; oscillator.frequency.setValueAtTime(index % 4 === 0 ? 260 : 210, startsAt);
+      gain.gain.setValueAtTime(0.0001, startsAt); gain.gain.exponentialRampToValueAtTime(0.24, startsAt + 0.01); gain.gain.exponentialRampToValueAtTime(0.0001, startsAt + 0.15);
+      oscillator.connect(gain); gain.connect(context.destination); oscillator.start(startsAt); oscillator.stop(startsAt + 0.17);
+    });
+    window.setTimeout(() => void context.close(), (sequence.length * interval + 0.3) * 1000);
+  }
+  return <div className="interactiveExercise rhythmExercise">
+    <strong>{content.prompt}</strong>
+    <div className="rhythmReference"><span aria-label={`Pista visual: ${content.visual_cue}`}>{content.visual_cue}</span><button className="secondary" onClick={() => playRhythm(content.target_pattern)}><Volume2 /> Escuchar modelo</button></div>
+    <Suspense fallback={<div className="rhythmLabScene loadingScene" aria-label="Preparando secuenciador 3D" />}>
+      <RhythmLab3D pattern={pattern} activeBeat={activeBeat} />
+    </Suspense>
+    <div className="beatControls" role="group" aria-label="Pulsos de la secuencia">{pattern.map((enabled, index) => <button key={index} className={enabled ? "beatButton selected" : "beatButton"} aria-pressed={enabled} aria-label={`Pulso ${index + 1}: ${enabled ? "sonido" : "silencio"}`} onClick={() => { setPattern((current) => current.map((value, position) => position === index ? !value : value)); setChecked(false); }}><span>{index + 1}</span>{enabled ? "TA" : "—"}</button>)}</div>
+    <button className="secondary" onClick={() => playRhythm(pattern)}><Play /> Escuchar mi ritmo</button>
+    <button onClick={() => { setChecked(true); if (correct) onSolved(pattern); }}><Check /> Comprobar ritmo</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Ritmo reconstruido! ${content.explanation}` : "Todavía suena diferente. Compara el modelo, los sonidos y los silencios."}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -182,7 +217,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -215,6 +250,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "TILE_LAB" && <TileLabExercise key={activity.id} content={activity.content as TileLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "TIMELINE" && <TimelineExercise key={activity.id} content={activity.content as Timeline} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "FOOD_WEB_LAB" && <FoodWebExercise key={activity.id} content={activity.content as FoodWebLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "RHYTHM_LAB" && <RhythmExercise key={activity.id} content={activity.content as RhythmLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

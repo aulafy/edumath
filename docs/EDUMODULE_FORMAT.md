@@ -50,9 +50,9 @@ assets/
 
 ## Activities
 
-Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructions`, `content`, and `evidence`. Version 1.0 supports `EXPLANATION`, `CLOSED_QUESTION`, `OPEN_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `FOOD_WEB_LAB`, `TIMELINE`, `MAP`, `SIMULATION`, `GUIDED_EXPERIMENT`, `READING`, `WRITING`, and `ASSESSMENT`.
+Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructions`, `content`, and `evidence`. Version 1.0 supports `EXPLANATION`, `CLOSED_QUESTION`, `OPEN_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `FOOD_WEB_LAB`, `RHYTHM_LAB`, `TIMELINE`, `MAP`, `SIMULATION`, `GUIDED_EXPERIMENT`, `READING`, `WRITING`, and `ASSESSMENT`.
 
-`CLOSED_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `FOOD_WEB_LAB`, and `TIMELINE` are interactive in the learner runner. Their solutions are schema-validated on import and checked again by the backend before progress is recorded. The browser provides immediate feedback, but it is not authoritative.
+`CLOSED_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `FOOD_WEB_LAB`, `RHYTHM_LAB`, and `TIMELINE` are interactive in the learner runner. Their solutions are schema-validated on import and checked again by the backend before progress is recorded. The browser provides immediate feedback, but it is not authoritative.
 
 `BALANCE_LAB` turns additive decomposition into direct manipulation. Its content declares a positive `left_value`, two to eight unique positive `weights`, one valid `example_solution`, and a short explanation. The learner may discover any non-repeating combination of the declared weights that reaches the target; the example is a validation witness, not the only accepted answer. Trusted EduMath code renders and grades the 3D balance.
 
@@ -114,6 +114,19 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
     { "source": "rabbit", "target": "fox" }
   ],
   "explanation": "Energy moves from grass to rabbit and then to fox."
+}
+```
+
+`RHYTHM_LAB` declares 4 to 12 beats, a tempo from 50 to 120 BPM, an exact boolean sound/rest pattern, and an equivalent text cue. Patterns must contain at least one sound and one rest. Trusted EduMath code synthesises short tones with the Web Audio API and animates the 3D pads; packages cannot provide audio code. The visual cue and labelled controls provide a non-audio route through the same task.
+
+```json
+{
+  "prompt": "Rebuild the four-beat echo.",
+  "beats": 4,
+  "bpm": 76,
+  "target_pattern": [true, false, true, false],
+  "visual_cue": "● ○ ● ○",
+  "explanation": "The pulse continues through sounds and rests."
 }
 ```
 

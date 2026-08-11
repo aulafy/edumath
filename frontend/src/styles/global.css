@@ -890,6 +890,66 @@ select {
   padding: 6px;
 }
 
+.rhythmReference {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.rhythmReference > span {
+  font-size: 1.35rem;
+  letter-spacing: 0;
+  word-spacing: 6px;
+}
+
+.rhythmLabScene {
+  width: 100%;
+  height: clamp(230px, 34vh, 320px);
+  overflow: hidden;
+  border: 1px solid #cdd8c7;
+  border-radius: 8px;
+  background: #f2f5ed;
+}
+
+.rhythmLabScene canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.beatControls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(58px, 1fr));
+  gap: 8px;
+}
+
+.beatButton {
+  display: grid;
+  min-height: 62px;
+  gap: 2px;
+  border-color: #c4d0ca;
+  background: #f7faf8;
+  color: #20342c;
+}
+
+.beatButton span {
+  font-size: 0.72rem;
+}
+
+.beatButton.selected {
+  border-color: #c9563c;
+  background: #ffe3d9;
+  box-shadow: inset 0 -4px 0 #ef7658;
+}
+
+@media (max-width: 560px) {
+  .rhythmReference {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
 .sceneHotspot {
   position: absolute;
   left: 50%;
