@@ -1,0 +1,119 @@
+{
+  "id": "org.edumath.primary.knowledge-of-the-natural-social-and-cultural-environment-c1-sociedades-y-territorios",
+  "title": "Sociedades y territorios: mi entorno cercano",
+  "summary": "Módulo de 1.º ciclo para conocer el colegio, el barrio y las personas que ayudan en la vida diaria, y para orientarse en espacios cercanos con nociones básicas de lugar y convivencia.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "KNOWLEDGE_OF_THE_NATURAL_SOCIAL_AND_CULTURAL_ENVIRONMENT",
+  "competencies": [
+    "Reconocer espacios cercanos como el colegio, la casa y el barrio y describir para qué sirven.",
+    "Identificar personas y servicios del entorno que ayudan a la comunidad.",
+    "Usar nociones simples de orientación y ubicación en el espacio próximo.",
+    "Mostrar hábitos de respeto y cuidado en la convivencia del entorno cercano."
+  ],
+  "assessment_criteria": [
+    "Describe con palabras sencillas lugares conocidos del entorno cercano y su uso principal.",
+    "Relaciona personas y servicios del barrio o del colegio con la ayuda que prestan.",
+    "Sitúa objetos o lugares con nociones básicas como cerca, lejos, dentro o fuera.",
+    "Propone acciones de respeto y cuidado en espacios compartidos."
+  ],
+  "basic_knowledge": [
+    "El colegio, la casa y el barrio como espacios de vida diaria.",
+    "Personas y servicios del entorno: familia, profesorado, sanitarios, bomberos y policía local.",
+    "Nociones espaciales básicas: cerca, lejos, dentro, fuera, arriba y abajo.",
+    "Normas sencillas de convivencia y cuidado de los espacios comunes.",
+    "Primeras ideas de mapa y plano: representar un lugar conocido con dibujos o símbolos."
+  ],
+  "activities": [
+    {
+      "id": "lugares-del-entorno",
+      "type": "CLASSIFICATION",
+      "title": "¿Dónde ocurre?",
+      "instructions": "Lee cada acción y colócala en el lugar que le corresponde.",
+      "content": {
+        "prompt": "Clasifica cada acción en el lugar correcto.",
+        "categories": [
+          "Colegio",
+          "Casa",
+          "Barrio"
+        ],
+        "items": [
+          {
+            "label": "Hacer los deberes en la mesa",
+            "category": "Casa"
+          },
+          {
+            "label": "Jugar en el patio con los compañeros",
+            "category": "Colegio"
+          },
+          {
+            "label": "Comprar pan en la panadería",
+            "category": "Barrio"
+          },
+          {
+            "label": "Escuchar al maestro en clase",
+            "category": "Colegio"
+          }
+        ],
+        "explanation": "En casa estudiamos y descansamos; en el colegio aprendemos y jugamos con compañeros; en el barrio usamos tiendas y servicios del día a día."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "quien-ayuda",
+      "type": "CLOSED_QUESTION",
+      "title": "Quién nos ayuda",
+      "instructions": "Elige la respuesta correcta.",
+      "content": {
+        "prompt": "Si alguien se pone enfermo en el barrio, ¿quién le ayuda a cuidarse?",
+        "options": [
+          "El panadero",
+          "El personal sanitario",
+          "El cartero"
+        ],
+        "correct_option": "El personal sanitario",
+        "explanation": "El personal sanitario cuida la salud. Otras personas ayudan de otras formas, pero no tratan enfermedades."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "cerca-o-lejos",
+      "type": "CLASSIFICATION",
+      "title": "Cerca o lejos",
+      "instructions": "Clasifica cada ejemplo según la distancia desde el colegio.",
+      "content": {
+        "prompt": "Desde el colegio, ¿está cerca o lejos?",
+        "categories": [
+          "Cerca del colegio",
+          "Lejos del colegio"
+        ],
+        "items": [
+          {
+            "label": "El patio de recreo",
+            "category": "Cerca del colegio"
+          },
+          {
+            "label": "La puerta de la clase",
+            "category": "Cerca del colegio"
+          },
+          {
+            "label": "Otra ciudad en tren",
+            "category": "Lejos del colegio"
+          },
+          {
+            "label": "Una montaña de otro pueblo",
+            "category": "Lejos del colegio"
+          }
+        ],
+        "explanation": "Lo que está en el propio colegio o a pocos pasos está cerca. Lugares de otros pueblos o ciudades están lejos."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sociedades y territorios"
+}

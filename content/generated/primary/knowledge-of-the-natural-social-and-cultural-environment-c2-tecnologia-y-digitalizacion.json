@@ -1,0 +1,96 @@
+{
+  "id": "org.edumath.primary.knowledge-of-the-natural-social-and-cultural-environment-c2-tecnologia-y-digitalizacion",
+  "title": "Descubriendo el mundo con la tecnología",
+  "summary": "Los alumnos exploran cómo la tecnología nos ayuda a conocer el medio natural, social y cultural, identificando herramientas digitales y sus usos cotidianos.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "KNOWLEDGE_OF_THE_NATURAL_SOCIAL_AND_CULTURAL_ENVIRONMENT",
+  "competencies": [
+    "Competencia en ciencia, tecnología e ingeniería",
+    "Competencia digital",
+    "Competencia en conciencia y expresión culturales"
+  ],
+  "assessment_criteria": [
+    "Identifica ejemplos de tecnología en su entorno natural y social.",
+    "Distingue entre diferentes tipos de herramientas digitales."
+  ],
+  "basic_knowledge": [
+    "La tecnología incluye objetos y herramientas creados por las personas para facilitar tareas.",
+    "Las herramientas digitales permiten acceder a información y comunicarse."
+  ],
+  "activities": [
+    {
+      "id": "actividad-1-usos-tecnologia",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Para qué sirve la tecnología en el medio natural?",
+      "instructions": "Lee la pregunta y elige la opción correcta sobre el uso de la tecnología en la naturaleza.",
+      "content": {
+        "prompt": "¿Cuál de estos objetos es una herramienta tecnológica usada para estudiar el medio natural?",
+        "options": [
+          "Un telescopio",
+          "Una piedra",
+          "Una hoja de árbol"
+        ],
+        "correct_option": "Un telescopio",
+        "explanation": "El telescopio es un instrumento tecnológico que permite observar los astros y el espacio exterior, ayudando a conocer el medio natural."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "actividad-2-tipos-herramientas",
+      "type": "CLASSIFICATION",
+      "title": "Clasifica las herramientas digitales",
+      "instructions": "Lee cada objeto y clasifícalo en la categoría correcta: 'Digital' o 'No digital'.",
+      "content": {
+        "prompt": "Clasifica los siguientes objetos según si son herramientas digitales o no.",
+        "categories": [
+          "Digital",
+          "No digital"
+        ],
+        "items": [
+          {
+            "label": "Tablet",
+            "category": "Digital"
+          },
+          {
+            "label": "Libro de papel",
+            "category": "No digital"
+          },
+          {
+            "label": "Ordenador",
+            "category": "Digital"
+          },
+          {
+            "label": "Radio antigua",
+            "category": "No digital"
+          }
+        ],
+        "explanation": "Una tablet y un ordenador procesan información con sistemas digitales. Un libro de papel y una radio analógica no lo hacen."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "actividad-3-beneficios-tecnologia",
+      "type": "CLOSED_QUESTION",
+      "title": "Beneficios de la tecnología en la cultura",
+      "instructions": "Selecciona la opción que describe un beneficio de la tecnología en la cultura.",
+      "content": {
+        "prompt": "¿Qué nos permite hacer la tecnología para conocer la cultura?",
+        "options": [
+          "Ver películas y visitar museos en línea",
+          "Comprar ropa en tiendas físicas",
+          "Cocinar sin usar fuego"
+        ],
+        "correct_option": "Ver películas y visitar museos en línea",
+        "explanation": "La tecnología digital permite acceder a contenidos culturales como películas y museos virtuales desde casa."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Tecnología y digitalización"
+}

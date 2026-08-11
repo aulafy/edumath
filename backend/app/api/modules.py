@@ -48,6 +48,7 @@ def _require_known_teacher(db: Session, teacher_key: str | None) -> None:
 
 
 def _module_payload(row: EducationalModuleRow) -> dict:
+    manifest = json.loads(row.manifest_json)
     return {
         "id": row.id,
         "module_id": row.module_id,
@@ -62,6 +63,8 @@ def _module_payload(row: EducationalModuleRow) -> dict:
         "status": row.status,
         "package_sha256": row.package_sha256,
         "imported_at": row.imported_at,
+        "review_status": manifest.get("review_status", "COMMUNITY_DRAFT"),
+        "curriculum_strand": manifest.get("curriculum_strand"),
     }
 
 

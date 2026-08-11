@@ -91,6 +91,8 @@ export type EducationalModule = {
   status: "VALIDATED";
   package_sha256: string;
   imported_at: string;
+  review_status: "AI_DRAFT" | "COMMUNITY_DRAFT" | "EDUCATOR_REVIEWED";
+  curriculum_strand: string | null;
 };
 export type ModuleActivity = {
   id: string;

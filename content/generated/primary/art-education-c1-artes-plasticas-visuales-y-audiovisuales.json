@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.art-education-c1-artes-plasticas-visuales-y-audiovisuales",
+  "title": "Colores, formas e imágenes",
+  "summary": "Módulo de 1.º ciclo para observar, nombrar y clasificar colores, formas básicas e imágenes sencillas de las artes plásticas, visuales y audiovisuales.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "ART_EDUCATION",
+  "competencies": [
+    "Observar con atención imágenes, objetos y producciones plásticas del entorno.",
+    "Nombrar colores primarios y formas básicas en obras y materiales cotidianos.",
+    "Clasificar elementos visuales sencillos según color, forma o tipo de imagen.",
+    "Expresar de forma oral una idea breve sobre lo que se ve en una imagen."
+  ],
+  "assessment_criteria": [
+    "Identifica colores y formas básicas en imágenes y objetos.",
+    "Diferencia entre dibujo, fotografía e imagen en movimiento de forma sencilla.",
+    "Clasifica elementos visuales según criterios claros dados por el docente.",
+    "Describe con palabras simples lo que observa en una imagen o producción plástica."
+  ],
+  "basic_knowledge": [
+    "Colores primarios: rojo, azul y amarillo.",
+    "Formas planas básicas: círculo, cuadrado y triángulo.",
+    "Línea y mancha como elementos simples del dibujo.",
+    "Imágenes fijas y en movimiento: dibujo, fotografía y vídeo.",
+    "Materiales plásticos habituales: lápiz, crayón, tempera y papel.",
+    "Observación ordenada de una imagen: qué se ve, colores y formas."
+  ],
+  "activities": [
+    {
+      "id": "colores-primarios-pregunta",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Cuál es un color primario?",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "¿Cuál de estos es un color primario?",
+        "options": [
+          "Rojo",
+          "Verde",
+          "Rosa"
+        ],
+        "correct_option": "Rojo",
+        "explanation": "El rojo, el azul y el amarillo son colores primarios. El verde y el rosa se forman mezclando otros colores."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "formas-basicas-clasificacion",
+      "type": "CLASSIFICATION",
+      "title": "Clasifica formas y colores",
+      "instructions": "Arrastra cada elemento a la categoría correcta: forma o color.",
+      "content": {
+        "prompt": "Clasifica cada palabra según sea una forma o un color.",
+        "categories": [
+          "Forma",
+          "Color"
+        ],
+        "items": [
+          {
+            "label": "Círculo",
+            "category": "Forma"
+          },
+          {
+            "label": "Amarillo",
+            "category": "Color"
+          },
+          {
+            "label": "Triángulo",
+            "category": "Forma"
+          },
+          {
+            "label": "Azul",
+            "category": "Color"
+          }
+        ],
+        "explanation": "El círculo y el triángulo son formas. El amarillo y el azul son colores."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "tipos-de-imagen-pregunta",
+      "type": "CLOSED_QUESTION",
+      "title": "Imagen fija o en movimiento",
+      "instructions": "Elige la opción que describe una imagen en movimiento.",
+      "content": {
+        "prompt": "¿Cuál de estas es una imagen en movimiento?",
+        "options": [
+          "Un vídeo",
+          "Una fotografía",
+          "Un dibujo en papel"
+        ],
+        "correct_option": "Un vídeo",
+        "explanation": "El vídeo muestra imágenes que se mueven. La fotografía y el dibujo en papel son imágenes fijas."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Artes plásticas, visuales y audiovisuales"
+}

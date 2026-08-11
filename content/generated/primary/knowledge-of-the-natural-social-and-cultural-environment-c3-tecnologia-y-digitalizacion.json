@@ -1,0 +1,103 @@
+{
+  "id": "org.edumath.primary.knowledge-of-the-natural-social-and-cultural-environment-c3-tecnologia-y-digitalizacion",
+  "title": "Tecnología y digitalización",
+  "summary": "Módulo del ciclo 3 sobre dispositivos digitales, usos seguros de internet, algoritmos sencillos y tratamiento básico de la información en el medio natural, social y cultural.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "KNOWLEDGE_OF_THE_NATURAL_SOCIAL_AND_CULTURAL_ENVIRONMENT",
+  "competencies": [
+    "Usar de forma responsable dispositivos y herramientas digitales en tareas de aprendizaje.",
+    "Reconocer riesgos habituales en internet y aplicar normas básicas de seguridad y privacidad.",
+    "Identificar y seguir algoritmos o secuencias lógicas sencillas para resolver problemas.",
+    "Seleccionar y organizar información digital de forma clara y ética."
+  ],
+  "assessment_criteria": [
+    "Explica con ejemplos el uso adecuado de dispositivos y aplicaciones en la escuela y en casa.",
+    "Describe medidas básicas para proteger datos personales y actuar con respeto en entornos digitales.",
+    "Ordena o interpreta pasos de un algoritmo sencillo y comprueba el resultado.",
+    "Clasifica fuentes o tipos de información digital según su fiabilidad o su uso."
+  ],
+  "basic_knowledge": [
+    "Dispositivos digitales y sus funciones básicas.",
+    "Internet, redes y comunicación digital segura.",
+    "Privacidad, contraseñas y huella digital.",
+    "Algoritmos, instrucciones ordenadas y pensamiento computacional elemental.",
+    "Búsqueda, selección y organización de información digital.",
+    "Uso ético de contenidos y respeto a la autoría."
+  ],
+  "activities": [
+    {
+      "id": "usos-seguros-internet",
+      "type": "CLOSED_QUESTION",
+      "title": "Uso seguro de internet",
+      "instructions": "Lee la pregunta y elige la opción más segura.",
+      "content": {
+        "prompt": "¿Qué debes hacer si una página web te pide tu contraseña o datos personales sin que un adulto lo sepa?",
+        "options": [
+          "Compartir la información para poder seguir usando la página",
+          "Cerrar la página y contárselo a un adulto de confianza",
+          "Inventar datos falsos y continuar sin avisar a nadie"
+        ],
+        "correct_option": "Cerrar la página y contárselo a un adulto de confianza",
+        "explanation": "Los datos personales y las contraseñas no se comparten. Ante una petición dudosa, se cierra la página y se pide ayuda a un adulto."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-dispositivos-usos",
+      "type": "CLASSIFICATION",
+      "title": "Dispositivos y sus usos",
+      "instructions": "Clasifica cada ejemplo en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica cada elemento según si es un dispositivo digital o un uso de la tecnología.",
+        "categories": [
+          "Dispositivo digital",
+          "Uso de la tecnología"
+        ],
+        "items": [
+          {
+            "label": "Tableta",
+            "category": "Dispositivo digital"
+          },
+          {
+            "label": "Buscar información para un trabajo",
+            "category": "Uso de la tecnología"
+          },
+          {
+            "label": "Ordenador",
+            "category": "Dispositivo digital"
+          },
+          {
+            "label": "Videollamada con la clase",
+            "category": "Uso de la tecnología"
+          }
+        ],
+        "explanation": "Los dispositivos son aparatos como la tableta o el ordenador. Los usos son las acciones que hacemos con ellos, como buscar información o hacer una videollamada."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "pasos-algoritmo-sencillo",
+      "type": "CLOSED_QUESTION",
+      "title": "Algoritmo paso a paso",
+      "instructions": "Lee la situación y elige el orden correcto de pasos.",
+      "content": {
+        "prompt": "Quieres imprimir un trabajo ya guardado en el ordenador. ¿Cuál es el orden correcto de pasos?",
+        "options": [
+          "Encender la impresora, abrir el archivo, pulsar imprimir y recoger la hoja",
+          "Recoger la hoja, pulsar imprimir y después abrir el archivo",
+          "Abrir el archivo, recoger la hoja y luego encender la impresora"
+        ],
+        "correct_option": "Encender la impresora, abrir el archivo, pulsar imprimir y recoger la hoja",
+        "explanation": "Un algoritmo es una secuencia ordenada de pasos. Primero se prepara la impresora, luego se abre el archivo, se imprime y al final se recoge el resultado."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Tecnología y digitalización"
+}

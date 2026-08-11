@@ -1,0 +1,119 @@
+{
+  "id": "org.edumath.primary.art-education-c2-recepcion-y-analisis",
+  "title": "Miramos y analizamos obras artísticas",
+  "summary": "El alumnado observa, describe y clasifica elementos de imágenes y obras artísticas sencillas para comprender mensajes visuales del entorno.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "ART_EDUCATION",
+  "competencies": [
+    "Observar con atención imágenes y obras artísticas del entorno y de distintas épocas o culturas.",
+    "Describir de forma sencilla elementos visuales como color, forma, línea y textura.",
+    "Interpretar el mensaje o la emoción que transmite una obra con un lenguaje claro y respetuoso.",
+    "Comparar obras o imágenes según rasgos artísticos observables."
+  ],
+  "assessment_criteria": [
+    "Identifica en una imagen o obra elementos visuales básicos (color, forma, línea, textura).",
+    "Describe con vocabulario adecuado lo que ve en una producción artística.",
+    "Clasifica imágenes según rasgos artísticos o el tipo de expresión (dibujo, pintura, fotografía).",
+    "Explica de forma sencilla qué sensación o idea le sugiere una obra sin recurrir a juicios personales ofensivos."
+  ],
+  "basic_knowledge": [
+    "Elementos del lenguaje visual: línea, color, forma, textura y composición sencilla.",
+    "Tipos de imágenes y producciones artísticas: dibujo, pintura, fotografía y escultura.",
+    "Sensaciones, emociones e ideas que pueden transmitir las obras.",
+    "Observación ordenada: qué se ve, cómo está organizado y qué comunica.",
+    "Respeto por las creaciones propias y ajenas al comentar y analizar."
+  ],
+  "activities": [
+    {
+      "id": "colores-calidos-frios",
+      "type": "CLASSIFICATION",
+      "title": "Colores cálidos y fríos",
+      "instructions": "Lee cada color y colócalo en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica estos colores según sean cálidos o fríos.",
+        "categories": [
+          "Cálidos",
+          "Fríos"
+        ],
+        "items": [
+          {
+            "label": "Rojo",
+            "category": "Cálidos"
+          },
+          {
+            "label": "Azul",
+            "category": "Fríos"
+          },
+          {
+            "label": "Naranja",
+            "category": "Cálidos"
+          },
+          {
+            "label": "Verde",
+            "category": "Fríos"
+          }
+        ],
+        "explanation": "Los colores cálidos (rojo, naranja, amarillo) recuerdan al sol y al fuego. Los fríos (azul, verde, violeta) recuerdan al agua y al hielo."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "que-tipo-de-obra",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué tipo de obra es?",
+      "instructions": "Elige la respuesta correcta según la descripción.",
+      "content": {
+        "prompt": "Una obra hecha con pinceles y pintura sobre un lienzo o un papel se llama…",
+        "options": [
+          "Pintura",
+          "Fotografía",
+          "Escultura"
+        ],
+        "correct_option": "Pintura",
+        "explanation": "La pintura se realiza con pigmentos y pinceles u otras herramientas sobre una superficie. La fotografía se captura con una cámara y la escultura es una obra en volumen."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "elementos-visuales-basicos",
+      "type": "CLASSIFICATION",
+      "title": "Elementos que vemos en la obra",
+      "instructions": "Clasifica cada ejemplo en el elemento visual que representa.",
+      "content": {
+        "prompt": "Clasifica cada ejemplo en el elemento visual correcto.",
+        "categories": [
+          "Línea",
+          "Forma",
+          "Textura"
+        ],
+        "items": [
+          {
+            "label": "Un trazo fino que dibuja un camino",
+            "category": "Línea"
+          },
+          {
+            "label": "Un círculo rojo en el centro",
+            "category": "Forma"
+          },
+          {
+            "label": "Una superficie que parece rugosa",
+            "category": "Textura"
+          },
+          {
+            "label": "Un contorno de una casa",
+            "category": "Línea"
+          }
+        ],
+        "explanation": "La línea es un trazo o contorno; la forma es una figura cerrada (círculo, cuadrado…); la textura es cómo se siente o se ve la superficie (suave, rugosa…)."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Recepción y análisis"
+}

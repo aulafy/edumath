@@ -1,0 +1,102 @@
+{
+  "id": "org.edumath.primary.knowledge-of-the-natural-social-and-cultural-environment-c2-cultura-cientifica",
+  "title": "Cultura científica: observar, preguntar y comprobar",
+  "summary": "Módulo del segundo ciclo para iniciarse en la cultura científica: observar el entorno, formular preguntas, distinguir hechos de opiniones y clasificar materiales y seres vivos con criterios sencillos.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "KNOWLEDGE_OF_THE_NATURAL_SOCIAL_AND_CULTURAL_ENVIRONMENT",
+  "competencies": [
+    "Iniciarse en el método científico con observación, pregunta e hipótesis simple.",
+    "Usar el lenguaje científico básico para describir hechos del medio natural.",
+    "Clasificar materiales y seres vivos con criterios claros y comprobables.",
+    "Valorar la ciencia como forma de conocer y cuidar el entorno."
+  ],
+  "assessment_criteria": [
+    "Observa fenómenos cercanos y formula preguntas que se pueden investigar.",
+    "Distingue entre un hecho observado y una opinión personal.",
+    "Clasifica materiales según propiedades sencillas (origen, estado o uso).",
+    "Explica con palabras propias por qué una conclusión se basa en la evidencia."
+  ],
+  "basic_knowledge": [
+    "Observación, pregunta e hipótesis simple en investigaciones escolares.",
+    "Hechos, opiniones y evidencias en la explicación del medio natural.",
+    "Propiedades de materiales: origen natural o artificial, estado y usos.",
+    "Seres vivos y no vivos: necesidades básicas y criterios de clasificación.",
+    "Hábitos de seguridad y cuidado al explorar el entorno escolar."
+  ],
+  "activities": [
+    {
+      "id": "hecho-u-opinion",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Hecho u opinión?",
+      "instructions": "Lee la frase y elige la respuesta correcta.",
+      "content": {
+        "prompt": "«Hoy ha llovido y el patio está mojado». ¿Qué es esta frase?",
+        "options": [
+          "Un hecho que se puede comprobar",
+          "Una opinión sobre el tiempo",
+          "Un consejo para jugar fuera"
+        ],
+        "correct_option": "Un hecho que se puede comprobar",
+        "explanation": "Es un hecho porque se puede observar y comprobar: si ha llovido, el suelo se ve mojado."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "materiales-origen",
+      "type": "CLASSIFICATION",
+      "title": "Materiales: natural o artificial",
+      "instructions": "Clasifica cada material según su origen.",
+      "content": {
+        "prompt": "Clasifica estos materiales en naturales o artificiales.",
+        "categories": [
+          "Natural",
+          "Artificial"
+        ],
+        "items": [
+          {
+            "label": "Madera de un árbol",
+            "category": "Natural"
+          },
+          {
+            "label": "Plástico de un vaso",
+            "category": "Artificial"
+          },
+          {
+            "label": "Piedra del río",
+            "category": "Natural"
+          },
+          {
+            "label": "Vidrio de una ventana",
+            "category": "Artificial"
+          }
+        ],
+        "explanation": "Los materiales naturales se obtienen de la naturaleza sin fabricarlos; los artificiales se elaboran en fábricas o talleres."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "pregunta-investigable",
+      "type": "CLOSED_QUESTION",
+      "title": "Una buena pregunta científica",
+      "instructions": "Elige la pregunta que se puede investigar en clase.",
+      "content": {
+        "prompt": "¿Cuál de estas preguntas se puede investigar observando o midiendo?",
+        "options": [
+          "¿Qué planta crece más en dos semanas con la misma agua?",
+          "¿Cuál es la planta más bonita del patio?",
+          "¿A quién le gusta más el color verde?"
+        ],
+        "correct_option": "¿Qué planta crece más en dos semanas con la misma agua?",
+        "explanation": "Esa pregunta se puede comprobar midiendo el crecimiento. Las otras piden gustos u opiniones, no evidencias."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Cultura científica"
+}

@@ -1,0 +1,102 @@
+{
+  "id": "org.edumath.primary.art-education-c1-creacion-e-interpretacion",
+  "title": "Crear e interpretar con formas, colores y sonidos",
+  "summary": "Módulo de primer ciclo para experimentar la creación e interpretación artística con imágenes, gestos y sonidos sencillos, de forma segura y guiada.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "ART_EDUCATION",
+  "competencies": [
+    "Participar en creaciones artísticas sencillas con materiales y sonidos del entorno.",
+    "Interpretar con el cuerpo, la voz o el gesto ideas y emociones básicas.",
+    "Observar y elegir elementos plásticos y musicales para expresar un mensaje claro.",
+    "Colaborar con respeto al crear o interpretar en grupo."
+  ],
+  "assessment_criteria": [
+    "Realiza producciones plásticas o sonoras simples siguiendo una consigna.",
+    "Usa color, forma, línea, ritmo o gesto de manera intencionada y segura.",
+    "Interpreta una idea breve con movimiento, voz o imagen comprensible.",
+    "Cuida materiales y respeta turnos al crear o presentar."
+  ],
+  "basic_knowledge": [
+    "Creación plástica con líneas, formas y colores primarios.",
+    "Interpretación con gesto, movimiento y voz de forma sencilla.",
+    "Elementos básicos: punto, línea, forma, color, ritmo y silencio.",
+    "Procesos de crear, ensayar y mostrar una idea corta.",
+    "Uso responsable de materiales y espacios de creación."
+  ],
+  "activities": [
+    {
+    "id": "elige-la-herramienta",
+      "type": "CLOSED_QUESTION",
+    "title": "Herramientas para pintar",
+      "instructions": "Lee la pregunta y elige una sola respuesta.",
+      "content": {
+      "prompt": "¿Qué herramienta es adecuada para extender pintura líquida sobre un papel?",
+        "options": [
+        "Un pincel",
+        "Una regla",
+        "Una grapadora"
+        ],
+      "correct_option": "Un pincel",
+      "explanation": "El pincel permite recoger y extender pintura líquida. Los colores pueden expresar ideas distintas para cada persona."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasifica-crear-o-interpretar",
+      "type": "CLASSIFICATION",
+      "title": "¿Crear o interpretar?",
+      "instructions": "Coloca cada acción en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica cada acción como crear o interpretar.",
+        "categories": [
+          "Crear",
+          "Interpretar"
+        ],
+        "items": [
+          {
+            "label": "Dibujar un sol con ceras",
+            "category": "Crear"
+          },
+          {
+            "label": "Cantar una canción aprendida",
+            "category": "Interpretar"
+          },
+          {
+            "label": "Modelar una figura de plastilina",
+            "category": "Crear"
+          },
+          {
+            "label": "Bailar un ritmo con palmadas",
+            "category": "Interpretar"
+          }
+        ],
+        "explanation": "Crear es inventar o construir algo nuevo; interpretar es expresar con cuerpo, voz o gesto una idea o pieza."
+      },
+      "evidence": {}
+    },
+    {
+    "id": "preparar-una-interpretacion",
+      "type": "CLOSED_QUESTION",
+    "title": "Preparamos una interpretación",
+      "instructions": "Elige el gesto que mejor expresa la idea.",
+      "content": {
+      "prompt": "Antes de representar una escena en grupo, ¿qué acción ayuda a colaborar?",
+        "options": [
+        "Acordar los turnos y ensayar",
+        "Hablar todos a la vez",
+        "Cambiar la escena sin avisar"
+        ],
+      "correct_option": "Acordar los turnos y ensayar",
+      "explanation": "Acordar turnos y ensayar permite que todas las personas participen y sepan cuándo intervenir."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Creación e interpretación"
+}

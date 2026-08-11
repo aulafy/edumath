@@ -1,0 +1,102 @@
+{
+  "id": "org.edumath.primary.knowledge-of-the-natural-social-and-cultural-environment-c1-tecnologia-y-digitalizacion",
+  "title": "Tecnología y digitalización en 1.º ciclo",
+  "summary": "Módulo para 1.º y 2.º de Primaria sobre dispositivos digitales cotidianos, usos seguros y sencillos, y clasificación de herramientas tecnológicas del entorno próximo.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "KNOWLEDGE_OF_THE_NATURAL_SOCIAL_AND_CULTURAL_ENVIRONMENT",
+  "competencies": [
+    "Reconocer dispositivos digitales del entorno escolar y familiar y su utilidad básica.",
+    "Usar de forma sencilla y segura recursos digitales con ayuda de un adulto.",
+    "Distinguir entre objetos tecnológicos y objetos no tecnológicos del día a día.",
+    "Mostrar hábitos responsables al usar pantallas y dispositivos."
+  ],
+  "assessment_criteria": [
+    "Identifica dispositivos digitales habituales y explica para qué sirven con palabras sencillas.",
+    "Clasifica objetos del entorno según sean o no herramientas tecnológicas.",
+    "Describe normas básicas de uso seguro de dispositivos con ayuda.",
+    "Participa en tareas digitales simples siguiendo instrucciones claras."
+  ],
+  "basic_knowledge": [
+    "Dispositivos digitales cercanos: tablet, ordenador, pizarra digital y teléfono.",
+    "Usos cotidianos de la tecnología en casa y en la escuela.",
+    "Normas básicas de cuidado y uso seguro de pantallas y dispositivos.",
+    "Diferencia entre herramientas tecnológicas y objetos que no lo son.",
+    "Pasos muy simples para encender, apagar y pedir ayuda al usar un dispositivo."
+  ],
+  "activities": [
+    {
+      "id": "dispositivos-del-colegio",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué es un dispositivo digital?",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "¿Cuál de estos objetos es un dispositivo digital?",
+        "options": [
+          "Una tablet",
+          "Un lápiz de madera",
+          "Una goma de borrar"
+        ],
+        "correct_option": "Una tablet",
+        "explanation": "Una tablet es un dispositivo digital porque usa electricidad y pantallas para mostrar información. Un lápiz y una goma no son digitales."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "tecnologico-o-no",
+      "type": "CLASSIFICATION",
+      "title": "Tecnológico o no tecnológico",
+      "instructions": "Clasifica cada objeto en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica estos objetos del entorno en tecnológicos o no tecnológicos.",
+        "categories": [
+          "Tecnológico",
+          "No tecnológico"
+        ],
+        "items": [
+          {
+            "label": "Ordenador",
+            "category": "Tecnológico"
+          },
+          {
+            "label": "Pizarra digital",
+            "category": "Tecnológico"
+          },
+          {
+            "label": "Cuaderno",
+            "category": "No tecnológico"
+          },
+          {
+            "label": "Tijeras de papel",
+            "category": "No tecnológico"
+          }
+        ],
+        "explanation": "El ordenador y la pizarra digital son tecnológicos porque funcionan con electricidad y programas. El cuaderno y las tijeras no necesitan tecnología digital."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "uso-seguro-pantalla",
+      "type": "CLOSED_QUESTION",
+      "title": "Uso seguro de la pantalla",
+      "instructions": "Elige la acción más segura al usar un dispositivo.",
+      "content": {
+        "prompt": "¿Qué debes hacer si no sabes usar bien una tablet en clase?",
+        "options": [
+          "Pedir ayuda a la maestra o al maestro",
+          "Tirar la tablet al suelo",
+          "Tocar todos los botones sin mirar"
+        ],
+        "correct_option": "Pedir ayuda a la maestra o al maestro",
+        "explanation": "Pedir ayuda es la forma segura y responsable de aprender a usar un dispositivo. No se debe golpear ni usar el aparato sin cuidado."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Tecnología y digitalización"
+}

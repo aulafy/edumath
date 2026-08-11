@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.knowledge-of-the-natural-social-and-cultural-environment-c3-cultura-cientifica",
+  "title": "Cultura científica: investigar y cuidar el medio",
+  "summary": "Módulo del tercer ciclo sobre la cultura científica: pasos de una investigación sencilla, hábitos saludables y clasificación de materiales y fuentes de energía del entorno.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "KNOWLEDGE_OF_THE_NATURAL_SOCIAL_AND_CULTURAL_ENVIRONMENT",
+  "competencies": [
+    "Utilizar de forma guiada estrategias básicas de indagación científica para plantear preguntas, observar y sacar conclusiones sobre el entorno natural.",
+    "Reconocer la importancia de hábitos saludables y del uso responsable de materiales y energías en la vida diaria.",
+    "Clasificar seres, materiales y fuentes de energía con criterios científicos sencillos y lenguaje claro."
+  ],
+  "assessment_criteria": [
+    "Explica con sus palabras los pasos principales de una investigación sencilla y el papel de la observación y la evidencia.",
+    "Identifica hábitos que favorecen la salud y el bienestar personal y colectivo.",
+    "Clasifica de forma correcta materiales o fuentes de energía según criterios científicos básicos.",
+    "Usa un vocabulario científico adecuado a su edad al describir hechos del medio natural."
+  ],
+  "basic_knowledge": [
+    "Cultura científica: pregunta, observación, hipótesis sencilla, experimentación controlada y conclusión basada en datos.",
+    "Salud y bienestar: higiene, alimentación equilibrada, actividad física y descanso.",
+    "Materia y energía en el entorno: materiales naturales y artificiales; energías renovables y no renovables.",
+    "Relación entre la actividad humana, el cuidado del medio y el uso responsable de los recursos."
+  ],
+  "activities": [
+    {
+      "id": "pasos-de-una-investigacion",
+      "type": "CLOSED_QUESTION",
+      "title": "Los pasos de una investigación",
+      "instructions": "Lee la pregunta y elige la opción correcta.",
+      "content": {
+        "prompt": "¿Cuál es el primer paso de una investigación científica sencilla?",
+        "options": [
+          "Hacer una pregunta sobre lo que queremos saber",
+          "Escribir la conclusión sin observar",
+          "Cambiar el resultado si no nos gusta"
+        ],
+        "correct_option": "Hacer una pregunta sobre lo que queremos saber",
+        "explanation": "Toda investigación empieza con una pregunta clara. Después se observa, se comprueba y se sacan conclusiones con evidencia."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "energias-renovables-y-no-renovables",
+      "type": "CLASSIFICATION",
+      "title": "Energías del entorno",
+      "instructions": "Clasifica cada fuente de energía en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica estas fuentes de energía en renovables o no renovables.",
+        "categories": [
+          "Renovables",
+          "No renovables"
+        ],
+        "items": [
+          {
+            "label": "Energía solar",
+            "category": "Renovables"
+          },
+          {
+            "label": "Carbón",
+            "category": "No renovables"
+          },
+          {
+            "label": "Energía eólica",
+            "category": "Renovables"
+          },
+          {
+            "label": "Petróleo",
+            "category": "No renovables"
+          }
+        ],
+        "explanation": "Las energías renovables se renuevan de forma natural, como el sol y el viento. El carbón y el petróleo se agotan y no se renuevan con rapidez."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "habito-saludable-diario",
+      "type": "CLOSED_QUESTION",
+      "title": "Hábitos que cuidan la salud",
+      "instructions": "Lee la pregunta y elige la opción correcta.",
+      "content": {
+        "prompt": "¿Qué hábito ayuda más a cuidar la salud cada día?",
+        "options": [
+          "Dormir las horas necesarias y moverse a diario",
+          "Saltarse el desayuno para ahorrar tiempo",
+          "Permanecer muchas horas sentado sin descansar la vista"
+        ],
+        "correct_option": "Dormir las horas necesarias y moverse a diario",
+        "explanation": "Dormir bien y hacer actividad física, junto con una alimentación equilibrada y buena higiene, favorecen la salud y el bienestar."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Cultura científica"
+}

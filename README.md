@@ -85,6 +85,7 @@ make validate-curriculum  # Validate curriculum files
 - [Spanish curriculum and classroom assignments](docs/SPAIN_CURRICULUM.md)
 - [Open EduModule format and authoring guide](docs/EDUMODULE_FORMAT.md)
 - [Open content catalog and review provenance](docs/CONTENT_CATALOG.md)
+- [Primary curriculum generation coverage](docs/PRIMARY_CURRICULUM_COVERAGE.md)
 - [Architecture and safety boundaries](ARCHITECTURE.md)
 - [Local voice architecture](docs/VOICE.md)
 - [Privacy](PRIVACY.md)

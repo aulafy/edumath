@@ -21,6 +21,10 @@ def write_file(archive: ZipFile, name: str, content: str) -> None:
 
 def main() -> None:
     modules = json.loads(CATALOG.read_text())["modules"]
+    modules.extend(
+        json.loads(path.read_text())
+        for path in sorted((ROOT / "content" / "generated" / "primary").glob("*.json"))
+    )
     OUTPUT.mkdir(parents=True, exist_ok=True)
     for module in modules:
         activities = module.pop("activities")
@@ -50,6 +54,8 @@ def main() -> None:
             "activity_files": activity_files,
             "asset_files": [],
             "created_at": "2026-08-11T00:00:00Z",
+            "review_status": module.get("review_status", "COMMUNITY_DRAFT"),
+            "curriculum_strand": module.get("curriculum_strand"),
         }
         target = OUTPUT / f"{module['id']}-{manifest['version']}.edumath"
         with ZipFile(target, "w") as archive:

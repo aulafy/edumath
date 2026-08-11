@@ -13,7 +13,7 @@ EduMath keeps its editable learning-content source in `content/open_modules.v1.j
 | ESO | 1 | Geography and History | Journey through Prehistory |
 | ESO | 2 | Physics and Chemistry | Forces in motion |
 
-The catalog currently contains 18 activities. Closed questions and classification challenges are interactive and are checked by the backend before completion is recorded. Selected modules also contain declarative WebGL scenes.
+The hand-maintained catalog currently contains 18 activities. Model-generated Primary drafts live separately in `content/generated/primary/` and are counted by the coverage report. Closed questions and classification challenges are interactive and are checked by the backend before completion is recorded. Selected modules also contain declarative WebGL scenes.
 
 ## Model-assisted drafting
 

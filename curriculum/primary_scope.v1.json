@@ -1,0 +1,48 @@
+{
+  "jurisdiction": "ES",
+  "source": "https://www.boe.es/buscar/act.php?id=BOE-A-2022-3296",
+  "source_law": "Real Decreto 157/2022",
+  "cycles": [
+    {"cycle": 1, "grades": [1, 2]},
+    {"cycle": 2, "grades": [3, 4]},
+    {"cycle": 3, "grades": [5, 6]}
+  ],
+  "areas": [
+    {
+      "subject": "KNOWLEDGE_OF_THE_NATURAL_SOCIAL_AND_CULTURAL_ENVIRONMENT",
+      "title": "Conocimiento del Medio Natural, Social y Cultural",
+      "strands": ["Cultura científica", "Tecnología y digitalización", "Sociedades y territorios"]
+    },
+    {
+      "subject": "ART_EDUCATION",
+      "title": "Educación Artística",
+      "strands": ["Recepción y análisis", "Creación e interpretación", "Artes plásticas, visuales y audiovisuales", "Música y artes escénicas"]
+    },
+    {
+      "subject": "PHYSICAL_EDUCATION",
+      "title": "Educación Física",
+      "strands": ["Vida activa y saludable", "Organización de la actividad física", "Resolución de problemas motores", "Autorregulación emocional e interacción social", "Manifestaciones de la cultura motriz", "Interacción sostenible con el entorno"]
+    },
+    {
+      "subject": "SPANISH_LANGUAGE_AND_LITERATURE",
+      "title": "Lengua Castellana y Literatura",
+      "strands": ["Las lenguas y sus hablantes", "Comunicación", "Educación literaria", "Reflexión sobre la lengua"]
+    },
+    {
+      "subject": "FOREIGN_LANGUAGE_ENGLISH",
+      "title": "Lengua Extranjera: Inglés",
+      "strands": ["Comunicación", "Plurilingüismo", "Interculturalidad"]
+    },
+    {
+      "subject": "MATHEMATICS",
+      "title": "Matemáticas",
+      "strands": ["Sentido numérico", "Sentido de la medida", "Sentido espacial", "Sentido algebraico", "Sentido estocástico", "Sentido socioafectivo"]
+    },
+    {
+      "subject": "CIVIC_AND_ETHICAL_VALUES",
+      "title": "Educación en Valores Cívicos y Éticos",
+      "cycles": [3],
+      "strands": ["Autoconocimiento y autonomía moral", "Sociedad, justicia y democracia", "Desarrollo sostenible y ética ambiental", "Educación emocional"]
+    }
+  ]
+}

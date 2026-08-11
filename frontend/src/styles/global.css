@@ -721,6 +721,21 @@ select {
   font-weight: 800;
 }
 
+.reviewBadge {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #fff0bd;
+  color: #715500;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.reviewBadge.educator_reviewed {
+  background: #dff3e9;
+  color: #185641;
+}
+
 .session {
   display: grid;
   grid-template-rows: auto 1fr;

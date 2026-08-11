@@ -47,6 +47,8 @@ class EduModuleManifest(BaseModel):
     activity_files: list[str] = Field(min_length=1, max_length=100)
     asset_files: list[str] = Field(default_factory=list, max_length=100)
     created_at: str
+    review_status: Literal["AI_DRAFT", "COMMUNITY_DRAFT", "EDUCATOR_REVIEWED"] = "COMMUNITY_DRAFT"
+    curriculum_strand: str | None = Field(default=None, max_length=140)
 
 
 class CoinValueScene(BaseModel):

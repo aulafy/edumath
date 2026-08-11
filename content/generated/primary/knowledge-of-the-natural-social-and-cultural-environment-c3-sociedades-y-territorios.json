@@ -1,0 +1,105 @@
+{
+  "id": "org.edumath.primary.knowledge-of-the-natural-social-and-cultural-environment-c3-sociedades-y-territorios",
+  "title": "Sociedades y territorios: España y Europa",
+  "summary": "El alumnado de 5.º y 6.º reconoce cómo se organizan las sociedades, localiza territorios de España y Europa, y relaciona hechos históricos y culturales con la vida actual de forma sencilla y respetuosa.",
+  "stage": "PRIMARY",
+  "grades": [
+    5,
+    6
+  ],
+  "subject": "KNOWLEDGE_OF_THE_NATURAL_SOCIAL_AND_CULTURAL_ENVIRONMENT",
+  "competencies": [
+    "Localizar y describir territorios de España y Europa usando mapas y datos sencillos.",
+    "Explicar de forma clara la organización social, política y cultural de la comunidad y del país.",
+    "Relacionar cambios históricos y migraciones con la diversidad cultural actual.",
+    "Valorar la convivencia democrática, los derechos y el patrimonio cultural compartido."
+  ],
+  "assessment_criteria": [
+    "Identifica provincias, comunidades autónomas y países europeos en representaciones cartográficas sencillas.",
+    "Describe instituciones básicas de la democracia y su función en la vida cotidiana.",
+    "Reconoce causas y consecuencias simples de migraciones y de cambios en el territorio.",
+    "Clasifica elementos del patrimonio natural y cultural y justifica su cuidado.",
+    "Utiliza vocabulario social y geográfico adecuado al ciclo en explicaciones orales o escritas breves."
+  ],
+  "basic_knowledge": [
+    "Organización territorial de España: municipios, provincias y comunidades autónomas.",
+    "Europa: países vecinos, capitales principales y la Unión Europea a nivel introductorio.",
+    "Instituciones democráticas: Ayuntamiento, Parlamento, Gobierno y Constitución como normas comunes.",
+    "Población, migraciones y diversidad cultural en la sociedad actual.",
+    "Actividades económicas y su relación con el territorio.",
+    "Patrimonio histórico, artístico y natural y su conservación.",
+    "Línea del tiempo y cambios sociales en la Edad Contemporánea de forma básica."
+  ],
+  "activities": [
+    {
+      "id": "mapa-espana-comunidades",
+      "type": "CLOSED_QUESTION",
+      "title": "Comunidades autónomas en el mapa",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+      "prompt": "¿Cómo se llaman las entidades territoriales de España que cuentan con instituciones propias de autogobierno?",
+        "options": [
+          "Comunidades autónomas",
+          "Continentes",
+          "Barrios"
+        ],
+        "correct_option": "Comunidades autónomas",
+      "explanation": "España se organiza territorialmente en municipios, provincias y comunidades autónomas. Hay comunidades formadas por una provincia y otras por varias."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-instituciones-y-territorio",
+      "type": "CLASSIFICATION",
+    "title": "Instituciones o entidades territoriales",
+    "instructions": "Clasifica cada elemento según sea una institución democrática o una entidad territorial.",
+      "content": {
+        "prompt": "Coloca cada palabra en la categoría correcta.",
+        "categories": [
+          "Institución democrática",
+        "Entidad territorial"
+        ],
+        "items": [
+          {
+            "label": "Ayuntamiento",
+            "category": "Institución democrática"
+          },
+          {
+            "label": "Parlamento",
+            "category": "Institución democrática"
+          },
+          {
+            "label": "Provincia",
+          "category": "Entidad territorial"
+          },
+          {
+            "label": "Municipio",
+          "category": "Entidad territorial"
+          }
+        ],
+      "explanation": "El ayuntamiento y el parlamento son instituciones. La provincia y el municipio son entidades de organización territorial."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "migraciones-y-diversidad",
+      "type": "CLOSED_QUESTION",
+      "title": "Migraciones y convivencia",
+      "instructions": "Elige la opción que mejor explica la idea.",
+      "content": {
+        "prompt": "Cuando personas de distintos lugares llegan a una misma ciudad y aportan lenguas, comidas y costumbres nuevas, ¿qué ocurre en esa sociedad?",
+        "options": [
+          "Aumenta la diversidad cultural",
+          "Desaparecen todos los mapas",
+          "Se eliminan las provincias"
+        ],
+        "correct_option": "Aumenta la diversidad cultural",
+        "explanation": "Las migraciones enriquecen la sociedad con distintas formas de vivir, hablar y celebrar. Convivir con respeto permite aprovechar esa diversidad cultural."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sociedades y territorios"
+}

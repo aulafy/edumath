@@ -1,0 +1,118 @@
+{
+  "id": "org.edumath.primary.knowledge-of-the-natural-social-and-cultural-environment-c2-sociedades-y-territorios",
+  "title": "Sociedades y territorios: mi entorno y cómo lo organizamos",
+  "summary": "El alumnado identifica elementos del entorno cercano, distingue paisajes y actividades humanas, y reconoce formas sencillas de organización social y territorial en el ciclo 2.",
+  "stage": "PRIMARY",
+  "grades": [
+    3,
+    4
+  ],
+  "subject": "KNOWLEDGE_OF_THE_NATURAL_SOCIAL_AND_CULTURAL_ENVIRONMENT",
+  "competencies": [
+    "Explorar el entorno natural, social y cultural cercano con curiosidad y respeto.",
+    "Identificar formas sencillas de organización de la vida en común.",
+    "Usar representaciones básicas del territorio para localizar lugares y elementos.",
+    "Valorar la diversidad de paisajes, oficios y costumbres del entorno."
+  ],
+  "assessment_criteria": [
+    "Describe con palabras sencillas elementos del paisaje y de la vida en el municipio o comarca.",
+    "Relaciona actividades humanas con el uso del territorio y de los recursos.",
+    "Localiza en mapas o croquis sencillos lugares conocidos del entorno.",
+    "Reconoce normas y servicios que ayudan a la convivencia en la comunidad."
+  ],
+  "basic_knowledge": [
+    "El municipio, el barrio y los servicios públicos cercanos.",
+    "Paisajes naturales y paisajes transformados por las personas.",
+    "Mapas, croquis y puntos de referencia del entorno.",
+    "Oficios, trabajos y actividades económicas del lugar.",
+    "Normas de convivencia y participación en la vida colectiva."
+  ],
+  "activities": [
+    {
+      "id": "paisaje-natural-o-humanizado",
+      "type": "CLASSIFICATION",
+      "title": "Paisaje natural o humanizado",
+      "instructions": "Clasifica cada elemento según el tipo de paisaje al que pertenece.",
+      "content": {
+        "prompt": "Clasifica estos elementos del entorno.",
+        "categories": [
+          "Paisaje natural",
+          "Paisaje humanizado"
+        ],
+        "items": [
+          {
+            "label": "Un bosque con árboles y animales",
+            "category": "Paisaje natural"
+          },
+          {
+            "label": "Una carretera con coches",
+            "category": "Paisaje humanizado"
+          },
+          {
+            "label": "Un río sin puentes ni casas",
+            "category": "Paisaje natural"
+          },
+          {
+            "label": "Un pueblo con calles y tiendas",
+            "category": "Paisaje humanizado"
+          }
+        ],
+        "explanation": "El paisaje natural conserva elementos de la naturaleza. El paisaje humanizado muestra cambios hechos por las personas, como casas, calles o carreteras."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "servicios-del-municipio",
+      "type": "CLOSED_QUESTION",
+      "title": "Servicios del municipio",
+      "instructions": "Lee la pregunta y elige la opción correcta.",
+      "content": {
+        "prompt": "¿Cuál de estas instituciones municipales presta servicios públicos?",
+        "options": [
+          "El ayuntamiento",
+          "Una tienda de juguetes",
+          "Una casa particular"
+        ],
+        "correct_option": "El ayuntamiento",
+        "explanation": "El ayuntamiento es la institución que gobierna y administra el municipio y organiza servicios para la población."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "trabajos-y-territorio",
+      "type": "CLASSIFICATION",
+      "title": "Trabajos y territorio",
+      "instructions": "Clasifica cada trabajo según el lugar donde se realiza de forma habitual.",
+      "content": {
+        "prompt": "Clasifica estos trabajos según el lugar principal donde se hacen.",
+        "categories": [
+          "Campo o naturaleza",
+          "Ciudad o pueblo"
+        ],
+        "items": [
+          {
+            "label": "Agricultor que cultiva hortalizas",
+            "category": "Campo o naturaleza"
+          },
+          {
+            "label": "Conductor de autobús urbano",
+            "category": "Ciudad o pueblo"
+          },
+          {
+            "label": "Pastor que cuida ovejas en el monte",
+            "category": "Campo o naturaleza"
+          },
+          {
+            "label": "Bibliotecaria en la biblioteca municipal",
+            "category": "Ciudad o pueblo"
+          }
+        ],
+        "explanation": "Algunos trabajos se hacen sobre todo en el campo o la naturaleza. Otros se realizan en la ciudad o el pueblo, cerca de servicios y calles."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Sociedades y territorios"
+}

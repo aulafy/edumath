@@ -145,8 +145,9 @@ export function TeacherDashboard({ onClose }: { onClose: () => void }) {
               <div className="moduleList">
                 {modules.map((module) => (
                   <article className="moduleItem" key={module.id}>
-                    <div><strong>{module.title}</strong><span>{subjectLabel(module.subject)} · {module.stage === "PRIMARY" ? "Primaria" : "ESO"} · v{module.version}</span></div>
+                    <div><strong>{module.title}</strong><span>{subjectLabel(module.subject)} · {module.stage === "PRIMARY" ? "Primaria" : "ESO"} · v{module.version}</span>{module.curriculum_strand && <small>{module.curriculum_strand}</small>}</div>
                     <span className="licenseBadge">{module.license}</span>
+                    <span className={`reviewBadge ${module.review_status.toLowerCase()}`}>{module.review_status === "EDUCATOR_REVIEWED" ? "Revisado" : "Borrador"}</span>
                     <button className="secondary moduleAssignButton" onClick={() => void prepareModule(module)}><ListChecks /> Asignar</button>
                     <button className="iconButton secondary" aria-label={`Exportar ${module.title}`} title="Exportar módulo" onClick={() => void exportModule(module)}><Download /></button>
                   </article>

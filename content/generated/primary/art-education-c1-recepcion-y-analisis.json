@@ -1,0 +1,100 @@
+{
+  "id": "org.edumath.primary.art-education-c1-recepcion-y-analisis",
+  "title": "Miramos y descubrimos el arte",
+  "summary": "Observamos obras y elementos artísticos sencillos. Aprendemos a mirar con atención, nombrar lo que vemos y decir qué nos transmite.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "ART_EDUCATION",
+  "competencies": [
+    "Observar con atención obras y producciones artísticas sencillas.",
+    "Identificar elementos visuales básicos (color, forma, línea y textura).",
+    "Describir con palabras simples lo que se ve y la sensación que produce.",
+    "Respetar las creaciones propias y de otras personas."
+  ],
+  "assessment_criteria": [
+    "Reconoce en imágenes o obras elementos visuales básicos.",
+    "Clasifica con ayuda estímulos artísticos según criterios simples (color, forma o tipo de obra).",
+    "Expresa de forma clara y respetuosa una observación o una emoción ante una obra."
+  ],
+  "basic_knowledge": [
+    "Recepción y análisis: mirar, escuchar y describir producciones artísticas del entorno y de distintas épocas o culturas.",
+    "Elementos del lenguaje visual: color, forma, línea, tamaño y textura.",
+    "Sensaciones y emociones que despiertan las obras.",
+    "Diferencias sencillas entre tipos de manifestaciones artísticas (dibujo, pintura, escultura, fotografía)."
+  ],
+  "activities": [
+    {
+      "id": "colores-primarios-obra",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué color primarios ves?",
+      "instructions": "Lee la pregunta. Elige la respuesta correcta.",
+      "content": {
+        "prompt": "En un cuadro hay solo rojo, amarillo y azul. ¿Cómo se llaman estos colores?",
+        "options": [
+          "Colores primarios",
+          "Colores fríos",
+          "Colores grises"
+        ],
+        "correct_option": "Colores primarios",
+        "explanation": "El rojo, el amarillo y el azul son colores primarios. Con ellos se pueden mezclar otros colores."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-formas-basicas",
+      "type": "CLASSIFICATION",
+      "title": "Formas redondas o rectas",
+      "instructions": "Clasifica cada elemento en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica estas formas según su contorno.",
+        "categories": [
+          "Formas redondas",
+          "Formas con lados rectos"
+        ],
+        "items": [
+          {
+            "label": "Círculo",
+            "category": "Formas redondas"
+          },
+          {
+            "label": "Cuadrado",
+            "category": "Formas con lados rectos"
+          },
+          {
+            "label": "Óvalo",
+            "category": "Formas redondas"
+          },
+          {
+            "label": "Triángulo",
+            "category": "Formas con lados rectos"
+          }
+        ],
+        "explanation": "Las formas redondas no tienen esquinas. Las formas con lados rectos tienen lados y vértices."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "tipo-de-obra-arte",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué tipo de obra es?",
+      "instructions": "Piensa en cómo se hace la obra. Elige la opción correcta.",
+      "content": {
+        "prompt": "Una obra se puede rodear y tocar con cuidado: es de piedra y tiene volumen. ¿Qué tipo de obra es?",
+        "options": [
+          "Una escultura",
+          "Un dibujo plano",
+          "Una canción"
+        ],
+        "correct_option": "Una escultura",
+        "explanation": "Una escultura es una obra con volumen en el espacio. Un dibujo es plano y una canción se escucha."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Recepción y análisis"
+}

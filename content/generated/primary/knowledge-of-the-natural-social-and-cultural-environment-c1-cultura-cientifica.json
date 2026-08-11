@@ -1,0 +1,118 @@
+{
+  "id": "org.edumath.primary.knowledge-of-the-natural-social-and-cultural-environment-c1-cultura-cientifica",
+  "title": "Cultura científica: observamos y cuidamos el mundo",
+  "summary": "Módulo de ciclo 1 para iniciar la mirada científica: distinguir seres vivos y no vivos, observar con cuidado y relacionar hábitos saludables con el cuidado del cuerpo y del entorno.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "KNOWLEDGE_OF_THE_NATURAL_SOCIAL_AND_CULTURAL_ENVIRONMENT",
+  "competencies": [
+    "Observar el entorno natural con curiosidad y respeto.",
+    "Diferenciar seres vivos y objetos inertes con criterios sencillos.",
+    "Reconocer hábitos que ayudan a cuidar el cuerpo y el medio.",
+    "Explicar con palabras claras lo que se ve y se comprueba."
+  ],
+  "assessment_criteria": [
+    "Identifica seres vivos y no vivos y justifica la clasificación con rasgos simples.",
+    "Describe observaciones del entorno usando los sentidos de forma segura.",
+    "Relaciona acciones cotidianas con el cuidado de la salud y del medio.",
+    "Comunica ideas científicas de forma breve y ordenada."
+  ],
+  "basic_knowledge": [
+    "Seres vivos y no vivos: nacimiento, crecimiento, alimentación y movimiento.",
+    "Observación del entorno: lo que se ve, se oye y se toca con seguridad.",
+    "Necesidades básicas de personas, animales y plantas.",
+    "Hábitos de higiene, alimentación y cuidado del entorno cercano.",
+    "Materiales y objetos del aula y de la naturaleza: uso y cuidado."
+  ],
+  "activities": [
+    {
+      "id": "vivos-o-no-vivos",
+      "type": "CLASSIFICATION",
+      "title": "¿Vive o no vive?",
+      "instructions": "Lee cada palabra. Colócala en la categoría correcta.",
+      "content": {
+        "prompt": "Clasifica cada elemento según sea un ser vivo o no vivo.",
+        "categories": [
+          "Ser vivo",
+          "No vivo"
+        ],
+        "items": [
+          {
+            "label": "Perro",
+            "category": "Ser vivo"
+          },
+          {
+            "label": "Piedra",
+            "category": "No vivo"
+          },
+          {
+            "label": "Árbol",
+            "category": "Ser vivo"
+          },
+          {
+            "label": "Silla",
+            "category": "No vivo"
+          }
+        ],
+        "explanation": "Los seres vivos nacen, crecen y se alimentan. Los no vivos no hacen eso."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "necesita-la-planta",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Qué necesita una planta?",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "¿Qué necesita una planta para vivir?",
+        "options": [
+          "Agua y luz",
+          "Solo juguetes",
+          "Solo música"
+        ],
+        "correct_option": "Agua y luz",
+        "explanation": "Las plantas necesitan agua y luz para crecer y estar sanas."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "habitos-saludables",
+      "type": "CLASSIFICATION",
+      "title": "Cuidamos el cuerpo",
+      "instructions": "Clasifica cada acción según ayude o no a cuidar el cuerpo.",
+      "content": {
+        "prompt": "Clasifica cada acción en hábito saludable o hábito poco saludable.",
+        "categories": [
+          "Hábito saludable",
+          "Hábito poco saludable"
+        ],
+        "items": [
+          {
+            "label": "Lavarse las manos",
+            "category": "Hábito saludable"
+          },
+          {
+            "label": "Comer fruta",
+            "category": "Hábito saludable"
+          },
+          {
+            "label": "No dormir casi nada",
+            "category": "Hábito poco saludable"
+          },
+          {
+            "label": "Beber agua",
+            "category": "Hábito saludable"
+          }
+        ],
+        "explanation": "Dormir, lavarse, beber agua y comer fruta ayudan a cuidar el cuerpo."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Cultura científica"
+}

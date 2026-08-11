@@ -1,0 +1,123 @@
+{
+  "id": "org.edumath.primary.art-education-c1-musica-y-artes-escenicas",
+  "title": "Música y artes escénicas: sonidos, canciones y cuerpo",
+  "summary": "Módulo de primer ciclo para escuchar, reconocer y clasificar sonidos y elementos musicales básicos, y para expresar ideas con la voz, el cuerpo y el movimiento de forma segura y respetuosa.",
+  "stage": "PRIMARY",
+  "grades": [
+    1,
+    2
+  ],
+  "subject": "ART_EDUCATION",
+  "competencies": [
+    "Escuchar con atención sonidos del entorno y de la música e identificar cualidades sencillas como fuerte-suave o rápido-lento.",
+    "Participar en canciones, juegos rítmicos y actividades de movimiento con el cuerpo de forma coordinada y respetuosa.",
+    "Reconocer y usar de manera básica la voz, el cuerpo y objetos sonoros como medios de expresión artística.",
+    "Disfrutar de experiencias musicales y escénicas propias y ajenas con curiosidad, cuidado y respeto."
+  ],
+  "assessment_criteria": [
+    "Identifica sonidos del entorno y de la música y describe de forma sencilla si son fuertes o suaves, rápidos o lentos.",
+    "Sigue un ritmo simple con palmas, pies o movimiento corporal manteniendo la atención.",
+    "Participa en canciones y juegos musicales usando la voz y el cuerpo de forma adecuada.",
+    "Clasifica sonidos, instrumentos o acciones escénicas según criterios sencillos trabajados en clase.",
+    "Muestra respeto hacia las producciones artísticas propias y de los demás."
+  ],
+  "basic_knowledge": [
+    "Sonidos del entorno natural y cotidiano y su escucha atenta.",
+    "Cualidades del sonido: fuerte y suave, rápido y lento, agudo y grave de forma muy sencilla.",
+    "La voz como instrumento: hablar, cantar y hacer sonidos expresivos.",
+    "El cuerpo como medio de expresión: palmas, pies, gestos y movimiento libre o guiado.",
+    "Canciones infantiles, juegos rítmicos y danzas simples del patrimonio cercano.",
+    "Instrumentos de percusión corporal y de pequeña percusión de uso escolar.",
+    "Elementos básicos de las artes escénicas: personaje, gesto, espacio y movimiento.",
+    "Normas de respeto, cuidado de materiales y seguridad en actividades de música y movimiento."
+  ],
+  "activities": [
+    {
+      "id": "sonido-fuerte-o-suave",
+      "type": "CLOSED_QUESTION",
+      "title": "¿Fuerte o suave?",
+      "instructions": "Lee la pregunta y elige la respuesta correcta.",
+      "content": {
+        "prompt": "Si oyes el trueno de una tormenta, ¿cómo es ese sonido?",
+        "options": [
+          "Fuerte",
+          "Suave",
+          "Silencioso"
+        ],
+        "correct_option": "Fuerte",
+        "explanation": "El trueno se oye con mucha intensidad, por eso lo describimos como un sonido fuerte."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "clasificar-sonidos-del-entorno",
+      "type": "CLASSIFICATION",
+      "title": "Sonidos de la naturaleza o de objetos",
+      "instructions": "Clasifica cada sonido según si viene de la naturaleza o de un objeto.",
+      "content": {
+        "prompt": "Pon cada sonido en la categoría correcta.",
+        "categories": [
+          "Naturaleza",
+          "Objeto"
+        ],
+        "items": [
+          {
+            "label": "Canto de un pájaro",
+            "category": "Naturaleza"
+          },
+          {
+            "label": "Timbre de la puerta",
+            "category": "Objeto"
+          },
+          {
+            "label": "Lluvia en el patio",
+            "category": "Naturaleza"
+          },
+          {
+            "label": "Campana del recreo",
+            "category": "Objeto"
+          }
+        ],
+        "explanation": "Los sonidos de la naturaleza los producen animales o el clima; los de objetos los producen cosas hechas por las personas."
+      },
+      "evidence": {}
+    },
+    {
+      "id": "voz-cuerpo-o-instrumento",
+      "type": "CLASSIFICATION",
+      "title": "¿Con qué lo hago?",
+      "instructions": "Clasifica cada acción según el medio de expresión que se usa.",
+      "content": {
+        "prompt": "Clasifica cada acción en voz, cuerpo o instrumento.",
+        "categories": [
+          "Voz",
+          "Cuerpo",
+          "Instrumento"
+        ],
+        "items": [
+          {
+            "label": "Cantar una canción",
+            "category": "Voz"
+          },
+          {
+            "label": "Dar palmas al ritmo",
+            "category": "Cuerpo"
+          },
+          {
+            "label": "Tocar un tambor",
+            "category": "Instrumento"
+          },
+          {
+            "label": "Pitar con un silbato",
+            "category": "Instrumento"
+          }
+        ],
+        "explanation": "La voz canta o habla, el cuerpo hace gestos y ritmo sin objetos, y el instrumento es un objeto sonoro que se toca."
+      },
+      "evidence": {}
+    }
+  ],
+  "version": "0.1.0",
+  "review_status": "AI_DRAFT",
+  "curriculum_strand": "Música y artes escénicas"
+}
