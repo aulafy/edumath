@@ -16,6 +16,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "TIMELINE": "org.edumath.tests.history-timeline",
             "FOOD_WEB_LAB": "org.edumath.tests.science-food-web",
             "RHYTHM_LAB": "org.edumath.tests.music-rhythm",
+            "SENTENCE_LAB": "org.edumath.tests.language-sentence",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -153,6 +154,27 @@ def make_rhythm_activity() -> dict:
             "target_pattern": [True, False, True, False],
             "visual_cue": "● ○ ● ○",
             "explanation": "Sounds fall on beats one and three.",
+        },
+        "evidence": {},
+    }
+
+
+def make_sentence_activity() -> dict:
+    return {
+        "id": "build-library-sentence",
+        "type": "SENTENCE_LAB",
+        "title": "Build a sentence",
+        "instructions": "Place every group of words in order.",
+        "content": {
+            "prompt": "Build the library sentence.",
+            "tokens": [
+                {"id": "the-team", "text": "The team", "role": "SUBJECT"},
+                {"id": "reads", "text": "reads", "role": "PREDICATE"},
+                {"id": "a-story", "text": "a story", "role": "PREDICATE"},
+                {"id": "today", "text": "today.", "role": "PREDICATE"},
+            ],
+            "target_order": ["the-team", "reads", "a-story", "today"],
+            "explanation": "The subject comes before this predicate.",
         },
         "evidence": {},
     }
@@ -531,3 +553,38 @@ def test_rhythm_lab_requires_the_exact_boolean_pattern() -> None:
         )
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["four-beat-rhythm"]
+
+
+def test_sentence_lab_requires_the_exact_token_order() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms",
+            json={"name": "4C Language", "stage": "PRIMARY", "grade": 4},
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import",
+            headers=headers,
+            files={"package": ("sentence.edumath", make_package(make_sentence_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments",
+            headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["build-library-sentence"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Alex"}).json()
+        client.post(
+            f"/api/modules/assignments/{assignment['join_code']}/join",
+            json={"student_id": student["id"]},
+        )
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/build-library-sentence/complete"
+        wrong = ["today", "the-team", "reads", "a-story"]
+        assert client.post(endpoint, json={"student_id": student["id"], "response": wrong}).status_code == 422
+        completed = client.post(
+            endpoint,
+            json={"student_id": student["id"], "response": make_sentence_activity()["content"]["target_order"]},
+        )
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["build-library-sentence"]

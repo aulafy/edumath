@@ -251,6 +251,34 @@ class RhythmLabContent(BaseModel):
         return self
 
 
+class SentenceToken(BaseModel):
+    id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=80)
+    text: str = Field(min_length=1, max_length=40)
+    role: Literal["SUBJECT", "PREDICATE", "CONNECTOR"]
+
+
+class SentenceLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    tokens: list[SentenceToken] = Field(min_length=4, max_length=10)
+    target_order: list[str] = Field(min_length=4, max_length=10)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_sentence(self):
+        token_ids = [token.id for token in self.tokens]
+        if len(token_ids) != len(set(token_ids)):
+            raise ValueError("Sentence token IDs must be unique.")
+        if len(self.target_order) != len(set(self.target_order)):
+            raise ValueError("The sentence order cannot reuse a token.")
+        if set(self.target_order) != set(token_ids):
+            raise ValueError("The sentence order must use every declared token exactly once.")
+        if not any(token.role == "SUBJECT" for token in self.tokens):
+            raise ValueError("A sentence lab must include a subject token.")
+        if not any(token.role == "PREDICATE" for token in self.tokens):
+            raise ValueError("A sentence lab must include a predicate token.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -262,6 +290,7 @@ class ModuleActivity(BaseModel):
         "TILE_LAB",
         "FOOD_WEB_LAB",
         "RHYTHM_LAB",
+        "SENTENCE_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -291,4 +320,6 @@ class ModuleActivity(BaseModel):
             FoodWebLabContent.model_validate(self.content)
         elif self.type == "RHYTHM_LAB":
             RhythmLabContent.model_validate(self.content)
+        elif self.type == "SENTENCE_LAB":
+            SentenceLabContent.model_validate(self.content)
         return self

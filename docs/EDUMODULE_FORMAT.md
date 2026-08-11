@@ -50,9 +50,9 @@ assets/
 
 ## Activities
 
-Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructions`, `content`, and `evidence`. Version 1.0 supports `EXPLANATION`, `CLOSED_QUESTION`, `OPEN_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `FOOD_WEB_LAB`, `RHYTHM_LAB`, `TIMELINE`, `MAP`, `SIMULATION`, `GUIDED_EXPERIMENT`, `READING`, `WRITING`, and `ASSESSMENT`.
+Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructions`, `content`, and `evidence`. Version 1.0 supports `EXPLANATION`, `CLOSED_QUESTION`, `OPEN_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `FOOD_WEB_LAB`, `RHYTHM_LAB`, `SENTENCE_LAB`, `TIMELINE`, `MAP`, `SIMULATION`, `GUIDED_EXPERIMENT`, `READING`, `WRITING`, and `ASSESSMENT`.
 
-`CLOSED_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `FOOD_WEB_LAB`, `RHYTHM_LAB`, and `TIMELINE` are interactive in the learner runner. Their solutions are schema-validated on import and checked again by the backend before progress is recorded. The browser provides immediate feedback, but it is not authoritative.
+`CLOSED_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TILE_LAB`, `FOOD_WEB_LAB`, `RHYTHM_LAB`, `SENTENCE_LAB`, and `TIMELINE` are interactive in the learner runner. Their solutions are schema-validated on import and checked again by the backend before progress is recorded. The browser provides immediate feedback, but it is not authoritative.
 
 `BALANCE_LAB` turns additive decomposition into direct manipulation. Its content declares a positive `left_value`, two to eight unique positive `weights`, one valid `example_solution`, and a short explanation. The learner may discover any non-repeating combination of the declared weights that reaches the target; the example is a validation witness, not the only accepted answer. Trusted EduMath code renders and grades the 3D balance.
 
@@ -129,6 +129,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
   "explanation": "The pulse continues through sounds and rests."
 }
 ```
+
+`SENTENCE_LAB` declares 4 to 10 unique word-group tokens, assigns each a display role (`SUBJECT`, `PREDICATE`, or `CONNECTOR`), and provides one complete target order. The order must be an exact permutation of the token IDs and the activity must contain both subject and predicate material. Learners move every token into a spatial sentence rail; the backend checks the exact ID sequence before progress is recorded. Roles are visual hints, not a substitute for syntactic review.
 
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 

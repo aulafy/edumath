@@ -357,6 +357,14 @@ def complete_module_activity(
             or pattern != activity.content["target_pattern"]
         ):
             raise HTTPException(status_code=422, detail="The submitted rhythm is not correct.")
+    if activity.type == "SENTENCE_LAB":
+        response = data.response
+        if (
+            not isinstance(response, list)
+            or any(not isinstance(value, str) for value in response)
+            or response != activity.content["target_order"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted sentence is not correct.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

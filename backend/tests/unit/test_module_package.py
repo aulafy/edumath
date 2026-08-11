@@ -231,3 +231,30 @@ def test_rhythm_rejects_a_pattern_with_the_wrong_length() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_sentence_lab_rejects_an_order_that_omits_a_token() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "SENTENCE_LAB",
+        "content": {
+            "prompt": "Build the sentence.",
+            "tokens": [
+                {"id": "the-team", "text": "The team", "role": "SUBJECT"},
+                {"id": "reads", "text": "reads", "role": "PREDICATE"},
+                {"id": "a-story", "text": "a story", "role": "PREDICATE"},
+                {"id": "today", "text": "today", "role": "PREDICATE"},
+            ],
+            "target_order": ["the-team", "reads", "a-story"],
+            "explanation": "Every token belongs in the sentence.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

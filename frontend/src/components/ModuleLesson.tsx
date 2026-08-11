@@ -10,6 +10,7 @@ const TileLab3D = lazy(() => import("./TileLab3D").then((module) => ({ default: 
 const TimePath3D = lazy(() => import("./TimePath3D").then((module) => ({ default: module.TimePath3D })));
 const FoodWebLab3D = lazy(() => import("./FoodWebLab3D").then((module) => ({ default: module.FoodWebLab3D })));
 const RhythmLab3D = lazy(() => import("./RhythmLab3D").then((module) => ({ default: module.RhythmLab3D })));
+const SentenceLab3D = lazy(() => import("./SentenceLab3D").then((module) => ({ default: module.SentenceLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -22,6 +23,8 @@ type FoodWebOrganism = { id: string; label: string; role: "PRODUCER" | "CONSUMER
 type FoodWebLink = { source: string; target: string };
 type FoodWebLab = { prompt: string; habitat: string; organisms: FoodWebOrganism[]; links: FoodWebLink[]; explanation: string };
 type RhythmLab = { prompt: string; beats: number; bpm: number; target_pattern: boolean[]; visual_cue: string; explanation: string };
+type SentenceToken = { id: string; text: string; role: "SUBJECT" | "PREDICATE" | "CONNECTOR" };
+type SentenceLab = { prompt: string; tokens: SentenceToken[]; target_order: string[]; explanation: string };
 
 function tileMetrics(cells: TileCell[]) {
   const points = new Set(cells.map((cell) => `${cell.row}:${cell.col}`));
@@ -208,6 +211,27 @@ function RhythmExercise({ content, onSolved }: { content: RhythmLab; onSolved: (
   </div>;
 }
 
+function SentenceExercise({ content, onSolved }: { content: SentenceLab; onSolved: (response: string[]) => void }) {
+  const [order, setOrder] = useState<string[]>([]);
+  const [checked, setChecked] = useState(false);
+  const byId = new Map(content.tokens.map((token) => [token.id, token]));
+  const correct = order.length === content.target_order.length && order.every((id, index) => id === content.target_order[index]);
+  function toggle(id: string) {
+    setOrder((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+    setChecked(false);
+  }
+  return <div className="interactiveExercise sentenceExercise">
+    <strong>{content.prompt}</strong>
+    <Suspense fallback={<div className="sentenceLabScene loadingScene" aria-label="Preparando laboratorio de frases" />}>
+      <SentenceLab3D tokens={content.tokens} order={order} />
+    </Suspense>
+    <div className="sentenceRail" aria-live="polite">{order.length === 0 ? <span>Tu frase aparecerá aquí</span> : order.map((id, index) => <button key={id} onClick={() => toggle(id)}><small>{index + 1}</small>{byId.get(id)?.text}</button>)}</div>
+    <div className="sentenceTokenTray" role="group" aria-label="Fichas de palabras">{content.tokens.map((token) => <button key={token.id} className={`sentenceToken ${token.role.toLowerCase()} ${order.includes(token.id) ? "selected" : ""}`} disabled={order.includes(token.id)} onClick={() => toggle(token.id)}>{token.text}<small>{token.role === "SUBJECT" ? "Sujeto" : token.role === "CONNECTOR" ? "Enlace" : "Predicado"}</small></button>)}</div>
+    <button disabled={order.length !== content.tokens.length} onClick={() => { setChecked(true); if (correct) onSolved(order); }}><Check /> Comprobar frase</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Frase en órbita! ${content.explanation}` : "La frase todavía no fluye. Retira una ficha del carril y prueba otro orden."}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -217,7 +241,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -251,6 +275,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "TIMELINE" && <TimelineExercise key={activity.id} content={activity.content as Timeline} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "FOOD_WEB_LAB" && <FoodWebExercise key={activity.id} content={activity.content as FoodWebLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "RHYTHM_LAB" && <RhythmExercise key={activity.id} content={activity.content as RhythmLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "SENTENCE_LAB" && <SentenceExercise key={activity.id} content={activity.content as SentenceLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>
