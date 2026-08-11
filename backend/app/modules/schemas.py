@@ -173,6 +173,31 @@ class TileLabContent(BaseModel):
         return self
 
 
+class TimelineEvent(BaseModel):
+    id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=80)
+    label: str = Field(min_length=2, max_length=120)
+    year: int = Field(ge=-10000, le=2100)
+    date_label: str = Field(min_length=1, max_length=40)
+    detail: str = Field(min_length=3, max_length=240)
+
+
+class TimelineContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    era_label: str = Field(min_length=2, max_length=100)
+    events: list[TimelineEvent] = Field(min_length=3, max_length=8)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_timeline(self):
+        ids = [event.id for event in self.events]
+        years = [event.year for event in self.events]
+        if len(ids) != len(set(ids)):
+            raise ValueError("Timeline event IDs must be unique.")
+        if len(years) != len(set(years)):
+            raise ValueError("Timeline event years must be unique.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -205,4 +230,6 @@ class ModuleActivity(BaseModel):
             BalanceLabContent.model_validate(self.content)
         elif self.type == "TILE_LAB":
             TileLabContent.model_validate(self.content)
+        elif self.type == "TIMELINE":
+            TimelineContent.model_validate(self.content)
         return self

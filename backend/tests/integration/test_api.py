@@ -13,6 +13,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
         "id": {
             "BALANCE_LAB": "org.edumath.tests.math-balance",
             "TILE_LAB": "org.edumath.tests.math-tiles",
+            "TIMELINE": "org.edumath.tests.history-timeline",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -86,6 +87,26 @@ def make_tile_activity() -> dict:
                 {"row": 1, "col": 1}, {"row": 1, "col": 2},
             ],
             "explanation": "A two by three rectangle has area six and perimeter ten.",
+        },
+        "evidence": {},
+    }
+
+
+def make_timeline_activity() -> dict:
+    return {
+        "id": "timeline-printing",
+        "type": "TIMELINE",
+        "title": "The path of communication",
+        "instructions": "Choose the events from oldest to newest.",
+        "content": {
+            "prompt": "Rebuild the communication timeline.",
+            "era_label": "From writing to radio",
+            "events": [
+                {"id": "radio", "label": "Radio", "year": 1901, "date_label": "1901", "detail": "A radio signal crosses the Atlantic."},
+                {"id": "writing", "label": "Writing", "year": -3200, "date_label": "c. 3200 BCE", "detail": "Early writing systems appear."},
+                {"id": "printing", "label": "Printing press", "year": 1450, "date_label": "c. 1450", "detail": "Movable type accelerates book production."},
+            ],
+            "explanation": "Writing came first, then the printing press, and later radio.",
         },
         "evidence": {},
     }
@@ -359,3 +380,36 @@ def test_tile_lab_checks_shape_area_perimeter_and_connectivity() -> None:
         )
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["tile-rectangle"]
+
+
+def test_timeline_requires_chronological_order() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms",
+            json={"name": "5A History", "stage": "PRIMARY", "grade": 4},
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import",
+            headers=headers,
+            files={"package": ("timeline.edumath", make_package(make_timeline_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments",
+            headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["timeline-printing"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Vega"}).json()
+        client.post(
+            f"/api/modules/assignments/{assignment['join_code']}/join",
+            json={"student_id": student["id"]},
+        )
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/timeline-printing/complete"
+        wrong = ["radio", "printing", "writing"]
+        assert client.post(endpoint, json={"student_id": student["id"], "response": wrong}).status_code == 422
+        correct = ["writing", "printing", "radio"]
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": correct})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["timeline-printing"]

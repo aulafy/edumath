@@ -37,7 +37,7 @@ class ModuleJoinRequest(BaseModel):
 
 class ActivityCompleteRequest(BaseModel):
     student_id: str
-    response: str | dict | list[int] | list[dict] | None = None
+    response: str | dict | list[int] | list[str] | list[dict] | None = None
 
 
 def _require_known_teacher(db: Session, teacher_key: str | None) -> None:
@@ -334,6 +334,11 @@ def complete_module_activity(
             or perimeter != content["target_perimeter"]
         ):
             raise HTTPException(status_code=422, detail="The submitted tiles do not match the target.")
+    if activity.type == "TIMELINE":
+        events = activity.content["events"]
+        expected = [event["id"] for event in sorted(events, key=lambda event: event["year"])]
+        if data.response != expected:
+            raise HTTPException(status_code=422, detail="The submitted timeline order is not correct.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

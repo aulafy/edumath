@@ -145,3 +145,31 @@ def test_tile_lab_rejects_a_disconnected_example_shape() -> None:
             )
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_timeline_rejects_duplicate_years() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update(
+        {
+            "type": "TIMELINE",
+            "content": {
+                "prompt": "Order the events.",
+                "era_label": "A short era",
+                "events": [
+                    {"id": "one", "label": "One", "year": 1800, "date_label": "1800", "detail": "The first event."},
+                    {"id": "two", "label": "Two", "year": 1800, "date_label": "1800", "detail": "The second event."},
+                    {"id": "three", "label": "Three", "year": 1900, "date_label": "1900", "detail": "The third event."},
+                ],
+                "explanation": "Every event needs a distinct position in time.",
+            },
+        }
+    )
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

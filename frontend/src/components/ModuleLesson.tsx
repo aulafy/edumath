@@ -7,12 +7,15 @@ import { contentLabel, subjectLabel } from "../utils/labels";
 const LearningScene3D = lazy(() => import("./LearningScene3D").then((module) => ({ default: module.LearningScene3D })));
 const BalanceLab3D = lazy(() => import("./BalanceLab3D").then((module) => ({ default: module.BalanceLab3D })));
 const TileLab3D = lazy(() => import("./TileLab3D").then((module) => ({ default: module.TileLab3D })));
+const TimePath3D = lazy(() => import("./TimePath3D").then((module) => ({ default: module.TimePath3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
 type BalanceLab = { prompt: string; left_value: number; weights: number[]; example_solution: number[]; explanation: string };
 type TileCell = { row: number; col: number };
 type TileLab = { prompt: string; rows: number; cols: number; target_area: number; target_perimeter: number; example_cells: TileCell[]; explanation: string };
+type TimelineEvent = { id: string; label: string; year: number; date_label: string; detail: string };
+type Timeline = { prompt: string; era_label: string; events: TimelineEvent[]; explanation: string };
 
 function tileMetrics(cells: TileCell[]) {
   const points = new Set(cells.map((cell) => `${cell.row}:${cell.col}`));
@@ -112,6 +115,32 @@ function TileLabExercise({ content, onSolved }: { content: TileLab; onSolved: (r
   </div>;
 }
 
+function TimelineExercise({ content, onSolved }: { content: Timeline; onSolved: (response: string[]) => void }) {
+  const [order, setOrder] = useState<string[]>([]);
+  const [checked, setChecked] = useState(false);
+  const expected = [...content.events].sort((a, b) => a.year - b.year).map((event) => event.id);
+  const correct = order.length === expected.length && order.every((id, index) => id === expected[index]);
+  function choose(id: string) {
+    setOrder((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+    setChecked(false);
+  }
+  return <div className="interactiveExercise timelineExercise">
+    <strong>{content.prompt}</strong>
+    <Suspense fallback={<div className="timePathScene loadingScene" aria-label="Preparando sendero 3D" />}>
+      <TimePath3D events={content.events} order={order} />
+    </Suspense>
+    <div className="timelineStatus"><span>{content.era_label}</span><strong>{order.length}/{content.events.length} estaciones</strong></div>
+    <div className="eventChoices">{content.events.map((event) => {
+      const position = order.indexOf(event.id);
+      return <button key={event.id} className={position >= 0 ? "eventChoice selected" : "eventChoice"} aria-pressed={position >= 0} onClick={() => choose(event.id)}>
+        <span className="eventOrder">{position >= 0 ? position + 1 : "?"}</span><span><strong>{event.label}</strong><small>{event.date_label}</small></span>
+      </button>;
+    })}</div>
+    <button disabled={order.length !== content.events.length} onClick={() => { setChecked(true); if (correct) onSolved(order); }}><Check /> Comprobar recorrido</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Recorrido completo! ${content.explanation}` : "Alguna estación está fuera de época. Toca eventos para retirarlos y vuelve a ordenar."}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -121,7 +150,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -152,6 +181,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "CLASSIFICATION" && <ClassificationExercise key={activity.id} content={activity.content as Classification} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "BALANCE_LAB" && <BalanceLabExercise key={activity.id} content={activity.content as BalanceLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "TILE_LAB" && <TileLabExercise key={activity.id} content={activity.content as TileLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "TIMELINE" && <TimelineExercise key={activity.id} content={activity.content as Timeline} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

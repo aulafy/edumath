@@ -83,6 +83,21 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 }
 ```
 
+`TIMELINE` presents three to eight shuffled events as a spatial path. Each event declares a stable `id`, learner-facing label, integer `year`, display-only `date_label`, and short detail. IDs and years must be unique. Learners activate stations from the lowest to the highest year; the backend derives the answer from the years and never trusts a package-provided answer array.
+
+```json
+{
+  "prompt": "Put these communication milestones in order.",
+  "era_label": "From writing to radio",
+  "events": [
+    { "id": "radio", "label": "Public radio", "year": 1920, "date_label": "c. 1920", "detail": "Broadcasts reach many listeners." },
+    { "id": "writing", "label": "Early writing", "year": -3200, "date_label": "c. 3200 BCE", "detail": "Writing records data and messages." },
+    { "id": "printing", "label": "Movable-type printing", "year": 1450, "date_label": "c. 1450", "detail": "Texts can be reproduced faster." }
+  ],
+  "explanation": "Writing came before printing and radio."
+}
+```
+
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.

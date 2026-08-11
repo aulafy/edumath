@@ -743,6 +743,83 @@ select {
   overflow-wrap: anywhere;
 }
 
+.timePathScene {
+  width: 100%;
+  height: clamp(220px, 32vh, 310px);
+  overflow: hidden;
+  border: 1px solid #c8d8d0;
+  border-radius: 8px;
+  background: #f0f7f3;
+}
+
+.timePathScene canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.timelineStatus {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #52675e;
+}
+
+.eventChoices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.eventChoice {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  min-height: 72px;
+  padding: 10px;
+  border-color: #c3d2ca;
+  background: #f8fbf9;
+  color: #20342c;
+  text-align: left;
+}
+
+.eventChoice.selected {
+  border-color: #287b63;
+  background: #dff2e7;
+}
+
+.eventChoice > span:last-child {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.eventChoice small {
+  color: #60736a;
+}
+
+.eventOrder {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 50%;
+  background: #e6eee9;
+  font-weight: 900;
+}
+
+.eventChoice.selected .eventOrder {
+  background: #287b63;
+  color: #ffffff;
+}
+
+@media (max-width: 560px) {
+  .eventChoices {
+    grid-template-columns: 1fr;
+  }
+}
+
 .sceneHotspot {
   position: absolute;
   left: 50%;
