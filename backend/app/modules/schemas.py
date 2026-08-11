@@ -457,6 +457,19 @@ class ProbabilityLabContent(BaseModel):
         return self
 
 
+class ReflectionLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    target_normal_angle: int = Field(ge=-30, le=30)
+    initial_normal_angle: int = Field(ge=-30, le=30)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_reflection(self):
+        if self.initial_normal_angle == self.target_normal_angle:
+            raise ValueError("The initial mirror normal must not already hit the target.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -475,6 +488,7 @@ class ModuleActivity(BaseModel):
         "ROUTE_LAB",
         "CLIMATE_LAB",
         "PROBABILITY_LAB",
+        "REFLECTION_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -518,4 +532,6 @@ class ModuleActivity(BaseModel):
             ClimateLabContent.model_validate(self.content)
         elif self.type == "PROBABILITY_LAB":
             ProbabilityLabContent.model_validate(self.content)
+        elif self.type == "REFLECTION_LAB":
+            ReflectionLabContent.model_validate(self.content)
         return self

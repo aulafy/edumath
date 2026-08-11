@@ -425,6 +425,15 @@ def complete_module_activity(
             != content["target_numerator"] * (response["blue_count"] + response["gold_count"])
         ):
             raise HTTPException(status_code=422, detail="The submitted probability machine does not match the target fraction.")
+    if activity.type == "REFLECTION_LAB":
+        response = data.response
+        if (
+            not isinstance(response, dict)
+            or set(response) != {"normal_angle"}
+            or type(response["normal_angle"]) is not int
+            or response["normal_angle"] != activity.content["target_normal_angle"]
+        ):
+            raise HTTPException(status_code=422, detail="The reflected ray does not hit the target sensor.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

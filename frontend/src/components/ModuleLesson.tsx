@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, Dices, FlaskConical, ListChecks, Minus, Play, Plus, Thermometer, Undo2, Volume2, X } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, Dices, FlaskConical, Gauge, ListChecks, Minus, Play, Plus, Thermometer, Undo2, Volume2, X } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { api } from "../api/client";
 import type { ModuleAssignment, Student } from "../types/contracts";
@@ -17,6 +17,7 @@ const ForceLab3D = lazy(() => import("./ForceLab3D").then((module) => ({ default
 const RouteLab3D = lazy(() => import("./RouteLab3D").then((module) => ({ default: module.RouteLab3D })));
 const ClimateLab3D = lazy(() => import("./ClimateLab3D").then((module) => ({ default: module.ClimateLab3D })));
 const ProbabilityLab3D = lazy(() => import("./ProbabilityLab3D").then((module) => ({ default: module.ProbabilityLab3D })));
+const ReflectionLab3D = lazy(() => import("./ReflectionLab3D").then((module) => ({ default: module.ReflectionLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -42,6 +43,7 @@ type RouteLab = { prompt: string; rows: number; cols: number; start: RouteCell; 
 type ClimateLab = { prompt: string; profile_label: string; temperature_min: number; temperature_max: number; rainfall_min: number; rainfall_max: number; initial_temperature: number; initial_rainfall: number; example_temperature: number; example_rainfall: number; explanation: string };
 type ProbabilityDraw = "BLUE" | "GOLD";
 type ProbabilityLab = { prompt: string; target_numerator: number; target_denominator: number; max_balls: number; initial_blue: number; initial_gold: number; example_blue: number; example_gold: number; draws: number; seed: number; explanation: string };
+type ReflectionLab = { prompt: string; target_normal_angle: number; initial_normal_angle: number; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -417,6 +419,24 @@ function ProbabilityExercise({ content, onSolved }: { content: ProbabilityLab; o
   </div>;
 }
 
+function ReflectionExercise({ content, onSolved }: { content: ReflectionLab; onSolved: (response: { normal_angle: number }) => void }) {
+  const [angle, setAngle] = useState(content.initial_normal_angle);
+  const [checked, setChecked] = useState(false);
+  const hit = angle === content.target_normal_angle;
+  return <div className="interactiveExercise reflectionExercise">
+    <strong>{content.prompt}</strong>
+    <div className="rayLegend" aria-label="Leyenda del banco óptico"><span className="incident">Rayo incidente</span><span className="normal">Normal</span><span className="reflected">Rayo reflejado</span><span className="sensor">Sensor</span></div>
+    <Suspense fallback={<div className="reflectionLabScene loadingScene" aria-label="Preparando banco óptico 3D" />}>
+      <ReflectionLab3D angle={angle} targetAngle={content.target_normal_angle} />
+    </Suspense>
+    <div className="angleMeters" aria-live="polite"><span><small>Incidencia i</small><strong>{Math.abs(angle)}°</strong></span><span><small>Reflexión r</small><strong>{Math.abs(angle)}°</strong></span><span className={hit ? "ready" : ""}><small>Sensor</small><strong>{hit ? "Alcanzado" : "Buscando"}</strong></span></div>
+    <label className="mirrorControl"><span><Gauge /> Inclinación de la normal</span><output>{angle}°</output><input aria-label="Inclinación de la normal" type="range" min="-30" max="30" step="1" value={angle} onInput={(event) => { setAngle(Number(event.currentTarget.value)); setChecked(false); }} /></label>
+    <p className="opticsRule">Los ángulos se miden desde la normal, no desde la superficie del espejo.</p>
+    <button onClick={() => { setChecked(true); if (hit) onSolved({ normal_angle: angle }); }}><Check /> Medir trayectoria</button>
+    {checked && <p className={hit ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{hit ? `¡Sensor alcanzado! ${content.explanation}` : "El rayo aún no atraviesa el sensor. Gira la normal y observa cómo cambia la trayectoria reflejada."}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -426,7 +446,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -467,6 +487,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "ROUTE_LAB" && <RouteExercise key={activity.id} content={activity.content as RouteLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "CLIMATE_LAB" && <ClimateExercise key={activity.id} content={activity.content as ClimateLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "PROBABILITY_LAB" && <ProbabilityExercise key={activity.id} content={activity.content as ProbabilityLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "REFLECTION_LAB" && <ReflectionExercise key={activity.id} content={activity.content as ReflectionLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

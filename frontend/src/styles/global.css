@@ -1052,12 +1052,30 @@ select {
 .machineRule { margin: 0; color: #4d625c; text-align: center; font-size: 0.86rem; font-weight: 700; }
 .experimentResult { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 11px 14px; border: 1px solid #b9cec5; border-radius: 8px; background: #edf6f2; }
 .experimentResult strong { color: #21614e; }
+.reflectionLabScene { width: 100%; height: clamp(290px, 43vh, 400px); overflow: hidden; border: 1px solid #c5d2cc; border-radius: 8px; background: #edf4f1; }
+.reflectionLabScene canvas { display: block; width: 100% !important; height: 100% !important; }
+.rayLegend { display: flex; flex-wrap: wrap; gap: 8px 14px; padding: 9px 12px; border: 1px solid #c8d6cf; border-radius: 8px; background: #f7faf8; font-size: 0.8rem; font-weight: 800; }
+.rayLegend span::before { content: ""; display: inline-block; width: 18px; height: 4px; margin-right: 6px; border-radius: 2px; vertical-align: middle; background: #e25545; }
+.rayLegend .normal::before { background: #286f9d; }
+.rayLegend .sensor::before { height: 10px; border-radius: 50%; background: #e1ad35; }
+.angleMeters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.angleMeters span { display: grid; gap: 2px; padding: 9px; border: 1px solid #c8d6cf; border-radius: 8px; background: #f7faf8; text-align: center; }
+.angleMeters span.ready { border-color: #2d8c68; background: #e3f5ec; }
+.angleMeters small { color: #607269; }
+.mirrorControl { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 7px 14px; padding: 12px; border: 2px solid #8aa9a0; border-radius: 8px; background: #fff; }
+.mirrorControl > span { display: flex; align-items: center; gap: 7px; font-weight: 800; }
+.mirrorControl svg { width: 20px; height: 20px; }
+.mirrorControl output { color: #21614e; font-size: 1.3rem; font-weight: 900; }
+.mirrorControl input { grid-column: 1 / -1; width: 100%; min-height: 32px; padding: 0; accent-color: #287b63; }
+.opticsRule { margin: 0; color: #4d625c; text-align: center; font-size: 0.86rem; font-weight: 700; }
 
 @media (max-width: 560px) {
   .climateTargets { grid-template-columns: 1fr; }
   .climateControls { grid-template-columns: 1fr; }
   .probabilityControls { grid-template-columns: 1fr; }
   .experimentResult { grid-template-columns: 1fr; }
+  .angleMeters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .angleMeters span:last-child { grid-column: 1 / -1; }
 }
 
 @media (max-width: 560px) {

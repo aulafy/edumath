@@ -21,11 +21,12 @@ EduMath keeps its editable learning-content source in `content/open_modules.v1.j
 | Primary | 5-6 | Mathematics | Route explorers |
 | ESO | 1 | Geography and History | The landscape station |
 | Primary | 6 | Mathematics | The probability machine |
+| ESO | 3 | Physics and Chemistry | The ray bench |
 | Primary | 5 | Spanish Language and Literature | The word laboratory |
 | ESO | 1 | Geography and History | Journey through Prehistory |
 | ESO | 2 | Physics and Chemistry | Forces in motion |
 
-The hand-maintained catalog currently contains 54 activities. Model-generated Primary drafts live separately in `content/generated/primary/` and are counted by the coverage report. Closed questions, classification challenges, balance laboratories, mosaic workshops, time paths, food-web laboratories, rhythm sequencers, sentence laboratories, orbital observatories, molecule workbenches, force benches, route laboratories, climate stations, and probability machines are interactive and checked by the backend before completion is recorded. Selected modules also contain declarative WebGL scenes.
+The hand-maintained catalog currently contains 57 activities. Model-generated Primary drafts live separately in `content/generated/primary/` and are counted by the coverage report. Closed questions, classification challenges, balance laboratories, mosaic workshops, time paths, food-web laboratories, rhythm sequencers, sentence laboratories, orbital observatories, molecule workbenches, force benches, route laboratories, climate stations, probability machines, and reflection benches are interactive and checked by the backend before completion is recorded. Selected modules also contain declarative WebGL scenes.
 
 ## Model-assisted drafting
 
@@ -37,7 +38,7 @@ Some catalog drafts use local Qwen 3.5 through LM Studio or Grok CLI to reduce r
 4. Build the package and pass the package validator and automated tests.
 5. Request qualified educator review before classroom deployment.
 
-In the current catalog, Grok assisted with the initial forces-and-motion draft and reviewed safeguards for the probability machine. Local Qwen assisted with the initial fractions draft and probability mission concepts. All model-assisted material required human correction before validation.
+In the current catalog, Grok assisted with the initial forces-and-motion draft and reviewed safeguards for the probability and reflection laboratories. Local Qwen assisted with the initial fractions draft and concepts for probability and reflection missions. All model-assisted material required human correction before validation.
 
 ## Build and validate
 

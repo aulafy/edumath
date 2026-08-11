@@ -23,6 +23,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "ROUTE_LAB": "org.edumath.tests.math-routes",
             "CLIMATE_LAB": "org.edumath.tests.geography-climate",
             "PROBABILITY_LAB": "org.edumath.tests.math-probability",
+            "REFLECTION_LAB": "org.edumath.tests.physics-reflection",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -287,6 +288,18 @@ def make_probability_activity() -> dict:
             "example_blue": 5, "example_gold": 5,
             "draws": 20, "seed": 1205,
             "explanation": "Equal counts give equal theoretical probabilities.",
+        }, "evidence": {},
+    }
+
+
+def make_reflection_activity() -> dict:
+    return {
+        "id": "aim-reflected-ray", "type": "REFLECTION_LAB",
+        "title": "Aim the reflected ray", "instructions": "Rotate the mirror normal.",
+        "content": {
+            "prompt": "Direct the reflected ray to the sensor.",
+            "target_normal_angle": 20, "initial_normal_angle": -10,
+            "explanation": "Incidence and reflection angles are equal when measured from the normal.",
         }, "evidence": {},
     }
 
@@ -875,3 +888,29 @@ def test_probability_lab_accepts_equivalent_target_ratios() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": {"blue_count": 4, "gold_count": 4}})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["build-even-chance"]
+
+
+def test_reflection_lab_requires_the_target_normal_angle() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms", json={"name": "4J Physics", "stage": "PRIMARY", "grade": 4}
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import", headers=headers,
+            files={"package": ("reflection.edumath", make_package(make_reflection_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments", headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["aim-reflected-ray"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Vega"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/aim-reflected-ray/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"normal_angle": -20}}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"normal_angle": True}}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": {"normal_angle": 20}})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["aim-reflected-ray"]

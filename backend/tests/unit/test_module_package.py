@@ -403,3 +403,24 @@ def test_probability_lab_rejects_a_false_witness_fraction() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_reflection_lab_rejects_an_already_solved_initial_angle() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "REFLECTION_LAB",
+        "content": {
+            "prompt": "Aim the ray.", "target_normal_angle": 15,
+            "initial_normal_angle": 15,
+            "explanation": "The initial state must require investigation.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())
