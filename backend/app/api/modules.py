@@ -559,6 +559,14 @@ def complete_module_activity(
             != response["right_mass"] * response["right_distance"]
         ):
             raise HTTPException(status_code=422, detail="The submitted lever does not preserve the mission constraints or balance.")
+    if activity.type == "SHADOW_VIEW_LAB":
+        response = data.response
+        if (
+            not isinstance(response, str)
+            or response not in {"NORTH", "EAST", "SOUTH", "WEST"}
+            or response != activity.content["target_orientation"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted orientation does not match both target views.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

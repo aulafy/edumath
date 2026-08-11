@@ -742,6 +742,47 @@ class LeverLabContent(BaseModel):
         return self
 
 
+class ShadowCube(BaseModel):
+    x: int = Field(ge=-2, le=2)
+    y: int = Field(ge=0, le=2)
+    z: int = Field(ge=-2, le=2)
+
+
+def rotate_shadow_cube(cube: ShadowCube, orientation: str) -> tuple[int, int, int]:
+    x, y, z = cube.x, cube.y, cube.z
+    return {
+        "NORTH": (x, y, z), "EAST": (z, y, -x),
+        "SOUTH": (-x, y, -z), "WEST": (-z, y, x),
+    }[orientation]
+
+
+def shadow_views(cubes: list[ShadowCube], orientation: str):
+    rotated = [rotate_shadow_cube(cube, orientation) for cube in cubes]
+    return frozenset((x, y) for x, y, _ in rotated), frozenset((z, y) for _, y, z in rotated)
+
+
+class ShadowViewLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    object_label: str = Field(min_length=2, max_length=80)
+    cubes: list[ShadowCube] = Field(min_length=4, max_length=7)
+    target_orientation: Literal["NORTH", "EAST", "SOUTH", "WEST"]
+    initial_orientation: Literal["NORTH", "EAST", "SOUTH", "WEST"]
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_shadow_views(self):
+        coordinates = {(cube.x, cube.y, cube.z) for cube in self.cubes}
+        if len(coordinates) != len(self.cubes):
+            raise ValueError("Shadow-view cubes must occupy unique coordinates.")
+        if self.initial_orientation == self.target_orientation:
+            raise ValueError("The initial shadow-view orientation must require a turn.")
+        orientations = ["NORTH", "EAST", "SOUTH", "WEST"]
+        target_views = shadow_views(self.cubes, self.target_orientation)
+        if sum(shadow_views(self.cubes, item) == target_views for item in orientations) != 1:
+            raise ValueError("The two target silhouettes must identify exactly one orientation.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -771,6 +812,7 @@ class ModuleActivity(BaseModel):
         "ATOM_BUILDER_LAB",
         "LIGHT_MIX_LAB",
         "LEVER_LAB",
+        "SHADOW_VIEW_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -836,4 +878,6 @@ class ModuleActivity(BaseModel):
             LightMixLabContent.model_validate(self.content)
         elif self.type == "LEVER_LAB":
             LeverLabContent.model_validate(self.content)
+        elif self.type == "SHADOW_VIEW_LAB":
+            ShadowViewLabContent.model_validate(self.content)
         return self

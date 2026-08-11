@@ -28,6 +28,7 @@ const SoundWaveLab3D = lazy(() => import("./SoundWaveLab3D").then((module) => ({
 const AtomBuilderLab3D = lazy(() => import("./AtomBuilderLab3D").then((module) => ({ default: module.AtomBuilderLab3D })));
 const LightMixLab3D = lazy(() => import("./LightMixLab3D").then((module) => ({ default: module.LightMixLab3D })));
 const LeverLab3D = lazy(() => import("./LeverLab3D").then((module) => ({ default: module.LeverLab3D })));
+const ShadowViewLab3D = lazy(() => import("./ShadowViewLab3D").then((module) => ({ default: module.ShadowViewLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -73,6 +74,9 @@ type LightChannel = 0 | 1;
 type LightMixLab = { prompt: string; target_label: "CYAN" | "YELLOW" | "MAGENTA" | "WHITE"; target_red: LightChannel; target_green: LightChannel; target_blue: LightChannel; initial_red: LightChannel; initial_green: LightChannel; initial_blue: LightChannel; explanation: string };
 type LeverField = "LEFT_MASS" | "LEFT_DISTANCE" | "RIGHT_MASS" | "RIGHT_DISTANCE";
 type LeverLab = { prompt: string; left_mass: number; left_distance: number; right_mass: number; right_distance: number; editable: LeverField; initial_value: number; explanation: string };
+type ShadowOrientation = "NORTH" | "EAST" | "SOUTH" | "WEST";
+type ShadowCube = { x: number; y: number; z: number };
+type ShadowViewLab = { prompt: string; object_label: string; cubes: ShadowCube[]; target_orientation: ShadowOrientation; initial_orientation: ShadowOrientation; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -734,6 +738,38 @@ function LeverExercise({ content, onSolved }: { content: LeverLab; onSolved: (re
   </div>;
 }
 
+const shadowOrientationLabels: Record<ShadowOrientation, string> = { NORTH: "Norte", EAST: "Este", SOUTH: "Sur", WEST: "Oeste" };
+const shadowOrientations: ShadowOrientation[] = ["NORTH", "EAST", "SOUTH", "WEST"];
+
+function rotateShadowCube(cube: ShadowCube, orientation: ShadowOrientation): ShadowCube {
+  if (orientation === "EAST") return { x: cube.z, y: cube.y, z: -cube.x };
+  if (orientation === "SOUTH") return { x: -cube.x, y: cube.y, z: -cube.z };
+  if (orientation === "WEST") return { x: -cube.z, y: cube.y, z: cube.x };
+  return cube;
+}
+
+function ShadowDiagram({ cubes, orientation, side, label }: { cubes: ShadowCube[]; orientation: ShadowOrientation; side: boolean; label: string }) {
+  const points = new Set(cubes.map((cube) => rotateShadowCube(cube, orientation)).map((cube) => `${side ? cube.z : cube.x}:${cube.y}`));
+  return <div className="shadowDiagram" role="img" aria-label={`${label}: ${points.size} casillas ocupadas`}><small>{label}</small><div>{[2, 1, 0].flatMap((y) => [-2, -1, 0, 1, 2].map((axis) => <span key={`${axis}:${y}`} className={points.has(`${axis}:${y}`) ? "filled" : ""} />))}</div></div>;
+}
+
+function ShadowViewExercise({ content, onSolved }: { content: ShadowViewLab; onSolved: (response: ShadowOrientation) => void }) {
+  const [orientation, setOrientation] = useState(content.initial_orientation);
+  const [checked, setChecked] = useState(false);
+  const correct = orientation === content.target_orientation;
+  const turn = (delta: number) => { const index = shadowOrientations.indexOf(orientation); setOrientation(shadowOrientations[(index + delta + 4) % 4]); setChecked(false); };
+  return <div className="interactiveExercise shadowViewExercise">
+    <strong>{content.prompt}</strong>
+    <div className="shadowTargets"><ShadowDiagram cubes={content.cubes} orientation={content.target_orientation} side={false} label="Plano frontal" /><ShadowDiagram cubes={content.cubes} orientation={content.target_orientation} side label="Plano lateral derecho" /></div>
+    <Suspense fallback={<div className="shadowViewScene loadingScene" aria-label="Preparando estudio de vistas 3D" />}><ShadowViewLab3D cubes={content.cubes} orientation={orientation} label={content.object_label} /></Suspense>
+    <div className="shadowTurner"><button className="iconButton secondary" aria-label="Girar un cuarto a la izquierda" onClick={() => turn(-1)}><Undo2 /></button><output aria-live="polite"><small>Orientación</small><strong>{shadowOrientationLabels[orientation]}</strong></output><button className="iconButton" aria-label="Girar un cuarto a la derecha" onClick={() => turn(1)}><Undo2 className="turnRight" /></button></div>
+    <div className="shadowCurrent"><ShadowDiagram cubes={content.cubes} orientation={orientation} side={false} label="Tu vista frontal" /><ShadowDiagram cubes={content.cubes} orientation={orientation} side label="Tu vista lateral" /></div>
+    <p className="modelBoundary">Proyección ortográfica conceptual: cada plano muestra las casillas ocupadas al mirar de frente o desde la derecha, sin perspectiva. Los colores ayudan a distinguir cubos, pero la solución depende de la forma de ambas vistas.</p>
+    <button onClick={() => { setChecked(true); if (correct) onSolved(orientation); }}><Check /> Comparar los dos planos</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Dos vistas coincidentes! ${content.explanation}` : "Una sola vista puede engañar. Compara también la otra silueta y gira otro cuarto de vuelta."}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -743,7 +779,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -795,6 +831,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "ATOM_BUILDER_LAB" && <AtomBuilderExercise key={activity.id} content={activity.content as AtomBuilderLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "LIGHT_MIX_LAB" && <LightMixExercise key={activity.id} content={activity.content as LightMixLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "LEVER_LAB" && <LeverExercise key={activity.id} content={activity.content as LeverLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "SHADOW_VIEW_LAB" && <ShadowViewExercise key={activity.id} content={activity.content as ShadowViewLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

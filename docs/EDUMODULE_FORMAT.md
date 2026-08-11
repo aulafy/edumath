@@ -166,6 +166,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 
 `LEVER_LAB` declares integer masses from 1 to 6, integer distances from 1 to 4, and exactly one editable field (`LEFT_MASS`, `LEFT_DISTANCE`, `RIGHT_MASS`, or `RIGHT_DISTANCE`). The declared target must satisfy `left_mass × left_distance = right_mass × right_distance`, while `initial_value` must require a change. The runner visualises tilt but also reports both products and the named state, so the activity remains operable without colour or motion. The backend verifies equilibrium and rejects changes to locked fields.
 
+`SHADOW_VIEW_LAB` declares four to seven uniquely positioned unit cubes, an initial cardinal orientation, and a target cardinal orientation. The runner rotates only around the vertical axis in quarter turns and derives frontal and right-side orthographic silhouettes by dropping the depth or horizontal coordinate. Package validation compares both silhouettes across all four orientations and rejects ambiguous targets. Filled grid cells use borders and hatching rather than colour alone; the backend accepts only the unique target orientation.
+
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.

@@ -34,6 +34,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "ATOM_BUILDER_LAB": "org.edumath.tests.chemistry-atom-builder",
             "LIGHT_MIX_LAB": "org.edumath.tests.art-light-mix",
             "LEVER_LAB": "org.edumath.tests.science-lever",
+            "SHADOW_VIEW_LAB": "org.edumath.tests.math-shadow-view",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -451,6 +452,19 @@ def make_lever_activity() -> dict:
             "prompt": "Balance both moments.", "left_mass": 3, "left_distance": 4,
             "right_mass": 4, "right_distance": 3, "editable": "RIGHT_MASS",
             "initial_value": 2, "explanation": "Both moments equal twelve.",
+        }, "evidence": {},
+    }
+
+
+def make_shadow_view_activity() -> dict:
+    return {
+        "id": "turn-the-cubes", "type": "SHADOW_VIEW_LAB",
+        "title": "Turn the cubes", "instructions": "Match both views.",
+        "content": {
+            "prompt": "Match the front and side plans.", "object_label": "Cube corner",
+            "cubes": [{"x": 0, "y": 0, "z": 0}, {"x": 1, "y": 0, "z": 0}, {"x": 0, "y": 1, "z": 0}, {"x": 0, "y": 0, "z": 1}],
+            "target_orientation": "EAST", "initial_orientation": "NORTH",
+            "explanation": "Both plans identify the east orientation.",
         }, "evidence": {},
     }
 
@@ -1319,3 +1333,20 @@ def test_lever_lab_requires_balance_and_preserves_locked_values() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": {"left_mass": 3, "left_distance": 4, "right_mass": 4, "right_distance": 3}})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["balance-lever"]
+
+
+def test_shadow_view_lab_requires_the_unique_target_orientation() -> None:
+    with TestClient(app) as client:
+        classroom = client.post("/api/teacher/classrooms", json={"name": "Spatial test", "stage": "PRIMARY", "grade": 4}).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post("/api/modules/import", headers=headers, files={"package": ("views.edumath", make_package(make_shadow_view_activity()), "application/zip")})
+        assert imported.status_code == 200
+        assignment = client.post(f"/api/modules/{imported.json()['id']}/assignments", headers=headers, json={"classroom_id": classroom["id"], "activity_ids": ["turn-the-cubes"]}).json()
+        student = client.post("/api/students", json={"display_name": "Vera"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/turn-the-cubes/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": "NORTH"}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": 1}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": "EAST"})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["turn-the-cubes"]
