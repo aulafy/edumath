@@ -714,6 +714,34 @@ class LightMixLabContent(BaseModel):
         return self
 
 
+class LeverLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    left_mass: int = Field(ge=1, le=6)
+    left_distance: int = Field(ge=1, le=4)
+    right_mass: int = Field(ge=1, le=6)
+    right_distance: int = Field(ge=1, le=4)
+    editable: Literal["LEFT_MASS", "LEFT_DISTANCE", "RIGHT_MASS", "RIGHT_DISTANCE"]
+    initial_value: int = Field(ge=1, le=6)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_lever(self):
+        target = {
+            "LEFT_MASS": self.left_mass,
+            "LEFT_DISTANCE": self.left_distance,
+            "RIGHT_MASS": self.right_mass,
+            "RIGHT_DISTANCE": self.right_distance,
+        }[self.editable]
+        maximum = 4 if self.editable.endswith("DISTANCE") else 6
+        if self.initial_value > maximum:
+            raise ValueError("The lever initial value exceeds the editable field range.")
+        if self.initial_value == target:
+            raise ValueError("The initial lever state must require an adjustment.")
+        if self.left_mass * self.left_distance != self.right_mass * self.right_distance:
+            raise ValueError("The target lever state must be balanced.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -742,6 +770,7 @@ class ModuleActivity(BaseModel):
         "SOUND_WAVE_LAB",
         "ATOM_BUILDER_LAB",
         "LIGHT_MIX_LAB",
+        "LEVER_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -805,4 +834,6 @@ class ModuleActivity(BaseModel):
             AtomBuilderLabContent.model_validate(self.content)
         elif self.type == "LIGHT_MIX_LAB":
             LightMixLabContent.model_validate(self.content)
+        elif self.type == "LEVER_LAB":
+            LeverLabContent.model_validate(self.content)
         return self

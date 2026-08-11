@@ -862,8 +862,25 @@ select {
 .lightSwitches .blue .channelSwatch { background: #3479d4; }
 .lightSwitches button.selected { background: #293a4a; color: white; }
 
+.leverScene { width: 100%; height: 360px; overflow: hidden; border: 2px solid #263d42; border-radius: 8px; }
+.leverReadout { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: stretch; }
+.leverReadout span, .leverReadout b { display: flex; min-width: 0; align-items: center; justify-content: center; padding: 12px; border: 2px solid #c8d2cf; border-radius: 8px; background: #f4f7f6; text-align: center; }
+.leverReadout span { flex-direction: column; }
+.leverReadout small { font-weight: 800; }
+.leverReadout strong { font-size: 1.3rem; }
+.leverReadout b { gap: 6px; }
+.leverReadout b.ready { border-color: #16705a; background: #dcf5e9; color: #125846; }
+.leverControl { display: grid; grid-template-columns: 1fr auto; gap: 10px 16px; align-items: center; padding: 14px; border: 2px solid #263d42; border-radius: 8px; background: #fff8de; }
+.leverControl label { font-weight: 900; }
+.leverControl > div { display: flex; align-items: center; gap: 8px; }
+.leverControl output { min-width: 44px; font-size: 1.5rem; font-weight: 900; text-align: center; }
+.leverControl input { grid-column: 1 / -1; width: 100%; }
+
 @media (max-width: 600px) {
   .lightSwitches { grid-template-columns: 1fr; }
+  .leverScene { height: 300px; }
+  .leverReadout { grid-template-columns: 1fr 1fr; }
+  .leverReadout b { grid-column: 1 / -1; grid-row: 2; }
 }
 
 .soundWaveScene { width: 100%; height: clamp(280px, 41vh, 380px); overflow: hidden; border: 1px solid #c5d2cc; border-radius: 8px; background: #eef4f1; }

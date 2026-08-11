@@ -27,6 +27,7 @@ const FunctionMachineLab3D = lazy(() => import("./FunctionMachineLab3D").then((m
 const SoundWaveLab3D = lazy(() => import("./SoundWaveLab3D").then((module) => ({ default: module.SoundWaveLab3D })));
 const AtomBuilderLab3D = lazy(() => import("./AtomBuilderLab3D").then((module) => ({ default: module.AtomBuilderLab3D })));
 const LightMixLab3D = lazy(() => import("./LightMixLab3D").then((module) => ({ default: module.LightMixLab3D })));
+const LeverLab3D = lazy(() => import("./LeverLab3D").then((module) => ({ default: module.LeverLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -70,6 +71,8 @@ type SoundWaveLab = { prompt: string; frequency_min: number; frequency_max: numb
 type AtomBuilderLab = { prompt: string; element_symbol: string; element_name: string; target_protons: number; target_neutrons: number; target_electrons: number; initial_protons: number; initial_neutrons: number; initial_electrons: number; explanation: string };
 type LightChannel = 0 | 1;
 type LightMixLab = { prompt: string; target_label: "CYAN" | "YELLOW" | "MAGENTA" | "WHITE"; target_red: LightChannel; target_green: LightChannel; target_blue: LightChannel; initial_red: LightChannel; initial_green: LightChannel; initial_blue: LightChannel; explanation: string };
+type LeverField = "LEFT_MASS" | "LEFT_DISTANCE" | "RIGHT_MASS" | "RIGHT_DISTANCE";
+type LeverLab = { prompt: string; left_mass: number; left_distance: number; right_mass: number; right_distance: number; editable: LeverField; initial_value: number; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -709,6 +712,28 @@ function LightMixExercise({ content, onSolved }: { content: LightMixLab; onSolve
   </div>;
 }
 
+function LeverExercise({ content, onSolved }: { content: LeverLab; onSolved: (response: Record<string, number>) => void }) {
+  const editableKey = content.editable.toLowerCase() as "left_mass" | "left_distance" | "right_mass" | "right_distance";
+  const [value, setValue] = useState(content.initial_value);
+  const [checked, setChecked] = useState(false);
+  const state = { left_mass: content.left_mass, left_distance: content.left_distance, right_mass: content.right_mass, right_distance: content.right_distance, [editableKey]: value };
+  const leftMoment = state.left_mass * state.left_distance;
+  const rightMoment = state.right_mass * state.right_distance;
+  const correct = leftMoment === rightMoment;
+  const maximum = content.editable.endsWith("DISTANCE") ? 4 : 6;
+  const controlLabel = ({ LEFT_MASS: "masa izquierda", LEFT_DISTANCE: "distancia izquierda", RIGHT_MASS: "masa derecha", RIGHT_DISTANCE: "distancia derecha" } as const)[content.editable];
+  const tilt = correct ? "Nivelada" : leftMoment > rightMoment ? "Izquierda abajo" : "Derecha abajo";
+  return <div className="interactiveExercise leverExercise">
+    <strong>{content.prompt}</strong>
+    <Suspense fallback={<div className="leverScene loadingScene" aria-label="Preparando palanca 3D" />}><LeverLab3D leftMass={state.left_mass} leftDistance={state.left_distance} rightMass={state.right_mass} rightDistance={state.right_distance} /></Suspense>
+    <div className="leverReadout" aria-live="polite"><span><small>Momento izquierdo</small><strong>{state.left_mass} × {state.left_distance} = {leftMoment}</strong></span><b className={correct ? "ready" : ""}><ArrowLeftRight />{tilt}</b><span><small>Momento derecho</small><strong>{state.right_mass} × {state.right_distance} = {rightMoment}</strong></span></div>
+    <div className="leverControl"><label htmlFor={`lever-${content.editable}`}>Ajusta la {controlLabel}</label><div><button className="iconButton secondary" aria-label={`Reducir ${controlLabel}`} disabled={value <= 1} onClick={() => { setValue(value - 1); setChecked(false); }}><Minus /></button><output aria-label={`${controlLabel}: ${value}`}>{value}</output><button className="iconButton" aria-label={`Aumentar ${controlLabel}`} disabled={value >= maximum} onClick={() => { setValue(value + 1); setChecked(false); }}><Plus /></button></div><input id={`lever-${content.editable}`} aria-label={`Ajustar ${controlLabel}`} type="range" min="1" max={maximum} step="1" value={value} onInput={(event) => { setValue(Number(event.currentTarget.value)); setChecked(false); }} /></div>
+    <p className="modelBoundary">Modelo ideal de palanca de primer género: las masas son unidades iguales, las distancias se miden desde el fulcro y se ignoran la masa del tablón y el rozamiento. Equilibrar exige comparar masa × distancia, no solo las masas.</p>
+    <button onClick={() => { setChecked(true); if (correct) onSolved(state); }}><Check /> Comprobar momentos</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Palanca nivelada! ${content.explanation}` : `Compara los productos: ${leftMoment} y ${rightMoment}. Ajusta ${controlLabel} hasta que sean iguales.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -718,7 +743,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -769,6 +794,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "SOUND_WAVE_LAB" && <SoundWaveExercise key={activity.id} content={activity.content as SoundWaveLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "ATOM_BUILDER_LAB" && <AtomBuilderExercise key={activity.id} content={activity.content as AtomBuilderLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "LIGHT_MIX_LAB" && <LightMixExercise key={activity.id} content={activity.content as LightMixLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "LEVER_LAB" && <LeverExercise key={activity.id} content={activity.content as LeverLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

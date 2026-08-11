@@ -164,6 +164,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 
 `LIGHT_MIX_LAB` declares binary red, green, and blue light channels for both an initial and target state, plus one target label among `CYAN`, `YELLOW`, `MAGENTA`, and `WHITE`. The package validator rejects labels whose canonical additive RGB channels disagree. The runner provides labelled on/off switches, a named result, and a swatch in addition to the 3D lighting, so success never depends on colour perception alone. Content must distinguish additive light from subtractive pigment mixing.
 
+`LEVER_LAB` declares integer masses from 1 to 6, integer distances from 1 to 4, and exactly one editable field (`LEFT_MASS`, `LEFT_DISTANCE`, `RIGHT_MASS`, or `RIGHT_DISTANCE`). The declared target must satisfy `left_mass × left_distance = right_mass × right_distance`, while `initial_value` must require a change. The runner visualises tilt but also reports both products and the named state, so the activity remains operable without colour or motion. The backend verifies equilibrium and rejects changes to locked fields.
+
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.

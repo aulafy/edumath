@@ -33,6 +33,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "SOUND_WAVE_LAB": "org.edumath.tests.physics-sound-wave",
             "ATOM_BUILDER_LAB": "org.edumath.tests.chemistry-atom-builder",
             "LIGHT_MIX_LAB": "org.edumath.tests.art-light-mix",
+            "LEVER_LAB": "org.edumath.tests.science-lever",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -438,6 +439,18 @@ def make_light_mix_activity() -> dict:
             "target_red": 0, "target_green": 1, "target_blue": 1,
             "initial_red": 1, "initial_green": 0, "initial_blue": 0,
             "explanation": "Green and blue light add to cyan.",
+        }, "evidence": {},
+    }
+
+
+def make_lever_activity() -> dict:
+    return {
+        "id": "balance-lever", "type": "LEVER_LAB",
+        "title": "Balance the lever", "instructions": "Change the right mass.",
+        "content": {
+            "prompt": "Balance both moments.", "left_mass": 3, "left_distance": 4,
+            "right_mass": 4, "right_distance": 3, "editable": "RIGHT_MASS",
+            "initial_value": 2, "explanation": "Both moments equal twelve.",
         }, "evidence": {},
     }
 
@@ -1289,3 +1302,20 @@ def test_light_mix_lab_requires_the_exact_binary_channels() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": {"red": 0, "green": 1, "blue": 1}})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["mix-cyan-light"]
+
+
+def test_lever_lab_requires_balance_and_preserves_locked_values() -> None:
+    with TestClient(app) as client:
+        classroom = client.post("/api/teacher/classrooms", json={"name": "Lever test", "stage": "PRIMARY", "grade": 4}).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post("/api/modules/import", headers=headers, files={"package": ("lever.edumath", make_package(make_lever_activity()), "application/zip")})
+        assert imported.status_code == 200
+        assignment = client.post(f"/api/modules/{imported.json()['id']}/assignments", headers=headers, json={"classroom_id": classroom["id"], "activity_ids": ["balance-lever"]}).json()
+        student = client.post("/api/students", json={"display_name": "Leo"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/balance-lever/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"left_mass": 3, "left_distance": 4, "right_mass": 3, "right_distance": 3}}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"left_mass": 4, "left_distance": 3, "right_mass": 4, "right_distance": 3}}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": {"left_mass": 3, "left_distance": 4, "right_mass": 4, "right_distance": 3}})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["balance-lever"]

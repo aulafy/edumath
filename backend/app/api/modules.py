@@ -533,6 +533,32 @@ def complete_module_activity(
             or response["blue"] != content["target_blue"]
         ):
             raise HTTPException(status_code=422, detail="The submitted light channels do not create the target color.")
+    if activity.type == "LEVER_LAB":
+        response = data.response
+        content = activity.content
+        if (
+            not isinstance(response, dict)
+            or set(response) != {"left_mass", "left_distance", "right_mass", "right_distance"}
+            or any(type(value) is not int for value in response.values())
+            or not 1 <= response["left_mass"] <= 6
+            or not 1 <= response["right_mass"] <= 6
+            or not 1 <= response["left_distance"] <= 4
+            or not 1 <= response["right_distance"] <= 4
+        ):
+            raise HTTPException(status_code=422, detail="The submitted lever state is invalid.")
+        target = {
+            "left_mass": content["left_mass"],
+            "left_distance": content["left_distance"],
+            "right_mass": content["right_mass"],
+            "right_distance": content["right_distance"],
+        }
+        editable_key = content["editable"].lower()
+        if (
+            any(response[key] != value for key, value in target.items() if key != editable_key)
+            or response["left_mass"] * response["left_distance"]
+            != response["right_mass"] * response["right_distance"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted lever does not preserve the mission constraints or balance.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,
