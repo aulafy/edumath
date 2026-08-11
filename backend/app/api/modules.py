@@ -567,6 +567,19 @@ def complete_module_activity(
             or response != activity.content["target_orientation"]
         ):
             raise HTTPException(status_code=422, detail="The submitted orientation does not match both target views.")
+    if activity.type == "CITY_BUDGET_LAB":
+        response = data.response
+        content = activity.content
+        if (
+            not isinstance(response, dict)
+            or set(response) != {"solar", "trees", "transit"}
+            or any(type(value) is not int or value < 0 or value > 10 for value in response.values())
+            or sum(response.values()) != 10
+            or response["solar"] * 2 < content["target_energy"]
+            or response["trees"] * 2 < content["target_green"]
+            or response["transit"] * 2 < content["target_mobility"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted city plan does not meet the budget and targets.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

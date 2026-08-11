@@ -29,6 +29,7 @@ const AtomBuilderLab3D = lazy(() => import("./AtomBuilderLab3D").then((module) =
 const LightMixLab3D = lazy(() => import("./LightMixLab3D").then((module) => ({ default: module.LightMixLab3D })));
 const LeverLab3D = lazy(() => import("./LeverLab3D").then((module) => ({ default: module.LeverLab3D })));
 const ShadowViewLab3D = lazy(() => import("./ShadowViewLab3D").then((module) => ({ default: module.ShadowViewLab3D })));
+const CityBudgetLab3D = lazy(() => import("./CityBudgetLab3D").then((module) => ({ default: module.CityBudgetLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -77,6 +78,7 @@ type LeverLab = { prompt: string; left_mass: number; left_distance: number; righ
 type ShadowOrientation = "NORTH" | "EAST" | "SOUTH" | "WEST";
 type ShadowCube = { x: number; y: number; z: number };
 type ShadowViewLab = { prompt: string; object_label: string; cubes: ShadowCube[]; target_orientation: ShadowOrientation; initial_orientation: ShadowOrientation; explanation: string };
+type CityBudgetLab = { prompt: string; target_energy: number; target_green: number; target_mobility: number; initial_solar: number; initial_trees: number; initial_transit: number; example_solar: number; example_trees: number; example_transit: number; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -770,6 +772,37 @@ function ShadowViewExercise({ content, onSolved }: { content: ShadowViewLab; onS
   </div>;
 }
 
+function CityBudgetExercise({ content, onSolved }: { content: CityBudgetLab; onSolved: (response: { solar: number; trees: number; transit: number }) => void }) {
+  const [solar, setSolar] = useState(content.initial_solar);
+  const [trees, setTrees] = useState(content.initial_trees);
+  const [transit, setTransit] = useState(content.initial_transit);
+  const [checked, setChecked] = useState(false);
+  const spent = solar + trees + transit;
+  const available = 10 - spent;
+  const scores = { energy: solar * 2, green: trees * 2, mobility: transit * 2 };
+  const correct = spent === 10 && scores.energy >= content.target_energy && scores.green >= content.target_green && scores.mobility >= content.target_mobility;
+  const investments = [
+    { key: "solar", label: "Energía solar", value: solar, set: setSolar, icon: <Sun /> },
+    { key: "trees", label: "Arbolado", value: trees, set: setTrees, icon: <CloudRain /> },
+    { key: "transit", label: "Transporte público", value: transit, set: setTransit, icon: <ArrowLeftRight /> },
+  ];
+  const targets = [
+    { label: "Energía limpia", value: scores.energy, target: content.target_energy },
+    { label: "Espacio verde", value: scores.green, target: content.target_green },
+    { label: "Movilidad", value: scores.mobility, target: content.target_mobility },
+  ];
+  return <div className="interactiveExercise cityBudgetExercise">
+    <strong>{content.prompt}</strong>
+    <div className={`budgetWallet ${available === 0 ? "ready" : ""}`} aria-live="polite"><span>Fichas disponibles</span><strong>{available}</strong><small>{available === 0 ? "Las 10 están asignadas" : `${available} ${available === 1 ? "ficha por asignar" : "fichas por asignar"}`}</small></div>
+    <Suspense fallback={<div className="cityBudgetScene loadingScene" aria-label="Preparando ecociudad 3D" />}><CityBudgetLab3D solar={solar} trees={trees} transit={transit} /></Suspense>
+    <div className="cityTargets">{targets.map((target) => <span key={target.label} className={target.value >= target.target ? "ready" : ""}><small>{target.label}</small><strong>{target.value}/{target.target}</strong></span>)}</div>
+    <div className="cityInvestments">{investments.map((item) => <div key={item.key}><span>{item.icon}<b>{item.label}</b></span><div><button className="iconButton secondary" aria-label={`Retirar una ficha de ${item.label.toLowerCase()}`} disabled={item.value === 0} onClick={() => { item.set(item.value - 1); setChecked(false); }}><Minus /></button><output aria-label={`${item.label}: ${item.value} ${item.value === 1 ? "ficha" : "fichas"}`}>{item.value}</output><button className="iconButton" aria-label={`Invertir una ficha en ${item.label.toLowerCase()}`} disabled={available === 0 || item.value === 10} onClick={() => { item.set(item.value + 1); setChecked(false); }}><Plus /></button></div></div>)}</div>
+    <p className="modelBoundary">Modelo de decisión: cada ficha genera 2 puntos en su propio indicador. No predice una ciudad real ni afirma que una sola inversión baste; sirve para comparar prioridades bajo un presupuesto fijo.</p>
+    <button disabled={spent !== 10} onClick={() => { setChecked(true); if (correct) onSolved({ solar, trees, transit }); }}><Check /> Presentar plan al consejo</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Plan aprobado! ${content.explanation}` : `El presupuesto está completo, pero revisa los indicadores que aún no alcanzan su objetivo. Puedes retirar una ficha y reasignarla.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -779,7 +812,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB" || activity.type === "CITY_BUDGET_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -832,6 +865,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "LIGHT_MIX_LAB" && <LightMixExercise key={activity.id} content={activity.content as LightMixLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "LEVER_LAB" && <LeverExercise key={activity.id} content={activity.content as LeverLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "SHADOW_VIEW_LAB" && <ShadowViewExercise key={activity.id} content={activity.content as ShadowViewLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "CITY_BUDGET_LAB" && <CityBudgetExercise key={activity.id} content={activity.content as CityBudgetLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

@@ -168,6 +168,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 
 `SHADOW_VIEW_LAB` declares four to seven uniquely positioned unit cubes, an initial cardinal orientation, and a target cardinal orientation. The runner rotates only around the vertical axis in quarter turns and derives frontal and right-side orthographic silhouettes by dropping the depth or horizontal coordinate. Package validation compares both silhouettes across all four orientations and rejects ambiguous targets. Filled grid cells use borders and hatching rather than colour alone; the backend accepts only the unique target orientation.
 
+`CITY_BUDGET_LAB` declares three minimum indicator scores, an initial ten-token allocation, and one valid example allocation. Solar, trees, and public-transit investments each produce two points in their named indicator. Package validation enumerates every integer allocation and requires at least two valid strategies, preventing disguised single-answer questions. The runner shows the remaining budget, all numeric indicators, and a reactive 3D city; the backend independently enforces the ten-token budget and every threshold.
+
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.

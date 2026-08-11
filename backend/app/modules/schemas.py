@@ -783,6 +783,46 @@ class ShadowViewLabContent(BaseModel):
         return self
 
 
+class CityBudgetLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    target_energy: int = Field(ge=0, le=20)
+    target_green: int = Field(ge=0, le=20)
+    target_mobility: int = Field(ge=0, le=20)
+    initial_solar: int = Field(ge=0, le=10)
+    initial_trees: int = Field(ge=0, le=10)
+    initial_transit: int = Field(ge=0, le=10)
+    example_solar: int = Field(ge=0, le=10)
+    example_trees: int = Field(ge=0, le=10)
+    example_transit: int = Field(ge=0, le=10)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    def matches(self, solar: int, trees: int, transit: int) -> bool:
+        return (
+            solar + trees + transit == 10
+            and solar * 2 >= self.target_energy
+            and trees * 2 >= self.target_green
+            and transit * 2 >= self.target_mobility
+        )
+
+    @model_validator(mode="after")
+    def validate_city_budget(self):
+        if self.initial_solar + self.initial_trees + self.initial_transit != 10:
+            raise ValueError("The initial city allocation must spend exactly ten tokens.")
+        if self.example_solar + self.example_trees + self.example_transit != 10:
+            raise ValueError("The city-budget example must spend exactly ten tokens.")
+        if self.matches(self.initial_solar, self.initial_trees, self.initial_transit):
+            raise ValueError("The initial city allocation must require redistribution.")
+        if not self.matches(self.example_solar, self.example_trees, self.example_transit):
+            raise ValueError("The city-budget example must meet every target.")
+        solutions = sum(
+            self.matches(solar, trees, 10 - solar - trees)
+            for solar in range(11) for trees in range(11 - solar)
+        )
+        if solutions < 2:
+            raise ValueError("A city-budget mission must allow at least two valid strategies.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -813,6 +853,7 @@ class ModuleActivity(BaseModel):
         "LIGHT_MIX_LAB",
         "LEVER_LAB",
         "SHADOW_VIEW_LAB",
+        "CITY_BUDGET_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -880,4 +921,6 @@ class ModuleActivity(BaseModel):
             LeverLabContent.model_validate(self.content)
         elif self.type == "SHADOW_VIEW_LAB":
             ShadowViewLabContent.model_validate(self.content)
+        elif self.type == "CITY_BUDGET_LAB":
+            CityBudgetLabContent.model_validate(self.content)
         return self

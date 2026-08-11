@@ -35,6 +35,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "LIGHT_MIX_LAB": "org.edumath.tests.art-light-mix",
             "LEVER_LAB": "org.edumath.tests.science-lever",
             "SHADOW_VIEW_LAB": "org.edumath.tests.math-shadow-view",
+            "CITY_BUDGET_LAB": "org.edumath.tests.civic-city-budget",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -465,6 +466,20 @@ def make_shadow_view_activity() -> dict:
             "cubes": [{"x": 0, "y": 0, "z": 0}, {"x": 1, "y": 0, "z": 0}, {"x": 0, "y": 1, "z": 0}, {"x": 0, "y": 0, "z": 1}],
             "target_orientation": "EAST", "initial_orientation": "NORTH",
             "explanation": "Both plans identify the east orientation.",
+        }, "evidence": {},
+    }
+
+
+def make_city_budget_activity() -> dict:
+    return {
+        "id": "fund-the-city", "type": "CITY_BUDGET_LAB",
+        "title": "Fund the city", "instructions": "Allocate ten tokens.",
+        "content": {
+            "prompt": "Meet all three city targets.", "target_energy": 6,
+            "target_green": 6, "target_mobility": 6,
+            "initial_solar": 6, "initial_trees": 2, "initial_transit": 2,
+            "example_solar": 4, "example_trees": 3, "example_transit": 3,
+            "explanation": "Several balanced plans satisfy all three targets.",
         }, "evidence": {},
     }
 
@@ -1350,3 +1365,20 @@ def test_shadow_view_lab_requires_the_unique_target_orientation() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": "EAST"})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["turn-the-cubes"]
+
+
+def test_city_budget_lab_accepts_multiple_plans_but_enforces_every_constraint() -> None:
+    with TestClient(app) as client:
+        classroom = client.post("/api/teacher/classrooms", json={"name": "Budget test", "stage": "PRIMARY", "grade": 4}).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post("/api/modules/import", headers=headers, files={"package": ("city.edumath", make_package(make_city_budget_activity()), "application/zip")})
+        assert imported.status_code == 200
+        assignment = client.post(f"/api/modules/{imported.json()['id']}/assignments", headers=headers, json={"classroom_id": classroom["id"], "activity_ids": ["fund-the-city"]}).json()
+        student = client.post("/api/students", json={"display_name": "Celia"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/fund-the-city/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"solar": 5, "trees": 2, "transit": 3}}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"solar": 3, "trees": 3, "transit": 3}}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": {"solar": 3, "trees": 4, "transit": 3}})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["fund-the-city"]
