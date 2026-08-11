@@ -379,6 +379,17 @@ def complete_module_activity(
             or response != expected
         ):
             raise HTTPException(status_code=422, detail="The submitted molecule is not correct.")
+    if activity.type == "FORCE_LAB":
+        response = data.response
+        forces = activity.content["forces"]
+        if (
+            not isinstance(response, list)
+            or any(type(value) is not int for value in response)
+            or len(response) != len(set(response))
+            or any(value not in forces for value in response)
+            or sum(response) != activity.content["target_resultant"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted forces do not reach the target resultant.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

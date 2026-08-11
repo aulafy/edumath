@@ -13,6 +13,7 @@ const RhythmLab3D = lazy(() => import("./RhythmLab3D").then((module) => ({ defau
 const SentenceLab3D = lazy(() => import("./SentenceLab3D").then((module) => ({ default: module.SentenceLab3D })));
 const OrbitLab3D = lazy(() => import("./OrbitLab3D").then((module) => ({ default: module.OrbitLab3D })));
 const MoleculeLab3D = lazy(() => import("./MoleculeLab3D").then((module) => ({ default: module.MoleculeLab3D })));
+const ForceLab3D = lazy(() => import("./ForceLab3D").then((module) => ({ default: module.ForceLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -31,6 +32,7 @@ type OrbitBody = { id: string; label: string; distance_rank: number; color: stri
 type OrbitLab = { prompt: string; center_label: string; bodies: OrbitBody[]; explanation: string };
 type MoleculeAtom = { symbol: string; label: string; count: number; color: string };
 type MoleculeLab = { prompt: string; molecule_name: string; formula: string; atoms: MoleculeAtom[]; explanation: string };
+type ForceLab = { prompt: string; target_resultant: number; forces: number[]; example_solution: number[]; explanation: string };
 
 function tileMetrics(cells: TileCell[]) {
   const points = new Set(cells.map((cell) => `${cell.row}:${cell.col}`));
@@ -285,6 +287,28 @@ function MoleculeExercise({ content, onSolved }: { content: MoleculeLab; onSolve
   </div>;
 }
 
+function ForceExercise({ content, onSolved }: { content: ForceLab; onSolved: (response: number[]) => void }) {
+  const [selected, setSelected] = useState<number[]>([]);
+  const [checked, setChecked] = useState(false);
+  const resultant = selected.reduce((sum, force) => sum + force, 0);
+  const correct = selected.length > 0 && resultant === content.target_resultant;
+  function toggle(force: number) {
+    setSelected((current) => current.includes(force) ? current.filter((value) => value !== force) : [...current, force]);
+    setChecked(false);
+  }
+  const direction = resultant === 0 ? "Equilibrio" : resultant > 0 ? "Derecha" : "Izquierda";
+  return <div className="interactiveExercise forceExercise">
+    <strong>{content.prompt}</strong>
+    <Suspense fallback={<div className="forceLabScene loadingScene" aria-label="Preparando banco de fuerzas 3D" />}>
+      <ForceLab3D selected={selected} resultant={resultant} />
+    </Suspense>
+    <div className="forceMeters" aria-live="polite"><span><small>Objetivo</small><strong>{content.target_resultant > 0 ? "+" : ""}{content.target_resultant} N</strong></span><span className={correct ? "ready" : ""}><small>Resultante</small><strong>{resultant > 0 ? "+" : ""}{resultant} N</strong></span><span><small>Dirección</small><strong>{direction}</strong></span></div>
+    <div className="forceTray" role="group" aria-label="Fuerzas disponibles">{content.forces.map((force) => <button key={force} className={selected.includes(force) ? "forceChoice selected" : "forceChoice"} aria-pressed={selected.includes(force)} onClick={() => toggle(force)}><span>{force < 0 ? "←" : "→"}</span><strong>{Math.abs(force)} N</strong><small>{force < 0 ? "Izquierda" : "Derecha"}</small></button>)}</div>
+    <button disabled={selected.length === 0} onClick={() => { setChecked(true); if (correct) onSolved(selected); }}><Check /> Medir resultante</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Objetivo conseguido! ${content.explanation}` : `La resultante es ${resultant} N. Activa o retira fuerzas para llegar a ${content.target_resultant} N.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -294,7 +318,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -331,6 +355,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "SENTENCE_LAB" && <SentenceExercise key={activity.id} content={activity.content as SentenceLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "ORBIT_LAB" && <OrbitExercise key={activity.id} content={activity.content as OrbitLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "MOLECULE_LAB" && <MoleculeExercise key={activity.id} content={activity.content as MoleculeLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "FORCE_LAB" && <ForceExercise key={activity.id} content={activity.content as ForceLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

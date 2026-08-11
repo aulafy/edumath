@@ -19,6 +19,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "SENTENCE_LAB": "org.edumath.tests.language-sentence",
             "ORBIT_LAB": "org.edumath.tests.science-orbits",
             "MOLECULE_LAB": "org.edumath.tests.science-molecules",
+            "FORCE_LAB": "org.edumath.tests.physics-forces",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -218,6 +219,23 @@ def make_molecule_activity() -> dict:
                 {"symbol": "O", "label": "Oxygen", "count": 1, "color": "#dd5544"},
             ],
             "explanation": "Water contains two hydrogen atoms and one oxygen atom.",
+        },
+        "evidence": {},
+    }
+
+
+def make_force_activity() -> dict:
+    return {
+        "id": "balance-cart",
+        "type": "FORCE_LAB",
+        "title": "Balance the cart",
+        "instructions": "Select forces to reach zero newtons.",
+        "content": {
+            "prompt": "Build a zero-newton resultant.",
+            "target_resultant": 0,
+            "forces": [-6, -4, 4, 6],
+            "example_solution": [-4, 4],
+            "explanation": "Equal opposite forces have a zero resultant.",
         },
         "evidence": {},
     }
@@ -696,3 +714,34 @@ def test_molecule_lab_requires_exact_integer_composition() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": {"H": 2, "O": 1}})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["build-water"]
+
+
+def test_force_lab_accepts_any_available_combination_with_the_target_sum() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms",
+            json={"name": "4F Science", "stage": "PRIMARY", "grade": 4},
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import",
+            headers=headers,
+            files={"package": ("forces.edumath", make_package(make_force_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments",
+            headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["balance-cart"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Iris"}).json()
+        client.post(
+            f"/api/modules/assignments/{assignment['join_code']}/join",
+            json={"student_id": student["id"]},
+        )
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/balance-cart/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": [-4, 6]}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": [-6, 6]})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["balance-cart"]

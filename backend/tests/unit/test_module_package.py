@@ -311,3 +311,26 @@ def test_molecule_lab_rejects_duplicate_element_symbols() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_force_lab_rejects_an_invalid_example_resultant() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "FORCE_LAB",
+        "content": {
+            "prompt": "Balance the cart.",
+            "target_resultant": 0,
+            "forces": [-5, -2, 3, 5],
+            "example_solution": [-2, 5],
+            "explanation": "The example does not reach zero.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

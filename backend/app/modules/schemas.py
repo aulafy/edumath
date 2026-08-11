@@ -327,6 +327,30 @@ class MoleculeLabContent(BaseModel):
         return self
 
 
+class ForceLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    target_resultant: int = Field(ge=-20, le=20)
+    forces: list[int] = Field(min_length=3, max_length=8)
+    example_solution: list[int] = Field(min_length=1, max_length=8)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_forces(self):
+        if 0 in self.forces:
+            raise ValueError("Available forces cannot be zero.")
+        if len(self.forces) != len(set(self.forces)):
+            raise ValueError("Available forces must be unique.")
+        if any(abs(force) > 20 for force in self.forces):
+            raise ValueError("Available force magnitudes cannot exceed twenty newtons.")
+        if len(self.example_solution) != len(set(self.example_solution)):
+            raise ValueError("The force solution cannot reuse a force.")
+        if any(force not in self.forces for force in self.example_solution):
+            raise ValueError("The force solution must use available forces.")
+        if sum(self.example_solution) != self.target_resultant:
+            raise ValueError("The force solution must reach the target resultant.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -341,6 +365,7 @@ class ModuleActivity(BaseModel):
         "SENTENCE_LAB",
         "ORBIT_LAB",
         "MOLECULE_LAB",
+        "FORCE_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -376,4 +401,6 @@ class ModuleActivity(BaseModel):
             OrbitLabContent.model_validate(self.content)
         elif self.type == "MOLECULE_LAB":
             MoleculeLabContent.model_validate(self.content)
+        elif self.type == "FORCE_LAB":
+            ForceLabContent.model_validate(self.content)
         return self

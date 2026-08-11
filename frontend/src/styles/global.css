@@ -1004,6 +1004,18 @@ select {
   .atomStepper { grid-column: 1 / -1; justify-self: end; }
 }
 
+.forceLabScene { width: 100%; height: clamp(250px, 38vh, 350px); overflow: hidden; border: 1px solid #c5d2cc; border-radius: 8px; background: #eef4ef; }
+.forceLabScene canvas { display: block; width: 100% !important; height: 100% !important; }
+.forceMeters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.forceMeters span { display: grid; min-width: 0; gap: 2px; padding: 9px; border: 1px solid #c8d6cf; border-radius: 8px; background: #f7faf8; text-align: center; }
+.forceMeters span.ready { border-color: #287b63; background: #dff3e9; }
+.forceMeters small { color: #607269; }
+.forceTray { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; }
+.forceChoice { display: grid; min-height: 76px; gap: 1px; border-color: #9aaba2; background: #fff; color: #20342c; }
+.forceChoice > span { font-size: 1.35rem; }
+.forceChoice small { font-size: 0.7rem; }
+.forceChoice.selected { border-color: #287b63; background: #dff3e9; box-shadow: inset 0 -4px 0 #78b9a0; }
+
 @media (max-width: 560px) {
   .rhythmReference {
     align-items: stretch;
