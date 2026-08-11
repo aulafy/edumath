@@ -40,6 +40,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "PUNCTUATION_LAB": "org.edumath.tests.language-punctuation",
             "CIRCULATION_LAB": "org.edumath.tests.biology-circulation",
             "TIMEZONE_LAB": "org.edumath.tests.geography-timezone",
+            "MOVEMENT_SEQUENCE_LAB": "org.edumath.tests.pe-movement",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -537,6 +538,10 @@ def make_timezone_activity() -> dict:
             "explanation": "Twenty plus nine is twenty-nine, or five next day.",
         }, "evidence": {},
     }
+
+
+def make_movement_activity() -> dict:
+    return {"id":"debug-dance","type":"MOVEMENT_SEQUENCE_LAB","title":"Debug dance","instructions":"Replace the wrong command.","content":{"prompt":"Build an alternating pattern.","target_sequence":["STEP","CLAP","STEP","CLAP"],"initial_sequence":["STEP","STEP","CLAP","CLAP"],"seated_alternative":"Lift one knee for each step.","explanation":"Order changes the program."},"evidence":{}}
 
 
 def test_create_student_and_session() -> None:
@@ -1503,3 +1508,17 @@ def test_timezone_lab_requires_the_exact_strict_offset() -> None:
         assert client.post(endpoint, json={"student_id": student["id"], "response": True}).status_code == 422
         completed = client.post(endpoint, json={"student_id": student["id"], "response": 9})
         assert completed.status_code == 200
+
+
+def test_movement_sequence_lab_requires_exact_order() -> None:
+    with TestClient(app) as client:
+        classroom = client.post("/api/teacher/classrooms", json={"name": "Movement test", "stage": "PRIMARY", "grade": 4}).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post("/api/modules/import", headers=headers, files={"package": ("move.edumath", make_package(make_movement_activity()), "application/zip")})
+        assert imported.status_code == 200
+        assignment = client.post(f"/api/modules/{imported.json()['id']}/assignments", headers=headers, json={"classroom_id": classroom["id"], "activity_ids": ["debug-dance"]}).json()
+        student = client.post("/api/students", json={"display_name": "Mara"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/debug-dance/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": ["STEP", "STEP", "CLAP", "CLAP"]}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": ["STEP", "CLAP", "STEP", "CLAP"]}).status_code == 200

@@ -178,6 +178,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 
 `TIMEZONE_LAB` declares a UTC hour, an integer offset from −11 to +12, a target local hour, and a day shift of −1, 0, or +1. Package validation recomputes both modulo-24 time and day crossing. The runner synchronises a globe marker, signed equation, 24-hour clock, and previous/same/next-day label. Content must clarify that real civil time includes fractional offsets and daylight-saving changes.
 
+`MOVEMENT_SEQUENCE_LAB` declares target and initial programs of four to six commands chosen from `STEP`, `CLAP`, `TURN_LEFT`, `TURN_RIGHT`, and `JUMP`. Both programs must have equal lengths and differ. The runner supports slot-by-slot debugging, animated playback, keyboard operation, and a declared seated alternative. No camera or body measurement is used; the backend validates only the exact command order.
+
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.

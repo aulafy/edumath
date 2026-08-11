@@ -34,6 +34,7 @@ const BinarySignalLab3D = lazy(() => import("./BinarySignalLab3D").then((module)
 const PunctuationLab3D = lazy(() => import("./PunctuationLab3D").then((module) => ({ default: module.PunctuationLab3D })));
 const CirculationLab3D = lazy(() => import("./CirculationLab3D").then((module) => ({ default: module.CirculationLab3D })));
 const TimezoneLab3D = lazy(() => import("./TimezoneLab3D").then((module) => ({ default: module.TimezoneLab3D })));
+const MovementSequenceLab3D = lazy(() => import("./MovementSequenceLab3D").then((module) => ({ default: module.MovementSequenceLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -90,6 +91,8 @@ type PunctuationLab = { prompt: string; parts: string[]; target_marks: Punctuati
 type CirculationStation = "RIGHT_HEART" | "LUNGS" | "LEFT_HEART" | "BODY";
 type CirculationLab = { prompt: string; circuit: "PULMONARY" | "SYSTEMIC" | "DOUBLE"; target_route: CirculationStation[]; explanation: string };
 type TimezoneLab = { prompt: string; utc_hour: number; target_local_hour: number; target_day_shift: -1 | 0 | 1; target_offset: number; initial_offset: number; destination_label: string; explanation: string };
+type MovementCommand = "STEP" | "CLAP" | "TURN_LEFT" | "TURN_RIGHT" | "JUMP";
+type MovementSequenceLab = { prompt: string; target_sequence: MovementCommand[]; initial_sequence: MovementCommand[]; seated_alternative: string; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -918,6 +921,28 @@ function TimezoneExercise({ content, onSolved }: { content: TimezoneLab; onSolve
   </div>;
 }
 
+const movementLabels: Record<MovementCommand, string> = { STEP: "Paso", CLAP: "Palmada", TURN_LEFT: "Giro izquierda", TURN_RIGHT: "Giro derecha", JUMP: "Salto" };
+
+function MovementSequenceExercise({ content, onSolved }: { content: MovementSequenceLab; onSolved: (response: MovementCommand[]) => void }) {
+  const [sequence, setSequence] = useState<MovementCommand[]>(content.initial_sequence);
+  const [selected, setSelected] = useState(0);
+  const [active, setActive] = useState<number | null>(null);
+  const [checked, setChecked] = useState(false);
+  const correct = sequence.every((command, index) => command === content.target_sequence[index]);
+  async function play() { if (active !== null) return; for (let index = 0; index < sequence.length; index += 1) { setActive(index); await new Promise((resolve) => window.setTimeout(resolve, 650)); } setActive(null); }
+  return <div className="interactiveExercise movementExercise">
+    <strong>{content.prompt}</strong>
+    <Suspense fallback={<div className="movementScene loadingScene" aria-label="Preparando avatar 3D" />}><MovementSequenceLab3D command={active === null ? null : sequence[active]} /></Suspense>
+    <div className="movementProgram" role="listbox" aria-label="Programa de movimiento">{sequence.map((command, index) => <button key={index} className={`${selected === index ? "selected" : "secondary"} ${active === index ? "playing" : ""}`} aria-selected={selected === index} onClick={() => setSelected(index)}><small>{index + 1}</small><strong>{movementLabels[command]}</strong></button>)}</div>
+    <div className="movementTray" role="group" aria-label={`Sustituir instrucción ${selected + 1}`}>{(Object.keys(movementLabels) as MovementCommand[]).map((command) => <button key={command} className="secondary" onClick={() => { setSequence((current) => current.map((item, index) => index === selected ? command : item)); setChecked(false); }}>{movementLabels[command]}</button>)}</div>
+    <button className="secondary" disabled={active !== null} onClick={() => void play()}><Play />{active === null ? "Ejecutar programa" : `Movimiento ${active + 1}`}</button>
+    <p className="movementAlternative"><strong>Alternativa sentada:</strong> {content.seated_alternative}</p>
+    <p className="modelBoundary">Actividad sin cámara ni puntuación corporal. Deja un metro libre, muévete sin correr y usa la alternativa sentada o un gesto de brazos en lugar del salto siempre que lo necesites.</p>
+    <button onClick={() => { setChecked(true); if (correct) onSolved(sequence); }}><Check /> Depurar coreografía</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Programa listo! ${content.explanation}` : "El orden todavía cambia la coreografía. Compara posición por posición y corrige la primera instrucción diferente."}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -927,7 +952,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB" || activity.type === "CITY_BUDGET_LAB" || activity.type === "BINARY_SIGNAL_LAB" || activity.type === "PUNCTUATION_LAB" || activity.type === "CIRCULATION_LAB" || activity.type === "TIMEZONE_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB" || activity.type === "CITY_BUDGET_LAB" || activity.type === "BINARY_SIGNAL_LAB" || activity.type === "PUNCTUATION_LAB" || activity.type === "CIRCULATION_LAB" || activity.type === "TIMEZONE_LAB" || activity.type === "MOVEMENT_SEQUENCE_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -985,6 +1010,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "PUNCTUATION_LAB" && <PunctuationExercise key={activity.id} content={activity.content as PunctuationLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "CIRCULATION_LAB" && <CirculationExercise key={activity.id} content={activity.content as CirculationLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "TIMEZONE_LAB" && <TimezoneExercise key={activity.id} content={activity.content as TimezoneLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "MOVEMENT_SEQUENCE_LAB" && <MovementSequenceExercise key={activity.id} content={activity.content as MovementSequenceLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

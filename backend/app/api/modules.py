@@ -609,6 +609,14 @@ def complete_module_activity(
         response = data.response
         if type(response) is not int or response != activity.content["target_offset"]:
             raise HTTPException(status_code=422, detail="The submitted UTC offset does not produce the target local time.")
+    if activity.type == "MOVEMENT_SEQUENCE_LAB":
+        response = data.response
+        if (
+            not isinstance(response, list)
+            or any(not isinstance(command, str) for command in response)
+            or response != activity.content["target_sequence"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted movement program does not match the choreography.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

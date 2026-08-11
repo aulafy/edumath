@@ -903,6 +903,25 @@ class TimezoneLabContent(BaseModel):
         return self
 
 
+MovementCommand = Literal["STEP", "CLAP", "TURN_LEFT", "TURN_RIGHT", "JUMP"]
+
+
+class MovementSequenceLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    target_sequence: list[MovementCommand] = Field(min_length=4, max_length=6)
+    initial_sequence: list[MovementCommand] = Field(min_length=4, max_length=6)
+    seated_alternative: str = Field(min_length=3, max_length=300)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_movement_sequence(self):
+        if len(self.target_sequence) != len(self.initial_sequence):
+            raise ValueError("Movement target and initial programs must have equal lengths.")
+        if self.target_sequence == self.initial_sequence:
+            raise ValueError("The initial movement program must contain a bug.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -938,6 +957,7 @@ class ModuleActivity(BaseModel):
         "PUNCTUATION_LAB",
         "CIRCULATION_LAB",
         "TIMEZONE_LAB",
+        "MOVEMENT_SEQUENCE_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -1015,4 +1035,6 @@ class ModuleActivity(BaseModel):
             CirculationLabContent.model_validate(self.content)
         elif self.type == "TIMEZONE_LAB":
             TimezoneLabContent.model_validate(self.content)
+        elif self.type == "MOVEMENT_SEQUENCE_LAB":
+            MovementSequenceLabContent.model_validate(self.content)
         return self
