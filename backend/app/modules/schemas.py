@@ -279,6 +279,30 @@ class SentenceLabContent(BaseModel):
         return self
 
 
+class OrbitBody(BaseModel):
+    id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=80)
+    label: str = Field(min_length=1, max_length=60)
+    distance_rank: int = Field(ge=1, le=8)
+    color: str = Field(pattern=r"^#[0-9a-fA-F]{6}$")
+
+
+class OrbitLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    center_label: str = Field(min_length=1, max_length=60)
+    bodies: list[OrbitBody] = Field(min_length=4, max_length=8)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_orbits(self):
+        ids = [body.id for body in self.bodies]
+        ranks = [body.distance_rank for body in self.bodies]
+        if len(ids) != len(set(ids)):
+            raise ValueError("Orbit body IDs must be unique.")
+        if sorted(ranks) != list(range(1, len(self.bodies) + 1)):
+            raise ValueError("Orbit ranks must form a complete sequence starting at one.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -291,6 +315,7 @@ class ModuleActivity(BaseModel):
         "FOOD_WEB_LAB",
         "RHYTHM_LAB",
         "SENTENCE_LAB",
+        "ORBIT_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -322,4 +347,6 @@ class ModuleActivity(BaseModel):
             RhythmLabContent.model_validate(self.content)
         elif self.type == "SENTENCE_LAB":
             SentenceLabContent.model_validate(self.content)
+        elif self.type == "ORBIT_LAB":
+            OrbitLabContent.model_validate(self.content)
         return self

@@ -365,6 +365,11 @@ def complete_module_activity(
             or response != activity.content["target_order"]
         ):
             raise HTTPException(status_code=422, detail="The submitted sentence is not correct.")
+    if activity.type == "ORBIT_LAB":
+        bodies = activity.content["bodies"]
+        expected = [body["id"] for body in sorted(bodies, key=lambda body: body["distance_rank"])]
+        if data.response != expected:
+            raise HTTPException(status_code=422, detail="The submitted orbit order is not correct.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

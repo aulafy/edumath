@@ -17,6 +17,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "FOOD_WEB_LAB": "org.edumath.tests.science-food-web",
             "RHYTHM_LAB": "org.edumath.tests.music-rhythm",
             "SENTENCE_LAB": "org.edumath.tests.language-sentence",
+            "ORBIT_LAB": "org.edumath.tests.science-orbits",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -175,6 +176,27 @@ def make_sentence_activity() -> dict:
             ],
             "target_order": ["the-team", "reads", "a-story", "today"],
             "explanation": "The subject comes before this predicate.",
+        },
+        "evidence": {},
+    }
+
+
+def make_orbit_activity() -> dict:
+    return {
+        "id": "rocky-planets",
+        "type": "ORBIT_LAB",
+        "title": "Rocky planets",
+        "instructions": "Place planets from the Sun outwards.",
+        "content": {
+            "prompt": "Order the rocky planets.",
+            "center_label": "Sun",
+            "bodies": [
+                {"id": "earth", "label": "Earth", "distance_rank": 3, "color": "#3f83c5"},
+                {"id": "mercury", "label": "Mercury", "distance_rank": 1, "color": "#9f978d"},
+                {"id": "mars", "label": "Mars", "distance_rank": 4, "color": "#c85f3d"},
+                {"id": "venus", "label": "Venus", "distance_rank": 2, "color": "#d9a84d"},
+            ],
+            "explanation": "Mercury, Venus, Earth, and Mars are ordered from the Sun.",
         },
         "evidence": {},
     }
@@ -588,3 +610,36 @@ def test_sentence_lab_requires_the_exact_token_order() -> None:
         )
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["build-library-sentence"]
+
+
+def test_orbit_lab_requires_inside_to_outside_order() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms",
+            json={"name": "4D Science", "stage": "PRIMARY", "grade": 4},
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import",
+            headers=headers,
+            files={"package": ("orbits.edumath", make_package(make_orbit_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments",
+            headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["rocky-planets"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Sol"}).json()
+        client.post(
+            f"/api/modules/assignments/{assignment['join_code']}/join",
+            json={"student_id": student["id"]},
+        )
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/rocky-planets/complete"
+        wrong = ["earth", "mercury", "venus", "mars"]
+        assert client.post(endpoint, json={"student_id": student["id"], "response": wrong}).status_code == 422
+        correct = ["mercury", "venus", "earth", "mars"]
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": correct})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["rocky-planets"]

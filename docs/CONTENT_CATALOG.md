@@ -15,11 +15,12 @@ EduMath keeps its editable learning-content source in `content/open_modules.v1.j
 | Primary | 4-5 | Knowledge of the Environment | Ecosystems of connections |
 | Primary | 2-4 | Art Education | The rhythm factory |
 | Primary | 4 | Spanish Language and Literature | Sentences in orbit |
+| Primary | 5-6 | Knowledge of the Environment | The distance observatory |
 | Primary | 5 | Spanish Language and Literature | The word laboratory |
 | ESO | 1 | Geography and History | Journey through Prehistory |
 | ESO | 2 | Physics and Chemistry | Forces in motion |
 
-The hand-maintained catalog currently contains 36 activities. Model-generated Primary drafts live separately in `content/generated/primary/` and are counted by the coverage report. Closed questions, classification challenges, balance laboratories, mosaic workshops, time paths, food-web laboratories, rhythm sequencers, and sentence laboratories are interactive and checked by the backend before completion is recorded. Selected modules also contain declarative WebGL scenes.
+The hand-maintained catalog currently contains 39 activities. Model-generated Primary drafts live separately in `content/generated/primary/` and are counted by the coverage report. Closed questions, classification challenges, balance laboratories, mosaic workshops, time paths, food-web laboratories, rhythm sequencers, sentence laboratories, and orbital observatories are interactive and checked by the backend before completion is recorded. Selected modules also contain declarative WebGL scenes.
 
 ## Model-assisted drafting
 

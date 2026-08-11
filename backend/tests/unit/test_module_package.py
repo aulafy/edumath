@@ -258,3 +258,30 @@ def test_sentence_lab_rejects_an_order_that_omits_a_token() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_orbit_lab_rejects_a_gap_in_distance_ranks() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "ORBIT_LAB",
+        "content": {
+            "prompt": "Place the bodies in orbit.",
+            "center_label": "Star",
+            "bodies": [
+                {"id": "a", "label": "A", "distance_rank": 1, "color": "#ffcc00"},
+                {"id": "b", "label": "B", "distance_rank": 2, "color": "#00aacc"},
+                {"id": "c", "label": "C", "distance_rank": 4, "color": "#cc4400"},
+                {"id": "d", "label": "D", "distance_rank": 5, "color": "#88aa44"},
+            ],
+            "explanation": "Ranks must not skip an orbit.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())
