@@ -597,6 +597,14 @@ def complete_module_activity(
             or response != activity.content["target_marks"]
         ):
             raise HTTPException(status_code=422, detail="The submitted punctuation does not reconstruct the sentence.")
+    if activity.type == "CIRCULATION_LAB":
+        response = data.response
+        if (
+            not isinstance(response, list)
+            or any(not isinstance(station, str) for station in response)
+            or response != activity.content["target_route"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted blood route does not match the target circuit.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

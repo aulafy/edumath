@@ -864,6 +864,24 @@ class PunctuationLabContent(BaseModel):
         return self
 
 
+class CirculationLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    circuit: Literal["PULMONARY", "SYSTEMIC", "DOUBLE"]
+    target_route: list[Literal["RIGHT_HEART", "LUNGS", "LEFT_HEART", "BODY"]] = Field(min_length=3, max_length=5)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_circulation(self):
+        expected = {
+            "PULMONARY": ["RIGHT_HEART", "LUNGS", "LEFT_HEART"],
+            "SYSTEMIC": ["LEFT_HEART", "BODY", "RIGHT_HEART"],
+            "DOUBLE": ["RIGHT_HEART", "LUNGS", "LEFT_HEART", "BODY", "RIGHT_HEART"],
+        }[self.circuit]
+        if self.target_route != expected:
+            raise ValueError("The circulation route must match its canonical circuit.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -897,6 +915,7 @@ class ModuleActivity(BaseModel):
         "CITY_BUDGET_LAB",
         "BINARY_SIGNAL_LAB",
         "PUNCTUATION_LAB",
+        "CIRCULATION_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -970,4 +989,6 @@ class ModuleActivity(BaseModel):
             BinarySignalLabContent.model_validate(self.content)
         elif self.type == "PUNCTUATION_LAB":
             PunctuationLabContent.model_validate(self.content)
+        elif self.type == "CIRCULATION_LAB":
+            CirculationLabContent.model_validate(self.content)
         return self

@@ -174,6 +174,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 
 `PUNCTUATION_LAB` declares two to four sentence parts and one mark after each part, chosen from `NONE`, `COMMA`, `COLON`, and `PERIOD`. The target must end in a period and must render the declared full sentence exactly; package validation rejects mismatched parts, marks, or text. The runner combines selectable marks, a live sentence, a 3D pause score, and optional local TTS with browser fallback. Audio is never required, and the backend accepts only the complete canonical mark sequence.
 
+`CIRCULATION_LAB` declares one canonical circuit (`PULMONARY`, `SYSTEMIC`, or `DOUBLE`) and its ordered conceptual stations. Package validation rejects routes that disagree with the selected circuit. The runner lets learners build a path through right heart, lungs, left heart, and body while reporting the current oxygen state in text and a 3D model. Content must state that the four-station model omits anatomical detail and must not teach artery/vein names as a fixed oxygen rule.
+
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.

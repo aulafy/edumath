@@ -32,6 +32,7 @@ const ShadowViewLab3D = lazy(() => import("./ShadowViewLab3D").then((module) => 
 const CityBudgetLab3D = lazy(() => import("./CityBudgetLab3D").then((module) => ({ default: module.CityBudgetLab3D })));
 const BinarySignalLab3D = lazy(() => import("./BinarySignalLab3D").then((module) => ({ default: module.BinarySignalLab3D })));
 const PunctuationLab3D = lazy(() => import("./PunctuationLab3D").then((module) => ({ default: module.PunctuationLab3D })));
+const CirculationLab3D = lazy(() => import("./CirculationLab3D").then((module) => ({ default: module.CirculationLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -85,6 +86,8 @@ type BinaryBit = 0 | 1;
 type BinarySignalLab = { prompt: string; target_value: number; target_bits: BinaryBit[]; initial_bits: BinaryBit[]; message_label: string; explanation: string };
 type PunctuationMark = "NONE" | "COMMA" | "COLON" | "PERIOD";
 type PunctuationLab = { prompt: string; parts: string[]; target_marks: PunctuationMark[]; initial_marks: PunctuationMark[]; full_sentence: string; explanation: string };
+type CirculationStation = "RIGHT_HEART" | "LUNGS" | "LEFT_HEART" | "BODY";
+type CirculationLab = { prompt: string; circuit: "PULMONARY" | "SYSTEMIC" | "DOUBLE"; target_route: CirculationStation[]; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -869,6 +872,29 @@ function PunctuationExercise({ content, onSolved }: { content: PunctuationLab; o
   </div>;
 }
 
+const circulationLabels: Record<CirculationStation, string> = { RIGHT_HEART: "Corazón derecho", LUNGS: "Pulmones", LEFT_HEART: "Corazón izquierdo", BODY: "Cuerpo" };
+
+function CirculationExercise({ content, onSolved }: { content: CirculationLab; onSolved: (response: CirculationStation[]) => void }) {
+  const [route, setRoute] = useState<CirculationStation[]>([]);
+  const [checked, setChecked] = useState(false);
+  const current = route.at(-1) ?? null;
+  let oxygenRich = current === "LEFT_HEART";
+  for (const station of route) { if (station === "LUNGS") oxygenRich = true; if (station === "BODY") oxygenRich = false; if (route.length === 1 && station === "RIGHT_HEART") oxygenRich = false; }
+  const correct = route.length === content.target_route.length && route.every((station, index) => station === content.target_route[index]);
+  const add = (station: CirculationStation) => { if (route.length < content.target_route.length) setRoute((currentRoute) => [...currentRoute, station]); setChecked(false); };
+  return <div className="interactiveExercise circulationExercise">
+    <strong>{content.prompt}</strong>
+    <Suspense fallback={<div className="circulationScene loadingScene" aria-label="Preparando circulación 3D" />}><CirculationLab3D station={current} oxygenRich={oxygenRich} /></Suspense>
+    <div className="oxygenReadout" aria-live="polite"><span>Estado de la viajera</span><strong>{current ? `${circulationLabels[current]} · ${oxygenRich ? "rica en oxígeno" : "pobre en oxígeno"}` : "Elige la estación de salida"}</strong></div>
+    <div className="circulationStations" role="group" aria-label="Estaciones de la circulación">{(Object.keys(circulationLabels) as CirculationStation[]).map((station) => <button key={station} className="secondary" disabled={route.length >= content.target_route.length} onClick={() => add(station)}>{circulationLabels[station]}</button>)}</div>
+    <div className="circulationRoute" aria-label="Ruta construida">{route.length ? route.map((station, index) => <span key={`${station}-${index}`}><small>{index + 1}</small><strong>{circulationLabels[station]}</strong></span>) : <p>La ruta está vacía</p>}</div>
+    <button className="secondary" disabled={route.length === 0} onClick={() => { setRoute((currentRoute) => currentRoute.slice(0, -1)); setChecked(false); }}><Undo2 /> Deshacer última estación</button>
+    <p className="modelBoundary">Modelo conceptual de cuatro estaciones: omite vasos, válvulas, capilares, cámaras y tiempos reales. Las arterias y venas se nombran por la dirección del flujo, no porque siempre lleven un estado fijo de oxígeno.</p>
+    <button disabled={route.length !== content.target_route.length} onClick={() => { setChecked(true); if (correct) onSolved(route); }}><Check /> Comprobar recorrido</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Circuito completado! ${content.explanation}` : "La viajera no puede saltar estaciones. Deshaz desde el final y reconstruye el recorrido siguiendo el bombeo y el intercambio de oxígeno."}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -878,7 +904,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB" || activity.type === "CITY_BUDGET_LAB" || activity.type === "BINARY_SIGNAL_LAB" || activity.type === "PUNCTUATION_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB" || activity.type === "CITY_BUDGET_LAB" || activity.type === "BINARY_SIGNAL_LAB" || activity.type === "PUNCTUATION_LAB" || activity.type === "CIRCULATION_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -934,6 +960,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "CITY_BUDGET_LAB" && <CityBudgetExercise key={activity.id} content={activity.content as CityBudgetLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "BINARY_SIGNAL_LAB" && <BinarySignalExercise key={activity.id} content={activity.content as BinarySignalLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "PUNCTUATION_LAB" && <PunctuationExercise key={activity.id} content={activity.content as PunctuationLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "CIRCULATION_LAB" && <CirculationExercise key={activity.id} content={activity.content as CirculationLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

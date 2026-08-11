@@ -38,6 +38,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "CITY_BUDGET_LAB": "org.edumath.tests.civic-city-budget",
             "BINARY_SIGNAL_LAB": "org.edumath.tests.technology-binary-signal",
             "PUNCTUATION_LAB": "org.edumath.tests.language-punctuation",
+            "CIRCULATION_LAB": "org.edumath.tests.biology-circulation",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -509,6 +510,18 @@ def make_punctuation_activity() -> dict:
             "initial_marks": ["NONE", "COMMA", "PERIOD"],
             "full_sentence": "Traigo lápices, papel y goma.",
             "explanation": "A simple Spanish list has no comma before y.",
+        }, "evidence": {},
+    }
+
+
+def make_circulation_activity() -> dict:
+    return {
+        "id": "pulmonary-route", "type": "CIRCULATION_LAB",
+        "title": "Pulmonary route", "instructions": "Choose stations in order.",
+        "content": {
+            "prompt": "Build the pulmonary circuit.", "circuit": "PULMONARY",
+            "target_route": ["RIGHT_HEART", "LUNGS", "LEFT_HEART"],
+            "explanation": "Blood gains oxygen in the lungs before reaching the left heart.",
         }, "evidence": {},
     }
 
@@ -1445,3 +1458,19 @@ def test_punctuation_lab_requires_the_complete_mark_sequence() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": ["COMMA", "NONE", "PERIOD"]})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["punctuate-list"]
+
+
+def test_circulation_lab_requires_the_canonical_station_route() -> None:
+    with TestClient(app) as client:
+        classroom = client.post("/api/teacher/classrooms", json={"name": "Circulation test", "stage": "PRIMARY", "grade": 4}).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post("/api/modules/import", headers=headers, files={"package": ("circulation.edumath", make_package(make_circulation_activity()), "application/zip")})
+        assert imported.status_code == 200
+        assignment = client.post(f"/api/modules/{imported.json()['id']}/assignments", headers=headers, json={"classroom_id": classroom["id"], "activity_ids": ["pulmonary-route"]}).json()
+        student = client.post("/api/students", json={"display_name": "Cora"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/pulmonary-route/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": ["RIGHT_HEART", "LEFT_HEART", "LUNGS"]}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": ["RIGHT_HEART", "LUNGS", "LEFT_HEART"]})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["pulmonary-route"]
