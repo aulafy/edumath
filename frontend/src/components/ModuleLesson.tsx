@@ -5,9 +5,11 @@ import type { ModuleAssignment, Student } from "../types/contracts";
 import { contentLabel, subjectLabel } from "../utils/labels";
 
 const LearningScene3D = lazy(() => import("./LearningScene3D").then((module) => ({ default: module.LearningScene3D })));
+const BalanceLab3D = lazy(() => import("./BalanceLab3D").then((module) => ({ default: module.BalanceLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
+type BalanceLab = { prompt: string; left_value: number; weights: number[]; example_solution: number[]; explanation: string };
 
 function ContentValue({ value }: { value: unknown }) {
   if (Array.isArray(value)) return <ul>{value.map((item, index) => <li key={index}>{String(item)}</li>)}</ul>;
@@ -43,6 +45,27 @@ function ClassificationExercise({ content, onSolved }: { content: Classification
   </div>;
 }
 
+function BalanceLabExercise({ content, onSolved }: { content: BalanceLab; onSolved: (response: number[]) => void }) {
+  const [selected, setSelected] = useState<number[]>([]);
+  const [checked, setChecked] = useState(false);
+  const total = selected.reduce((sum, value) => sum + value, 0);
+  const correct = total === content.left_value;
+  function toggle(weight: number) {
+    setSelected((current) => current.includes(weight) ? current.filter((value) => value !== weight) : [...current, weight]);
+    setChecked(false);
+  }
+  return <div className="interactiveExercise balanceExercise">
+    <strong>{content.prompt}</strong>
+    <Suspense fallback={<div className="balanceLabScene loadingScene" aria-label="Preparando laboratorio 3D" />}>
+      <BalanceLab3D leftValue={content.left_value} rightValue={total} />
+    </Suspense>
+    <div className="balanceReadout" aria-live="polite"><span>{content.left_value}</span><strong>{correct ? "=" : total < content.left_value ? ">" : "<"}</strong><span>{total}</span></div>
+    <div className="weightTray" aria-label="Pesas disponibles">{content.weights.map((weight) => <button key={weight} className={selected.includes(weight) ? "weightButton selected" : "weightButton"} aria-pressed={selected.includes(weight)} onClick={() => toggle(weight)}><span>{weight}</span> kg</button>)}</div>
+    <button disabled={selected.length === 0} onClick={() => { setChecked(true); if (correct) onSolved(selected); }}><Check /> Comprobar equilibrio</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Equilibrio conseguido! ${content.explanation}` : total < content.left_value ? `Faltan ${content.left_value - total}. Prueba a añadir otra pesa.` : `Sobran ${total - content.left_value}. Retira o cambia alguna pesa.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -52,7 +75,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -81,6 +104,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         <p className="activityInstructions">{activity.instructions}</p>
         {activity.type === "CLOSED_QUESTION" && <ClosedQuestionExercise key={activity.id} content={activity.content as ClosedQuestion} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "CLASSIFICATION" && <ClassificationExercise key={activity.id} content={activity.content as Classification} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "BALANCE_LAB" && <BalanceLabExercise key={activity.id} content={activity.content as BalanceLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

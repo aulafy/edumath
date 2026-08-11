@@ -637,6 +637,64 @@ select {
   cursor: grabbing;
 }
 
+.balanceLabScene {
+  width: 100%;
+  height: clamp(240px, 36vh, 340px);
+  overflow: hidden;
+  border: 1px solid #b9d8ca;
+  border-radius: 8px;
+  background: #e8f6ef;
+}
+
+.balanceLabScene canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.balanceReadout {
+  display: grid;
+  grid-template-columns: 1fr 48px 1fr;
+  align-items: center;
+  max-width: 360px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.balanceReadout span {
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+.balanceReadout strong {
+  color: #287b63;
+  font-size: 1.6rem;
+}
+
+.weightTray {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(76px, 1fr));
+  gap: 10px;
+}
+
+.weightButton {
+  min-height: 64px;
+  border-color: #b2c7bd;
+  background: #f5faf7;
+  color: #20342c;
+}
+
+.weightButton span {
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
+.weightButton.selected {
+  border-color: #287b63;
+  background: #dff2e7;
+  box-shadow: inset 0 -4px 0 #9bcbb8;
+}
+
 .sceneHotspot {
   position: absolute;
   left: 50%;

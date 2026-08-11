@@ -86,3 +86,30 @@ def test_closed_question_requires_an_available_correct_option() -> None:
             )
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_balance_lab_requires_a_valid_example_solution() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update(
+        {
+            "type": "BALANCE_LAB",
+            "content": {
+                "prompt": "Balance twelve kilograms.",
+                "left_value": 12,
+                "weights": [2, 3, 5, 7],
+                "example_solution": [3, 7],
+                "explanation": "Both sides must have the same value.",
+            },
+        }
+    )
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(
+                name, json.dumps(activity) if name.endswith("observe.json") else content
+            )
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

@@ -36,7 +36,7 @@ class ModuleJoinRequest(BaseModel):
 
 class ActivityCompleteRequest(BaseModel):
     student_id: str
-    response: str | dict | None = None
+    response: str | dict | list[int] | None = None
 
 
 def _require_known_teacher(db: Session, teacher_key: str | None) -> None:
@@ -307,6 +307,16 @@ def complete_module_activity(
             raise HTTPException(
                 status_code=422, detail="The submitted classification is not correct."
             )
+    if activity.type == "BALANCE_LAB":
+        weights = activity.content["weights"]
+        if (
+            not isinstance(data.response, list)
+            or any(type(value) is not int for value in data.response)
+            or len(data.response) != len(set(data.response))
+            or any(value not in weights for value in data.response)
+            or sum(data.response) != activity.content["left_value"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted weights do not balance.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

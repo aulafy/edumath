@@ -50,9 +50,21 @@ assets/
 
 ## Activities
 
-Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructions`, `content`, and `evidence`. Version 1.0 supports `EXPLANATION`, `CLOSED_QUESTION`, `OPEN_QUESTION`, `CLASSIFICATION`, `TIMELINE`, `MAP`, `SIMULATION`, `GUIDED_EXPERIMENT`, `READING`, `WRITING`, and `ASSESSMENT`.
+Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructions`, `content`, and `evidence`. Version 1.0 supports `EXPLANATION`, `CLOSED_QUESTION`, `OPEN_QUESTION`, `CLASSIFICATION`, `BALANCE_LAB`, `TIMELINE`, `MAP`, `SIMULATION`, `GUIDED_EXPERIMENT`, `READING`, `WRITING`, and `ASSESSMENT`.
 
-`CLOSED_QUESTION` and `CLASSIFICATION` are interactive in the learner runner. Their solutions are schema-validated on import and checked again by the backend before progress is recorded. The browser provides immediate feedback, but it is not authoritative.
+`CLOSED_QUESTION`, `CLASSIFICATION`, and `BALANCE_LAB` are interactive in the learner runner. Their solutions are schema-validated on import and checked again by the backend before progress is recorded. The browser provides immediate feedback, but it is not authoritative.
+
+`BALANCE_LAB` turns additive decomposition into direct manipulation. Its content declares a positive `left_value`, two to eight unique positive `weights`, one valid `example_solution`, and a short explanation. The learner may discover any non-repeating combination of the declared weights that reaches the target; the example is a validation witness, not the only accepted answer. Trusted EduMath code renders and grades the 3D balance.
+
+```json
+{
+  "prompt": "Build 12 kg on the empty tray.",
+  "left_value": 12,
+  "weights": [2, 3, 4, 5, 7],
+  "example_solution": [5, 7],
+  "explanation": "5 + 7 = 12, so both sides are equal."
+}
+```
 
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 

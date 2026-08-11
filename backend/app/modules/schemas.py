@@ -101,6 +101,28 @@ class ClassificationContent(BaseModel):
         return self
 
 
+class BalanceLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    left_value: int = Field(ge=1, le=100)
+    weights: list[int] = Field(min_length=2, max_length=8)
+    example_solution: list[int] = Field(min_length=1, max_length=8)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_balance(self):
+        if len(self.weights) != len(set(self.weights)):
+            raise ValueError("Balance-lab weights must be unique.")
+        if any(weight < 1 or weight > 100 for weight in self.weights):
+            raise ValueError("Balance-lab weights must be between 1 and 100.")
+        if any(weight not in self.weights for weight in self.example_solution):
+            raise ValueError("The example solution must use available weights.")
+        if len(self.example_solution) != len(set(self.example_solution)):
+            raise ValueError("The example solution cannot reuse a weight.")
+        if sum(self.example_solution) != self.left_value:
+            raise ValueError("The example solution must balance the left value.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -108,6 +130,7 @@ class ModuleActivity(BaseModel):
         "CLOSED_QUESTION",
         "OPEN_QUESTION",
         "CLASSIFICATION",
+        "BALANCE_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -127,4 +150,6 @@ class ModuleActivity(BaseModel):
             ClosedQuestionContent.model_validate(self.content)
         elif self.type == "CLASSIFICATION":
             ClassificationContent.model_validate(self.content)
+        elif self.type == "BALANCE_LAB":
+            BalanceLabContent.model_validate(self.content)
         return self

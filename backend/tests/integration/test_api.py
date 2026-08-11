@@ -6,11 +6,15 @@ from app.main import app
 from fastapi.testclient import TestClient
 
 
-def make_package() -> bytes:
+def make_package(custom_activity: dict | None = None) -> bytes:
     manifest = {
         "format": "EDUMODULE",
         "format_version": "1.0",
-        "id": "org.edumath.tests.science-plants",
+        "id": (
+            "org.edumath.tests.math-balance"
+            if custom_activity
+            else "org.edumath.tests.science-plants"
+        ),
         "version": "1.0.0",
         "title": "How plants grow",
         "summary": "A guided Primary Science investigation about plant growth.",
@@ -30,7 +34,7 @@ def make_package() -> bytes:
         "activity_files": ["activities/observe.json"],
         "created_at": "2026-08-11T10:00:00Z",
     }
-    activity = {
+    activity = custom_activity or {
         "id": "observe-seedling",
         "type": "GUIDED_EXPERIMENT",
         "title": "Observe a seedling",
@@ -46,6 +50,23 @@ def make_package() -> bytes:
         for name, content in files.items():
             archive.writestr(ZipInfo(name, date_time=(2026, 8, 11, 0, 0, 0)), content)
     return buffer.getvalue()
+
+
+def make_balance_activity() -> dict:
+    return {
+        "id": "balance-twelve",
+        "type": "BALANCE_LAB",
+        "title": "Balance twelve",
+        "instructions": "Choose weights until both sides are equal.",
+        "content": {
+            "prompt": "Build 12 kilograms on the empty tray.",
+            "left_value": 12,
+            "weights": [2, 3, 5, 7],
+            "example_solution": [5, 7],
+            "explanation": "Five plus seven equals twelve.",
+        },
+        "evidence": {},
+    }
 
 
 def test_create_student_and_session() -> None:
@@ -234,3 +255,44 @@ def test_module_assignment_must_match_class_grade() -> None:
             json={"classroom_id": classroom["id"], "activity_ids": ["observe-seedling"]},
         )
         assert response.status_code == 422
+
+
+def test_balance_lab_is_verified_by_the_server() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms",
+            json={"name": "3A Mathematics", "stage": "PRIMARY", "grade": 3},
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        module = client.post(
+            "/api/modules/import",
+            headers=headers,
+            files={
+                "package": (
+                    "balance.edumath",
+                    make_package(make_balance_activity()),
+                    "application/zip",
+                )
+            },
+        ).json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments",
+            headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["balance-twelve"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Nora"}).json()
+        client.post(
+            f"/api/modules/assignments/{assignment['join_code']}/join",
+            json={"student_id": student["id"]},
+        )
+        endpoint = (
+            f"/api/modules/assignments/{assignment['join_code']}"
+            "/activities/balance-twelve/complete"
+        )
+        wrong = client.post(endpoint, json={"student_id": student["id"], "response": [5, 5, 2]})
+        assert wrong.status_code == 422
+        completed = client.post(
+            endpoint, json={"student_id": student["id"], "response": [5, 7]}
+        )
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["balance-twelve"]
