@@ -35,6 +35,24 @@
         {"id":"paleolithic-life","type":"CLOSED_QUESTION","title":"Una pista paleolítica","instructions":"Elige la opción propia del Paleolítico.","content":{"prompt":"¿Qué forma de vida fue habitual durante gran parte del Paleolítico?","options":["Nomadismo","Vida en grandes ciudades","Agricultura intensiva"],"correct_option":"Nomadismo","explanation":"Los grupos se desplazaban para buscar alimentos y recursos."},"evidence":{}},
         {"id":"neolithic-change","type":"CLOSED_QUESTION","title":"La revolución neolítica","instructions":"Identifica el cambio decisivo.","content":{"prompt":"¿Qué actividad favoreció los primeros poblados permanentes?","options":["La agricultura","La imprenta","La navegación a vapor"],"correct_option":"La agricultura","explanation":"Cultivar y criar animales favoreció el sedentarismo."},"evidence":{}}
       ]
+    },
+    {
+      "id": "org.edumath.physics.forces-motion-eso2", "title": "Fuerzas en movimiento", "summary": "Retos sobre velocidad media, fuerza resultante y fuerzas de contacto o a distancia.",
+      "stage": "ESO", "grades": [2], "subject": "PHYSICS_AND_CHEMISTRY", "competencies": ["STEM2", "STEM4"], "assessment_criteria": ["Interpretar movimientos sencillos y relacionar fuerzas con cambios de velocidad."], "basic_knowledge": ["Velocidad media, fuerza resultante y fuerzas habituales."],
+      "activities": [
+        {"id":"average-speed","type":"CLOSED_QUESTION","title":"Velocidad media","instructions":"Calcula y elige la respuesta con su unidad.","content":{"prompt":"Un ciclista recorre 120 m en 20 s. ¿Cuál es su velocidad media?","options":["6 m/s","2,4 m/s","140 m/s"],"correct_option":"6 m/s","explanation":"La velocidad media es distancia dividida entre tiempo: 120 ÷ 20 = 6 m/s."},"evidence":{}},
+        {"id":"net-force","type":"CLOSED_QUESTION","title":"La fuerza resultante","instructions":"Selecciona el efecto posible de una fuerza resultante no nula.","content":{"prompt":"Si sobre un cuerpo actúa una fuerza resultante distinta de cero, ¿qué puede ocurrir?","options":["Puede cambiar su velocidad","Su masa aumenta","Su velocidad nunca cambia"],"correct_option":"Puede cambiar su velocidad","explanation":"Una fuerza resultante no nula produce aceleración y puede cambiar el módulo o la dirección de la velocidad."},"evidence":{}},
+        {"id":"force-types","type":"CLASSIFICATION","title":"Contacto o distancia","instructions":"Clasifica cada interacción por el modo en que actúa.","content":{"prompt":"Clasifica estas fuerzas.","categories":["Contacto","A distancia"],"items":[{"label":"Rozamiento de un libro con la mesa","category":"Contacto"},{"label":"Peso de una manzana","category":"A distancia"},{"label":"Tensión de una cuerda","category":"Contacto"},{"label":"Atracción de un imán","category":"A distancia"}],"explanation":"Rozamiento y tensión requieren contacto; peso y fuerza magnética pueden actuar a distancia."},"evidence":{}}
+      ]
+    },
+    {
+      "id": "org.edumath.math.fractions-primary4", "title": "El taller de las fracciones", "summary": "Ejercicios para reconocer equivalencias y comparar fracciones mediante numeradores y denominadores.",
+      "stage": "PRIMARY", "grades": [4], "subject": "MATHEMATICS", "competencies": ["STEM1", "CPSAA5"], "assessment_criteria": ["Identificar fracciones equivalentes y comparar fracciones de igual denominador."], "basic_knowledge": ["Fracciones equivalentes y comparación de fracciones."],
+      "activities": [
+        {"id":"equivalent-pair","type":"CLOSED_QUESTION","title":"La misma cantidad","instructions":"Elige la pareja de fracciones equivalentes.","content":{"prompt":"¿Qué pareja representa la misma cantidad?","options":["1/2 y 2/4","1/3 y 2/5","3/4 y 1/2"],"correct_option":"1/2 y 2/4","explanation":"Al multiplicar numerador y denominador de 1/2 por 2 obtenemos 2/4."},"evidence":{}},
+        {"id":"fraction-unit","type":"CLASSIFICATION","title":"Respecto a la unidad","instructions":"Compara cada fracción con la unidad.","content":{"prompt":"Clasifica las fracciones.","categories":["Menor que uno","Igual a uno","Mayor que uno"],"items":[{"label":"3/4","category":"Menor que uno"},{"label":"5/5","category":"Igual a uno"},{"label":"7/4","category":"Mayor que uno"},{"label":"2/3","category":"Menor que uno"}],"explanation":"Compara numerador y denominador para saber si la fracción es menor, igual o mayor que uno."},"evidence":{}},
+        {"id":"same-denominator","type":"CLOSED_QUESTION","title":"Mismo denominador","instructions":"Compara los numeradores y elige la fracción mayor.","content":{"prompt":"¿Cuál es mayor: 3/8 o 5/8?","options":["3/8","5/8","Son iguales"],"correct_option":"5/8","explanation":"Con el mismo denominador, la fracción con mayor numerador es mayor."},"evidence":{}}
+      ]
     }
   ]
 }

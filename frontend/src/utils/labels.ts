@@ -4,6 +4,7 @@ const SUBJECTS: Record<string, string> = {
   KNOWLEDGE_OF_THE_NATURAL_SOCIAL_AND_CULTURAL_ENVIRONMENT: "Conocimiento del Medio",
   SPANISH_LANGUAGE_AND_LITERATURE: "Lengua Castellana y Literatura",
   GEOGRAPHY_AND_HISTORY: "Geografía e Historia",
+  PHYSICS_AND_CHEMISTRY: "Física y Química",
 };
 
 const CONTENT_LABELS: Record<string, string> = {
