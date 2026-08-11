@@ -36,6 +36,7 @@ class ModuleJoinRequest(BaseModel):
 
 class ActivityCompleteRequest(BaseModel):
     student_id: str
+    response: str | dict | None = None
 
 
 def _require_known_teacher(db: Session, teacher_key: str | None) -> None:
@@ -292,6 +293,16 @@ def complete_module_activity(
     )
     if not enrollment:
         raise HTTPException(status_code=403, detail="Student has not joined this class.")
+    module = db.get(EducationalModuleRow, assignment.module_row_id)
+    activity = next(item for item in _validated_activities(module) if item.id == activity_id)
+    if activity.type == "CLOSED_QUESTION" and data.response != activity.content["correct_option"]:
+        raise HTTPException(status_code=422, detail="The submitted answer is not correct.")
+    if activity.type == "CLASSIFICATION":
+        expected = {item["label"]: item["category"] for item in activity.content["items"]}
+        if data.response != expected:
+            raise HTTPException(
+                status_code=422, detail="The submitted classification is not correct."
+            )
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,
@@ -311,7 +322,6 @@ def complete_module_activity(
             )
         )
         db.commit()
-    module = db.get(EducationalModuleRow, assignment.module_row_id)
     return _assignment_payload(assignment, module, data.student_id, db)
 
 

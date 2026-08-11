@@ -60,3 +60,29 @@ def test_valid_edumodule_package() -> None:
 def test_package_rejects_unsafe_or_executable_files(name: str) -> None:
     with pytest.raises(ModulePackageError):
         validate_module_package(make_package(name))
+
+
+def test_closed_question_requires_an_available_correct_option() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update(
+        {
+            "type": "CLOSED_QUESTION",
+            "content": {
+                "prompt": "Choose one answer.",
+                "options": ["A", "B"],
+                "correct_option": "C",
+                "explanation": "Only A or B can be selected.",
+            },
+        }
+    )
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(
+                name, json.dumps(activity) if name.endswith("observe.json") else content
+            )
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

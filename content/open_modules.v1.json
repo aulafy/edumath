@@ -1,0 +1,40 @@
+{
+  "modules": [
+    {
+      "id": "org.edumath.math.money-primary2", "title": "La tienda de las monedas", "summary": "Retos interactivos para reconocer euros y céntimos y formar cantidades sencillas.",
+      "stage": "PRIMARY", "grades": [2], "subject": "MATHEMATICS", "competencies": ["STEM1", "CPSAA5"], "assessment_criteria": ["Resolver situaciones cotidianas con monedas y billetes."], "basic_knowledge": ["Sistema monetario europeo: monedas y billetes."],
+      "activities": [
+        {"id":"money-value","type":"CLOSED_QUESTION","title":"¿Cuántos céntimos?","instructions":"Observa la cantidad y elige una respuesta.","content":{"prompt":"¿Cuántos céntimos hay en 1 euro?","options":["10 céntimos","100 céntimos","1000 céntimos"],"correct_option":"100 céntimos","explanation":"Un euro está formado por 100 céntimos."},"evidence":{}},
+        {"id":"money-groups","type":"CLASSIFICATION","title":"Euros o céntimos","instructions":"Coloca cada moneda en su grupo.","content":{"prompt":"Clasifica cada moneda según su unidad.","categories":["Euros","Céntimos"],"items":[{"label":"2 €","category":"Euros"},{"label":"50 c","category":"Céntimos"},{"label":"1 €","category":"Euros"},{"label":"20 c","category":"Céntimos"}],"explanation":"El símbolo € indica euros y la c indica céntimos."},"evidence":{}},
+        {"id":"money-combine","type":"CLOSED_QUESTION","title":"Formamos un euro","instructions":"Elige la combinación que suma exactamente un euro.","content":{"prompt":"¿Qué dos monedas forman 1 euro?","options":["50 c y 50 c","20 c y 20 c","1 € y 50 c"],"correct_option":"50 c y 50 c","explanation":"50 más 50 son 100 céntimos, es decir, 1 euro."},"evidence":{}}
+      ]
+    },
+    {
+      "id": "org.edumath.science.ecosystems-primary3", "title": "Detectives del ecosistema", "summary": "Actividades para reconocer seres vivos, elementos no vivos y relaciones de alimentación.",
+      "stage": "PRIMARY", "grades": [3], "subject": "KNOWLEDGE_OF_THE_NATURAL_SOCIAL_AND_CULTURAL_ENVIRONMENT", "competencies": ["STEM2", "CC4"], "assessment_criteria": ["Identificar componentes de un ecosistema y relaciones sencillas."], "basic_knowledge": ["Seres vivos, hábitats y elementos del medio."],
+      "activities": [
+        {"id":"ecosystem-parts","type":"CLASSIFICATION","title":"Vivo o no vivo","instructions":"Clasifica los elementos del bosque.","content":{"prompt":"¿Qué elementos tienen vida?","categories":["Ser vivo","Elemento no vivo"],"items":[{"label":"Roble","category":"Ser vivo"},{"label":"Roca","category":"Elemento no vivo"},{"label":"Ardilla","category":"Ser vivo"},{"label":"Agua","category":"Elemento no vivo"}],"explanation":"Plantas y animales son seres vivos; agua y rocas forman parte del medio no vivo."},"evidence":{}},
+        {"id":"ecosystem-producer","type":"CLOSED_QUESTION","title":"¿Quién fabrica su alimento?","instructions":"Elige el productor de esta cadena alimentaria.","content":{"prompt":"En hierba → conejo → águila, ¿cuál es el productor?","options":["La hierba","El conejo","El águila"],"correct_option":"La hierba","explanation":"Las plantas producen su alimento gracias a la luz."},"evidence":{}},
+        {"id":"ecosystem-habitats","type":"CLASSIFICATION","title":"Cada cual en su hábitat","instructions":"Relaciona cada ser vivo con su hábitat habitual.","content":{"prompt":"Clasifica los seres vivos por hábitat.","categories":["Bosque","Mar","Desierto"],"items":[{"label":"Pulpo","category":"Mar"},{"label":"Encina","category":"Bosque"},{"label":"Camello","category":"Desierto"},{"label":"Delfín","category":"Mar"}],"explanation":"Cada ser vivo presenta características adecuadas para su hábitat."},"evidence":{}}
+      ]
+    },
+    {
+      "id": "org.edumath.language.word-classes-primary5", "title": "El laboratorio de palabras", "summary": "Juegos de clasificación para distinguir sustantivos, adjetivos, verbos y nombres propios.",
+      "stage": "PRIMARY", "grades": [5], "subject": "SPANISH_LANGUAGE_AND_LITERATURE", "competencies": ["CCL1", "CCL2"], "assessment_criteria": ["Reconocer categorías gramaticales básicas en enunciados sencillos."], "basic_knowledge": ["Sustantivos, adjetivos y verbos."],
+      "activities": [
+        {"id":"word-classes","type":"CLASSIFICATION","title":"Familias de palabras","instructions":"Clasifica cada palabra por su función.","content":{"prompt":"¿Es sustantivo, adjetivo o verbo?","categories":["Sustantivo","Adjetivo","Verbo"],"items":[{"label":"montaña","category":"Sustantivo"},{"label":"brillante","category":"Adjetivo"},{"label":"explorar","category":"Verbo"},{"label":"amistad","category":"Sustantivo"}],"explanation":"Los sustantivos nombran, los adjetivos describen y los verbos expresan acciones o estados."},"evidence":{}},
+        {"id":"adjective-detective","type":"CLOSED_QUESTION","title":"El adjetivo escondido","instructions":"Busca la palabra que describe al sustantivo.","content":{"prompt":"En «La bicicleta roja avanza», ¿cuál es el adjetivo?","options":["bicicleta","roja","avanza"],"correct_option":"roja","explanation":"Roja describe cómo es la bicicleta."},"evidence":{}},
+        {"id":"proper-nouns","type":"CLASSIFICATION","title":"Común o propio","instructions":"Distingue nombres comunes y propios.","content":{"prompt":"Clasifica cada sustantivo.","categories":["Nombre común","Nombre propio"],"items":[{"label":"río","category":"Nombre común"},{"label":"Ebro","category":"Nombre propio"},{"label":"ciudad","category":"Nombre común"},{"label":"Sevilla","category":"Nombre propio"}],"explanation":"Los nombres propios identifican seres o lugares concretos y se escriben con mayúscula."},"evidence":{}}
+      ]
+    },
+    {
+      "id": "org.edumath.history.prehistory-eso1", "title": "Viaje por la Prehistoria", "summary": "Retos para ordenar y diferenciar Paleolítico, Neolítico y Edad de los Metales.",
+      "stage": "ESO", "grades": [1], "subject": "GEOGRAPHY_AND_HISTORY", "competencies": ["CC1", "CC3"], "assessment_criteria": ["Situar y caracterizar las principales etapas de la Prehistoria."], "basic_knowledge": ["Paleolítico, Neolítico y Edad de los Metales."],
+      "activities": [
+        {"id":"prehistory-order","type":"CLASSIFICATION","title":"¿En qué etapa ocurrió?","instructions":"Relaciona cada cambio con su etapa.","content":{"prompt":"Clasifica los hechos prehistóricos.","categories":["Paleolítico","Neolítico","Edad de los Metales"],"items":[{"label":"Vida nómada y caza","category":"Paleolítico"},{"label":"Agricultura y poblados","category":"Neolítico"},{"label":"Uso del bronce","category":"Edad de los Metales"},{"label":"Primeras herramientas de piedra tallada","category":"Paleolítico"}],"explanation":"Las formas de vida y las tecnologías permiten diferenciar las etapas."},"evidence":{}},
+        {"id":"paleolithic-life","type":"CLOSED_QUESTION","title":"Una pista paleolítica","instructions":"Elige la opción propia del Paleolítico.","content":{"prompt":"¿Qué forma de vida fue habitual durante gran parte del Paleolítico?","options":["Nomadismo","Vida en grandes ciudades","Agricultura intensiva"],"correct_option":"Nomadismo","explanation":"Los grupos se desplazaban para buscar alimentos y recursos."},"evidence":{}},
+        {"id":"neolithic-change","type":"CLOSED_QUESTION","title":"La revolución neolítica","instructions":"Identifica el cambio decisivo.","content":{"prompt":"¿Qué actividad favoreció los primeros poblados permanentes?","options":["La agricultura","La imprenta","La navegación a vapor"],"correct_option":"La agricultura","explanation":"Cultivar y criar animales favoreció el sedentarismo."},"evidence":{}}
+      ]
+    }
+  ]
+}

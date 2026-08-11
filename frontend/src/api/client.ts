@@ -85,10 +85,10 @@ export const api = {
       headers: { "X-Teacher-Key": classroom.teacher_key },
       body: JSON.stringify({ classroom_id: classroom.id, activity_ids })
     }),
-  completeModuleActivity: (assignment: ModuleAssignment, studentId: string, activityId: string) =>
+  completeModuleActivity: (assignment: ModuleAssignment, studentId: string, activityId: string, response?: unknown) =>
     request<ModuleAssignment>(`/modules/assignments/${assignment.join_code}/activities/${activityId}/complete`, {
       method: "POST",
-      body: JSON.stringify({ student_id: studentId })
+      body: JSON.stringify({ student_id: studentId, response: response ?? null })
     }),
   transcribe: async (audio: Blob) => {
     const form = new FormData();

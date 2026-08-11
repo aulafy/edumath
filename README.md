@@ -54,6 +54,7 @@ For full local voice support or software development, follow the platform-specif
 - Optional OpenAI-compatible local LLM for short, non-authoritative wording only.
 - Portable `.edumath` learning modules with secure teacher import and exact export.
 - Teacher-selected module activities published to a class with resumable student progress.
+- Interactive questions and classification challenges checked authoritatively by the backend.
 
 The recommended local model is [Qwen3.5-9B in LM Studio](https://lmstudio.ai/models/qwen/qwen3.5-9b). Start the LM Studio local server on port `1234` before starting EduMath. Docker connects to it through `host.docker.internal`; the deterministic tutor remains available when the model is stopped.
 

@@ -49,6 +49,41 @@ class EduModuleManifest(BaseModel):
     created_at: str
 
 
+class ClosedQuestionContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    options: list[str] = Field(min_length=2, max_length=6)
+    correct_option: str
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_answer(self):
+        if len(self.options) != len(set(self.options)):
+            raise ValueError("Closed-question options must be unique.")
+        if self.correct_option not in self.options:
+            raise ValueError("The correct option must appear in options.")
+        return self
+
+
+class ClassificationItem(BaseModel):
+    label: str = Field(min_length=1, max_length=120)
+    category: str = Field(min_length=1, max_length=80)
+
+
+class ClassificationContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    categories: list[str] = Field(min_length=2, max_length=6)
+    items: list[ClassificationItem] = Field(min_length=2, max_length=20)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_categories(self):
+        if len(self.categories) != len(set(self.categories)):
+            raise ValueError("Classification categories must be unique.")
+        if any(item.category not in self.categories for item in self.items):
+            raise ValueError("Every classification answer must use a declared category.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -68,3 +103,11 @@ class ModuleActivity(BaseModel):
     instructions: str = Field(min_length=3, max_length=1000)
     content: dict = Field(default_factory=dict)
     evidence: dict = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def validate_interactive_content(self):
+        if self.type == "CLOSED_QUESTION":
+            ClosedQuestionContent.model_validate(self.content)
+        elif self.type == "CLASSIFICATION":
+            ClassificationContent.model_validate(self.content)
+        return self

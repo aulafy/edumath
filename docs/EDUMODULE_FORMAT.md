@@ -52,6 +52,8 @@ assets/
 
 Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructions`, `content`, and `evidence`. Version 1.0 supports `EXPLANATION`, `CLOSED_QUESTION`, `OPEN_QUESTION`, `CLASSIFICATION`, `TIMELINE`, `MAP`, `SIMULATION`, `GUIDED_EXPERIMENT`, `READING`, `WRITING`, and `ASSESSMENT`.
 
+`CLOSED_QUESTION` and `CLASSIFICATION` are interactive in the learner runner. Their solutions are schema-validated on import and checked again by the backend before progress is recorded. The browser provides immediate feedback, but it is not authoritative.
+
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.
 
 ## Licenses and authorship
@@ -72,6 +74,7 @@ From the repository root:
 
 ```bash
 python scripts/build_example_module.py
+python scripts/build_content_modules.py
 ```
 
 This creates `examples/dist/org.edumath.examples.plant-growth-1.0.0.edumath`. In the teacher dashboard, create or open a class, choose **Import module**, and select that file. A teacher key is required for imports; browsing module metadata is read-only.
