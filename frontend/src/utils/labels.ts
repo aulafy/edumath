@@ -9,6 +9,7 @@ const SUBJECTS: Record<string, string> = {
   CIVIC_AND_ETHICAL_VALUES: "Educación en Valores Cívicos y Éticos",
   GEOGRAPHY_AND_HISTORY: "Geografía e Historia",
   PHYSICS_AND_CHEMISTRY: "Física y Química",
+  BIOLOGY_AND_GEOLOGY: "Biología y Geología",
 };
 
 const CONTENT_LABELS: Record<string, string> = {

@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, Dices, FlaskConical, Gauge, ListChecks, Minus, Play, Plus, Thermometer, Undo2, Volume2, X } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, Dices, FlaskConical, Gauge, ListChecks, Minus, Play, Plus, Thermometer, Undo2, Volume2, X } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { api } from "../api/client";
 import type { ModuleAssignment, Student } from "../types/contracts";
@@ -18,6 +18,7 @@ const RouteLab3D = lazy(() => import("./RouteLab3D").then((module) => ({ default
 const ClimateLab3D = lazy(() => import("./ClimateLab3D").then((module) => ({ default: module.ClimateLab3D })));
 const ProbabilityLab3D = lazy(() => import("./ProbabilityLab3D").then((module) => ({ default: module.ProbabilityLab3D })));
 const ReflectionLab3D = lazy(() => import("./ReflectionLab3D").then((module) => ({ default: module.ReflectionLab3D })));
+const DiffusionLab3D = lazy(() => import("./DiffusionLab3D").then((module) => ({ default: module.DiffusionLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -44,6 +45,8 @@ type ClimateLab = { prompt: string; profile_label: string; temperature_min: numb
 type ProbabilityDraw = "BLUE" | "GOLD";
 type ProbabilityLab = { prompt: string; target_numerator: number; target_denominator: number; max_balls: number; initial_blue: number; initial_gold: number; example_blue: number; example_gold: number; draws: number; seed: number; explanation: string };
 type ReflectionLab = { prompt: string; target_normal_angle: number; initial_normal_angle: number; explanation: string };
+type NetFlow = "INWARD" | "OUTWARD" | "EQUILIBRIUM";
+type DiffusionLab = { prompt: string; target_net_flow: NetFlow; initial_outside: number; initial_inside: number; example_outside: number; example_inside: number; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -437,6 +440,35 @@ function ReflectionExercise({ content, onSolved }: { content: ReflectionLab; onS
   </div>;
 }
 
+function netFlow(outside: number, inside: number): NetFlow { return outside > inside ? "INWARD" : inside > outside ? "OUTWARD" : "EQUILIBRIUM"; }
+const flowLabels: Record<NetFlow, string> = { INWARD: "Hacia dentro →", OUTWARD: "← Hacia fuera", EQUILIBRIUM: "Equilibrio dinámico ⇄" };
+
+function DiffusionExercise({ content, onSolved }: { content: DiffusionLab; onSolved: (response: { outside_count: number; inside_count: number }) => void }) {
+  const [outside, setOutside] = useState(content.initial_outside);
+  const [inside, setInside] = useState(content.initial_inside);
+  const [checked, setChecked] = useState(false);
+  const flow = netFlow(outside, inside); const correct = flow === content.target_net_flow;
+  const change = (side: "OUTSIDE" | "INSIDE", delta: number) => {
+    if (side === "OUTSIDE" && outside + delta >= 1 && outside + delta <= 10) setOutside(outside + delta);
+    if (side === "INSIDE" && inside + delta >= 1 && inside + delta <= 10) setInside(inside + delta);
+    setChecked(false);
+  };
+  return <div className="interactiveExercise diffusionExercise">
+    <strong>{content.prompt}</strong>
+    <div className="diffusionTarget"><span>Flujo neto objetivo</span><strong>{flowLabels[content.target_net_flow]}</strong></div>
+    <div className="compartmentLabels"><span>Exterior celular</span><span>Interior celular</span></div>
+    <Suspense fallback={<div className="diffusionLabScene loadingScene" aria-label="Preparando membrana 3D" />}><DiffusionLab3D outside={outside} inside={inside} /></Suspense>
+    <div className={correct ? "netFlow ready" : "netFlow"} aria-live="polite"><ArrowLeftRight /><span>Flujo neto actual</span><strong>{flowLabels[flow]}</strong></div>
+    <div className="diffusionControls">
+      {(["OUTSIDE", "INSIDE"] as const).map((side) => { const value = side === "OUTSIDE" ? outside : inside; const label = side === "OUTSIDE" ? "Partículas fuera" : "Partículas dentro"; return <div className="concentrationCounter" key={side}><span>{label}</span><div><button className="iconButton secondary" aria-label={`Reducir ${label.toLowerCase()}`} disabled={value === 1} onClick={() => change(side, -1)}><Minus /></button><output aria-label={`${label}: ${value}`}>{value}</output><button className="iconButton" aria-label={`Aumentar ${label.toLowerCase()}`} disabled={value === 10} onClick={() => change(side, 1)}><Plus /></button></div></div>; })}
+    </div>
+    <p className="diffusionRule">Difusión simple del mismo soluto · volúmenes iguales · movimiento en ambos sentidos</p>
+    <p className="modelBoundary">El agua no se mueve en este modelo. No representa ósmosis ni transporte activo.</p>
+    <button onClick={() => { setChecked(true); if (correct) onSolved({ outside_count: outside, inside_count: inside }); }}><Check /> Analizar gradiente</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Gradiente construido! ${content.explanation}` : `El flujo neto actual es ${flowLabels[flow].toLowerCase()}. Ajusta las concentraciones para crear ${flowLabels[content.target_net_flow].toLowerCase()}.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -446,7 +478,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -488,6 +520,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "CLIMATE_LAB" && <ClimateExercise key={activity.id} content={activity.content as ClimateLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "PROBABILITY_LAB" && <ProbabilityExercise key={activity.id} content={activity.content as ProbabilityLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "REFLECTION_LAB" && <ReflectionExercise key={activity.id} content={activity.content as ReflectionLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "DIFFUSION_LAB" && <DiffusionExercise key={activity.id} content={activity.content as DiffusionLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

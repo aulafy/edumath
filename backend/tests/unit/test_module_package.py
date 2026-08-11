@@ -424,3 +424,25 @@ def test_reflection_lab_rejects_an_already_solved_initial_angle() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_diffusion_lab_rejects_a_witness_with_the_wrong_gradient() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "DIFFUSION_LAB",
+        "content": {
+            "prompt": "Create inward flow.", "target_net_flow": "INWARD",
+            "initial_outside": 2, "initial_inside": 7,
+            "example_outside": 3, "example_inside": 8,
+            "explanation": "This witness creates outward rather than inward flow.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

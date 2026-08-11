@@ -434,6 +434,17 @@ def complete_module_activity(
             or response["normal_angle"] != activity.content["target_normal_angle"]
         ):
             raise HTTPException(status_code=422, detail="The reflected ray does not hit the target sensor.")
+    if activity.type == "DIFFUSION_LAB":
+        response = data.response
+        if (
+            not isinstance(response, dict)
+            or set(response) != {"outside_count", "inside_count"}
+            or any(type(value) is not int or value < 1 or value > 10 for value in response.values())
+        ):
+            raise HTTPException(status_code=422, detail="The submitted diffusion state is invalid.")
+        net_flow = "INWARD" if response["outside_count"] > response["inside_count"] else "OUTWARD" if response["inside_count"] > response["outside_count"] else "EQUILIBRIUM"
+        if net_flow != activity.content["target_net_flow"]:
+            raise HTTPException(status_code=422, detail="The submitted concentrations do not create the target net flow.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

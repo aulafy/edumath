@@ -470,6 +470,28 @@ class ReflectionLabContent(BaseModel):
         return self
 
 
+class DiffusionLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    target_net_flow: Literal["INWARD", "OUTWARD", "EQUILIBRIUM"]
+    initial_outside: int = Field(ge=1, le=10)
+    initial_inside: int = Field(ge=1, le=10)
+    example_outside: int = Field(ge=1, le=10)
+    example_inside: int = Field(ge=1, le=10)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @staticmethod
+    def net_flow(outside: int, inside: int) -> str:
+        return "INWARD" if outside > inside else "OUTWARD" if inside > outside else "EQUILIBRIUM"
+
+    @model_validator(mode="after")
+    def validate_diffusion(self):
+        if self.net_flow(self.example_outside, self.example_inside) != self.target_net_flow:
+            raise ValueError("The diffusion example must create the target net flow.")
+        if self.net_flow(self.initial_outside, self.initial_inside) == self.target_net_flow:
+            raise ValueError("The initial diffusion state must require an adjustment.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -489,6 +511,7 @@ class ModuleActivity(BaseModel):
         "CLIMATE_LAB",
         "PROBABILITY_LAB",
         "REFLECTION_LAB",
+        "DIFFUSION_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -534,4 +557,6 @@ class ModuleActivity(BaseModel):
             ProbabilityLabContent.model_validate(self.content)
         elif self.type == "REFLECTION_LAB":
             ReflectionLabContent.model_validate(self.content)
+        elif self.type == "DIFFUSION_LAB":
+            DiffusionLabContent.model_validate(self.content)
         return self

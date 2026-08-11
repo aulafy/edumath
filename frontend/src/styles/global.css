@@ -1068,6 +1068,23 @@ select {
 .mirrorControl output { color: #21614e; font-size: 1.3rem; font-weight: 900; }
 .mirrorControl input { grid-column: 1 / -1; width: 100%; min-height: 32px; padding: 0; accent-color: #287b63; }
 .opticsRule { margin: 0; color: #4d625c; text-align: center; font-size: 0.86rem; font-weight: 700; }
+.diffusionLabScene { width: 100%; height: clamp(290px, 43vh, 400px); overflow: hidden; border: 1px solid #c5d2cc; border-radius: 8px; background: #edf4f1; }
+.diffusionLabScene canvas { display: block; width: 100% !important; height: 100% !important; }
+.diffusionTarget { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border: 1px solid #c8d6cf; border-radius: 8px; background: #f7faf8; }
+.diffusionTarget strong { color: #21614e; }
+.compartmentLabels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin-bottom: -8px; text-align: center; font-size: 0.8rem; font-weight: 800; }
+.compartmentLabels span:first-child { color: #24667f; }
+.compartmentLabels span:last-child { color: #745f3d; }
+.netFlow { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 10px 12px; border: 2px solid #bdc9c4; border-radius: 8px; background: #fff; }
+.netFlow.ready { border-color: #2d8c68; background: #e3f5ec; }
+.netFlow svg { width: 22px; height: 22px; }
+.diffusionControls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.concentrationCounter { display: grid; gap: 8px; padding: 12px; border: 2px solid #c7d3ce; border-radius: 8px; background: #fff; font-weight: 800; }
+.concentrationCounter > div { display: grid; grid-template-columns: 44px minmax(42px, 1fr) 44px; align-items: center; gap: 8px; }
+.concentrationCounter output { text-align: center; color: #704fa3; font-size: 1.45rem; font-weight: 900; }
+.diffusionRule, .modelBoundary { margin: 0; text-align: center; font-size: 0.84rem; font-weight: 700; }
+.diffusionRule { color: #425d55; }
+.modelBoundary { padding: 8px 10px; border-radius: 6px; background: #f3eee4; color: #65573f; }
 
 @media (max-width: 560px) {
   .climateTargets { grid-template-columns: 1fr; }
@@ -1076,6 +1093,9 @@ select {
   .experimentResult { grid-template-columns: 1fr; }
   .angleMeters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .angleMeters span:last-child { grid-column: 1 / -1; }
+  .diffusionControls { grid-template-columns: 1fr; }
+  .netFlow { grid-template-columns: auto minmax(0, 1fr); }
+  .netFlow strong { grid-column: 1 / -1; text-align: center; }
 }
 
 @media (max-width: 560px) {

@@ -24,6 +24,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "CLIMATE_LAB": "org.edumath.tests.geography-climate",
             "PROBABILITY_LAB": "org.edumath.tests.math-probability",
             "REFLECTION_LAB": "org.edumath.tests.physics-reflection",
+            "DIFFUSION_LAB": "org.edumath.tests.biology-diffusion",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -300,6 +301,19 @@ def make_reflection_activity() -> dict:
             "prompt": "Direct the reflected ray to the sensor.",
             "target_normal_angle": 20, "initial_normal_angle": -10,
             "explanation": "Incidence and reflection angles are equal when measured from the normal.",
+        }, "evidence": {},
+    }
+
+
+def make_diffusion_activity() -> dict:
+    return {
+        "id": "create-inward-flow", "type": "DIFFUSION_LAB",
+        "title": "Create inward flow", "instructions": "Adjust both concentrations.",
+        "content": {
+            "prompt": "Create net inward diffusion.", "target_net_flow": "INWARD",
+            "initial_outside": 2, "initial_inside": 7,
+            "example_outside": 8, "example_inside": 3,
+            "explanation": "Net flow goes from higher to lower concentration.",
         }, "evidence": {},
     }
 
@@ -914,3 +928,29 @@ def test_reflection_lab_requires_the_target_normal_angle() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": {"normal_angle": 20}})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["aim-reflected-ray"]
+
+
+def test_diffusion_lab_requires_the_target_concentration_relation() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms", json={"name": "4K Biology", "stage": "PRIMARY", "grade": 4}
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import", headers=headers,
+            files={"package": ("diffusion.edumath", make_package(make_diffusion_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments", headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["create-inward-flow"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Nil"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/create-inward-flow/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"outside_count": 3, "inside_count": 8}}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"outside_count": True, "inside_count": 2}}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": {"outside_count": 9, "inside_count": 2}})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["create-inward-flow"]
