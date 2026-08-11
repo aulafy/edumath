@@ -31,6 +31,7 @@ const LeverLab3D = lazy(() => import("./LeverLab3D").then((module) => ({ default
 const ShadowViewLab3D = lazy(() => import("./ShadowViewLab3D").then((module) => ({ default: module.ShadowViewLab3D })));
 const CityBudgetLab3D = lazy(() => import("./CityBudgetLab3D").then((module) => ({ default: module.CityBudgetLab3D })));
 const BinarySignalLab3D = lazy(() => import("./BinarySignalLab3D").then((module) => ({ default: module.BinarySignalLab3D })));
+const PunctuationLab3D = lazy(() => import("./PunctuationLab3D").then((module) => ({ default: module.PunctuationLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -82,6 +83,8 @@ type ShadowViewLab = { prompt: string; object_label: string; cubes: ShadowCube[]
 type CityBudgetLab = { prompt: string; target_energy: number; target_green: number; target_mobility: number; initial_solar: number; initial_trees: number; initial_transit: number; example_solar: number; example_trees: number; example_transit: number; explanation: string };
 type BinaryBit = 0 | 1;
 type BinarySignalLab = { prompt: string; target_value: number; target_bits: BinaryBit[]; initial_bits: BinaryBit[]; message_label: string; explanation: string };
+type PunctuationMark = "NONE" | "COMMA" | "COLON" | "PERIOD";
+type PunctuationLab = { prompt: string; parts: string[]; target_marks: PunctuationMark[]; initial_marks: PunctuationMark[]; full_sentence: string; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -827,6 +830,45 @@ function BinarySignalExercise({ content, onSolved }: { content: BinarySignalLab;
   </div>;
 }
 
+const punctuationSymbols: Record<PunctuationMark, string> = { NONE: " ", COMMA: ", ", COLON: ": ", PERIOD: "." };
+const punctuationLabels: Record<PunctuationMark, string> = { NONE: "Sin signo", COMMA: "Coma", COLON: "Dos puntos", PERIOD: "Punto" };
+
+function PunctuationExercise({ content, onSolved }: { content: PunctuationLab; onSolved: (response: PunctuationMark[]) => void }) {
+  const [marks, setMarks] = useState<PunctuationMark[]>(content.initial_marks);
+  const [checked, setChecked] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
+  const sentence = content.parts.map((part, index) => part + punctuationSymbols[marks[index]]).join("").trim();
+  const correct = marks.every((mark, index) => mark === content.target_marks[index]);
+  async function speak() {
+    if (speaking) return;
+    setSpeaking(true);
+    try {
+      const capabilities = await api.voiceCapabilities();
+      if (capabilities.tts_available) {
+        const blob = await api.synthesize(sentence);
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        audio.onended = () => { URL.revokeObjectURL(url); setSpeaking(false); };
+        await audio.play();
+        return;
+      }
+    } catch (_error) { /* Browser speech remains an optional fallback. */ }
+    if ("speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(sentence); utterance.lang = "es-ES"; utterance.rate = 0.88; utterance.onend = () => setSpeaking(false); window.speechSynthesis.cancel(); window.speechSynthesis.speak(utterance);
+    } else setSpeaking(false);
+  }
+  return <div className="interactiveExercise punctuationExercise">
+    <strong>{content.prompt}</strong>
+    <Suspense fallback={<div className="punctuationScene loadingScene" aria-label="Preparando escenario de puntuación 3D" />}><PunctuationLab3D marks={marks} /></Suspense>
+    <div className="punctuationSentence" aria-live="polite">{sentence}</div>
+    <div className="punctuationParts">{content.parts.map((part, index) => <label key={index}><span>{part}</span><select aria-label={`Signo después de ${part}`} value={marks[index]} onChange={(event) => { setMarks((current) => current.map((mark, position) => position === index ? event.target.value as PunctuationMark : mark)); setChecked(false); }}><option value="NONE">Sin signo</option><option value="COMMA">, Coma</option><option value="COLON">: Dos puntos</option><option value="PERIOD">. Punto</option></select><small>{punctuationLabels[marks[index]]}</small></label>)}</div>
+    <button className="secondary punctuationListen" disabled={speaking} onClick={() => void speak()}>{speaking ? <Volume2 /> : <Play />}{speaking ? "Escuchando la frase" : "Escuchar cómo suena"}</button>
+    <p className="modelBoundary">El audio es opcional y su prosodia depende de la voz instalada. Los signos, sus nombres y la frase escrita permiten resolver toda la actividad sin sonido.</p>
+    <button onClick={() => { setChecked(true); if (correct) onSolved(marks); }}><Check /> Revisar puntuación</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Edición terminada! ${content.explanation}` : "Lee la frase completa y revisa qué función cumple cada pausa: separar, anunciar o cerrar."}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -836,7 +878,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB" || activity.type === "CITY_BUDGET_LAB" || activity.type === "BINARY_SIGNAL_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB" || activity.type === "CITY_BUDGET_LAB" || activity.type === "BINARY_SIGNAL_LAB" || activity.type === "PUNCTUATION_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -891,6 +933,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "SHADOW_VIEW_LAB" && <ShadowViewExercise key={activity.id} content={activity.content as ShadowViewLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "CITY_BUDGET_LAB" && <CityBudgetExercise key={activity.id} content={activity.content as CityBudgetLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "BINARY_SIGNAL_LAB" && <BinarySignalExercise key={activity.id} content={activity.content as BinarySignalLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "PUNCTUATION_LAB" && <PunctuationExercise key={activity.id} content={activity.content as PunctuationLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

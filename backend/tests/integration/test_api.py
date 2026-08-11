@@ -37,6 +37,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "SHADOW_VIEW_LAB": "org.edumath.tests.math-shadow-view",
             "CITY_BUDGET_LAB": "org.edumath.tests.civic-city-budget",
             "BINARY_SIGNAL_LAB": "org.edumath.tests.technology-binary-signal",
+            "PUNCTUATION_LAB": "org.edumath.tests.language-punctuation",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -493,6 +494,21 @@ def make_binary_signal_activity() -> dict:
             "prompt": "Encode decimal five.", "target_value": 5,
             "target_bits": [0, 1, 0, 1], "initial_bits": [1, 0, 0, 1],
             "message_label": "Test message", "explanation": "Four plus one equals five.",
+        }, "evidence": {},
+    }
+
+
+def make_punctuation_activity() -> dict:
+    return {
+        "id": "punctuate-list", "type": "PUNCTUATION_LAB",
+        "title": "Punctuate a list", "instructions": "Choose each mark.",
+        "content": {
+            "prompt": "Punctuate the enumeration.",
+            "parts": ["Traigo lápices", "papel", "y goma"],
+            "target_marks": ["COMMA", "NONE", "PERIOD"],
+            "initial_marks": ["NONE", "COMMA", "PERIOD"],
+            "full_sentence": "Traigo lápices, papel y goma.",
+            "explanation": "A simple Spanish list has no comma before y.",
         }, "evidence": {},
     }
 
@@ -1412,3 +1428,20 @@ def test_binary_signal_lab_requires_exact_strict_bits() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": [0, 1, 0, 1]})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["send-five"]
+
+
+def test_punctuation_lab_requires_the_complete_mark_sequence() -> None:
+    with TestClient(app) as client:
+        classroom = client.post("/api/teacher/classrooms", json={"name": "Punctuation test", "stage": "PRIMARY", "grade": 4}).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post("/api/modules/import", headers=headers, files={"package": ("punctuation.edumath", make_package(make_punctuation_activity()), "application/zip")})
+        assert imported.status_code == 200
+        assignment = client.post(f"/api/modules/{imported.json()['id']}/assignments", headers=headers, json={"classroom_id": classroom["id"], "activity_ids": ["punctuate-list"]}).json()
+        student = client.post("/api/students", json={"display_name": "Paz"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/punctuate-list/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": ["COMMA", "COMMA", "PERIOD"]}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": ["COMMA", "NONE"]}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": ["COMMA", "NONE", "PERIOD"]})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["punctuate-list"]

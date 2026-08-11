@@ -172,6 +172,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 
 `BINARY_SIGNAL_LAB` declares a decimal target from 1 to 15, exactly four binary target bits in 8-4-2-1 order, and a different initial state. Package validation recomputes the weighted sum and rejects inconsistent targets. The runner synchronises labelled `ON/OFF` states, `1/0` digits, the expanded sum, decimal total, and animated 3D beacons, so neither colour nor light is required. The backend accepts only four strict integer bits matching the canonical code.
 
+`PUNCTUATION_LAB` declares two to four sentence parts and one mark after each part, chosen from `NONE`, `COMMA`, `COLON`, and `PERIOD`. The target must end in a period and must render the declared full sentence exactly; package validation rejects mismatched parts, marks, or text. The runner combines selectable marks, a live sentence, a 3D pause score, and optional local TTS with browser fallback. Audio is never required, and the backend accepts only the complete canonical mark sequence.
+
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.

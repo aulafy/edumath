@@ -841,6 +841,29 @@ class BinarySignalLabContent(BaseModel):
         return self
 
 
+class PunctuationLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    parts: list[str] = Field(min_length=2, max_length=4)
+    target_marks: list[Literal["NONE", "COMMA", "COLON", "PERIOD"]] = Field(min_length=2, max_length=4)
+    initial_marks: list[Literal["NONE", "COMMA", "COLON", "PERIOD"]] = Field(min_length=2, max_length=4)
+    full_sentence: str = Field(min_length=3, max_length=300)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_punctuation(self):
+        if len(self.parts) != len(self.target_marks) or len(self.parts) != len(self.initial_marks):
+            raise ValueError("Punctuation parts and mark sequences must have equal lengths.")
+        if self.target_marks[-1] != "PERIOD":
+            raise ValueError("A punctuation-lab target must end with a period.")
+        if self.initial_marks == self.target_marks:
+            raise ValueError("The initial punctuation must require editing.")
+        symbols = {"NONE": " ", "COMMA": ", ", "COLON": ": ", "PERIOD": "."}
+        rendered = "".join(part + symbols[mark] for part, mark in zip(self.parts, self.target_marks, strict=True)).strip()
+        if rendered != self.full_sentence:
+            raise ValueError("The punctuation target must render the declared full sentence exactly.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -873,6 +896,7 @@ class ModuleActivity(BaseModel):
         "SHADOW_VIEW_LAB",
         "CITY_BUDGET_LAB",
         "BINARY_SIGNAL_LAB",
+        "PUNCTUATION_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -944,4 +968,6 @@ class ModuleActivity(BaseModel):
             CityBudgetLabContent.model_validate(self.content)
         elif self.type == "BINARY_SIGNAL_LAB":
             BinarySignalLabContent.model_validate(self.content)
+        elif self.type == "PUNCTUATION_LAB":
+            PunctuationLabContent.model_validate(self.content)
         return self

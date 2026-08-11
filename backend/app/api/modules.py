@@ -589,6 +589,14 @@ def complete_module_activity(
             or response != activity.content["target_bits"]
         ):
             raise HTTPException(status_code=422, detail="The submitted binary signal does not encode the target message.")
+    if activity.type == "PUNCTUATION_LAB":
+        response = data.response
+        if (
+            not isinstance(response, list)
+            or any(not isinstance(mark, str) for mark in response)
+            or response != activity.content["target_marks"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted punctuation does not reconstruct the sentence.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,
