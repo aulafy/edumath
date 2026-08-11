@@ -14,7 +14,7 @@ from app.db.models import (
 )
 from app.db.session import get_db
 from app.modules.package import MAX_PACKAGE_BYTES, ModulePackageError, validate_module_package
-from app.modules.schemas import TileCell, tile_shape_metrics
+from app.modules.schemas import RouteCell, TileCell, simulate_route, tile_shape_metrics
 from fastapi import APIRouter, Depends, File, Header, HTTPException, UploadFile
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
@@ -390,6 +390,16 @@ def complete_module_activity(
             or sum(response) != activity.content["target_resultant"]
         ):
             raise HTTPException(status_code=422, detail="The submitted forces do not reach the target resultant.")
+    if activity.type == "ROUTE_LAB":
+        response = data.response
+        content = activity.content
+        if not isinstance(response, list) or any(not isinstance(move, str) for move in response) or len(response) > content["max_moves"]:
+            raise HTTPException(status_code=422, detail="The submitted route is invalid.")
+        start = RouteCell.model_validate(content["start"])
+        blocked = {(cell["row"], cell["col"]) for cell in content["blocked"]}
+        end = simulate_route(start, response, content["rows"], content["cols"], blocked)
+        if end != (content["target"]["row"], content["target"]["col"]):
+            raise HTTPException(status_code=422, detail="The submitted route does not reach the target.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

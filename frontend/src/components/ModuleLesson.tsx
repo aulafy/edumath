@@ -1,4 +1,4 @@
-import { ArrowLeft, Check, ChevronLeft, ChevronRight, FlaskConical, ListChecks, Minus, Play, Plus, Volume2, X } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, FlaskConical, ListChecks, Minus, Play, Plus, Undo2, Volume2, X } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { api } from "../api/client";
 import type { ModuleAssignment, Student } from "../types/contracts";
@@ -14,6 +14,7 @@ const SentenceLab3D = lazy(() => import("./SentenceLab3D").then((module) => ({ d
 const OrbitLab3D = lazy(() => import("./OrbitLab3D").then((module) => ({ default: module.OrbitLab3D })));
 const MoleculeLab3D = lazy(() => import("./MoleculeLab3D").then((module) => ({ default: module.MoleculeLab3D })));
 const ForceLab3D = lazy(() => import("./ForceLab3D").then((module) => ({ default: module.ForceLab3D })));
+const RouteLab3D = lazy(() => import("./RouteLab3D").then((module) => ({ default: module.RouteLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -33,6 +34,15 @@ type OrbitLab = { prompt: string; center_label: string; bodies: OrbitBody[]; exp
 type MoleculeAtom = { symbol: string; label: string; count: number; color: string };
 type MoleculeLab = { prompt: string; molecule_name: string; formula: string; atoms: MoleculeAtom[]; explanation: string };
 type ForceLab = { prompt: string; target_resultant: number; forces: number[]; example_solution: number[]; explanation: string };
+type RouteCell = { row: number; col: number };
+type RouteMove = "UP" | "DOWN" | "LEFT" | "RIGHT";
+type RouteLab = { prompt: string; rows: number; cols: number; start: RouteCell; target: RouteCell; blocked: RouteCell[]; max_moves: number; example_moves: RouteMove[]; explanation: string };
+
+const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
+
+function routePosition(content: RouteLab, moves: RouteMove[]) {
+  return moves.reduce((cell, move) => ({ row: cell.row + routeDeltas[move][0], col: cell.col + routeDeltas[move][1] }), content.start);
+}
 
 function tileMetrics(cells: TileCell[]) {
   const points = new Set(cells.map((cell) => `${cell.row}:${cell.col}`));
@@ -309,6 +319,37 @@ function ForceExercise({ content, onSolved }: { content: ForceLab; onSolved: (re
   </div>;
 }
 
+function RouteExercise({ content, onSolved }: { content: RouteLab; onSolved: (response: RouteMove[]) => void }) {
+  const [moves, setMoves] = useState<RouteMove[]>([]);
+  const [checked, setChecked] = useState(false);
+  const position = routePosition(content, moves);
+  const reached = position.row === content.target.row && position.col === content.target.col;
+  const blocked = new Set(content.blocked.map((cell) => `${cell.row}:${cell.col}`));
+  function canMove(move: RouteMove) {
+    const row = position.row + routeDeltas[move][0]; const col = position.col + routeDeltas[move][1];
+    return moves.length < content.max_moves && row >= 0 && row < content.rows && col >= 0 && col < content.cols && !blocked.has(`${row}:${col}`) && !reached;
+  }
+  function addMove(move: RouteMove) { if (canMove(move)) { setMoves((current) => [...current, move]); setChecked(false); } }
+  const labels: Record<RouteMove, string> = { UP: "Arriba", DOWN: "Abajo", LEFT: "Izquierda", RIGHT: "Derecha" };
+  return <div className="interactiveExercise routeExercise">
+    <strong>{content.prompt}</strong>
+    <Suspense fallback={<div className="routeLabScene loadingScene" aria-label="Preparando tablero de rutas 3D" />}>
+      <RouteLab3D rows={content.rows} cols={content.cols} blocked={content.blocked} target={content.target} position={position} />
+    </Suspense>
+    <div className="routeStatus" aria-live="polite"><span>Fila {position.row + 1}, columna {position.col + 1}</span><strong>{moves.length}/{content.max_moves} comandos</strong></div>
+    <div className="routeProgram" aria-label="Programa actual">{moves.length === 0 ? <span>Programa vacío</span> : moves.map((move, index) => <span key={`${move}-${index}`}>{index + 1}. {labels[move]}</span>)}</div>
+    <div className="routePad" role="group" aria-label="Controles de movimiento">
+      <button className="iconButton" aria-label="Mover arriba" title="Mover arriba" disabled={!canMove("UP")} onClick={() => addMove("UP")}><ArrowUp /></button>
+      <button className="iconButton" aria-label="Mover izquierda" title="Mover izquierda" disabled={!canMove("LEFT")} onClick={() => addMove("LEFT")}><ArrowLeft /></button>
+      <button className="iconButton secondary" aria-label="Deshacer último movimiento" title="Deshacer último movimiento" disabled={moves.length === 0} onClick={() => { setMoves((current) => current.slice(0, -1)); setChecked(false); }}><Undo2 /></button>
+      <button className="iconButton" aria-label="Mover derecha" title="Mover derecha" disabled={!canMove("RIGHT")} onClick={() => addMove("RIGHT")}><ArrowRight /></button>
+      <button className="iconButton" aria-label="Mover abajo" title="Mover abajo" disabled={!canMove("DOWN")} onClick={() => addMove("DOWN")}><ArrowDown /></button>
+    </div>
+    <button disabled={!reached} onClick={() => { setChecked(true); if (reached) onSolved(moves); }}><Check /> Ejecutar programa</button>
+    {checked && <p className="exerciseFeedback correct">¡Destino alcanzado! {content.explanation}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -318,7 +359,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -356,6 +397,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "ORBIT_LAB" && <OrbitExercise key={activity.id} content={activity.content as OrbitLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "MOLECULE_LAB" && <MoleculeExercise key={activity.id} content={activity.content as MoleculeLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "FORCE_LAB" && <ForceExercise key={activity.id} content={activity.content as ForceLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "ROUTE_LAB" && <RouteExercise key={activity.id} content={activity.content as RouteLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

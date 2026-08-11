@@ -334,3 +334,26 @@ def test_force_lab_rejects_an_invalid_example_resultant() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_route_lab_rejects_an_example_that_hits_an_obstacle() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "ROUTE_LAB",
+        "content": {
+            "prompt": "Program the rover.", "rows": 4, "cols": 4,
+            "start": {"row": 3, "col": 0}, "target": {"row": 0, "col": 3},
+            "blocked": [{"row": 2, "col": 0}], "max_moves": 8,
+            "example_moves": ["UP", "UP", "UP", "RIGHT", "RIGHT", "RIGHT"],
+            "explanation": "The first move enters a blocked cell.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

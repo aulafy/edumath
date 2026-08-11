@@ -20,6 +20,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "ORBIT_LAB": "org.edumath.tests.science-orbits",
             "MOLECULE_LAB": "org.edumath.tests.science-molecules",
             "FORCE_LAB": "org.edumath.tests.physics-forces",
+            "ROUTE_LAB": "org.edumath.tests.math-routes",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -236,6 +237,23 @@ def make_force_activity() -> dict:
             "forces": [-6, -4, 4, 6],
             "example_solution": [-4, 4],
             "explanation": "Equal opposite forces have a zero resultant.",
+        },
+        "evidence": {},
+    }
+
+
+def make_route_activity() -> dict:
+    return {
+        "id": "program-rover",
+        "type": "ROUTE_LAB",
+        "title": "Program the rover",
+        "instructions": "Reach the target without collisions.",
+        "content": {
+            "prompt": "Move across the grid.", "rows": 4, "cols": 4,
+            "start": {"row": 3, "col": 0}, "target": {"row": 0, "col": 3},
+            "blocked": [{"row": 2, "col": 1}], "max_moves": 8,
+            "example_moves": ["UP", "UP", "UP", "RIGHT", "RIGHT", "RIGHT"],
+            "explanation": "Several safe routes can reach the target.",
         },
         "evidence": {},
     }
@@ -745,3 +763,30 @@ def test_force_lab_accepts_any_available_combination_with_the_target_sum() -> No
         completed = client.post(endpoint, json={"student_id": student["id"], "response": [-6, 6]})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["balance-cart"]
+
+
+def test_route_lab_accepts_an_alternative_safe_path() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms", json={"name": "4G Maths", "stage": "PRIMARY", "grade": 4}
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import", headers=headers,
+            files={"package": ("route.edumath", make_package(make_route_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments", headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["program-rover"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Kai"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/program-rover/complete"
+        collision = ["RIGHT", "UP", "UP", "UP", "RIGHT", "RIGHT"]
+        assert client.post(endpoint, json={"student_id": student["id"], "response": collision}).status_code == 422
+        alternative = ["RIGHT", "RIGHT", "RIGHT", "UP", "UP", "UP"]
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": alternative})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["program-rover"]

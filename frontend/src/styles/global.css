@@ -1016,6 +1016,15 @@ select {
 .forceChoice small { font-size: 0.7rem; }
 .forceChoice.selected { border-color: #287b63; background: #dff3e9; box-shadow: inset 0 -4px 0 #78b9a0; }
 
+.routeLabScene { width: 100%; height: clamp(280px, 42vh, 390px); overflow: hidden; border: 1px solid #c5d2cc; border-radius: 8px; background: #eef4ef; }
+.routeLabScene canvas { display: block; width: 100% !important; height: 100% !important; }
+.routeStatus { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid #c8d6cf; border-radius: 8px; background: #f7faf8; }
+.routeProgram { display: flex; min-height: 52px; align-items: center; gap: 7px; padding: 8px; overflow-x: auto; border: 2px dashed #9aaba2; border-radius: 8px; background: #f7faf8; }
+.routeProgram > span { flex: 0 0 auto; padding: 7px 9px; border-radius: 6px; background: #dfeae4; font-size: 0.82rem; font-weight: 750; }
+.routePad { display: grid; grid-template-columns: repeat(3, 52px); grid-template-areas: ". up ." "left undo right" ". down ."; justify-content: center; gap: 7px; }
+.routePad .iconButton { width: 52px; height: 52px; min-height: 52px; padding: 10px; }
+.routePad button:nth-child(1) { grid-area: up; }.routePad button:nth-child(2) { grid-area: left; }.routePad button:nth-child(3) { grid-area: undo; }.routePad button:nth-child(4) { grid-area: right; }.routePad button:nth-child(5) { grid-area: down; }
+
 @media (max-width: 560px) {
   .rhythmReference {
     align-items: stretch;

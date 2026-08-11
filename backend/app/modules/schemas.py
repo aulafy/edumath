@@ -351,6 +351,54 @@ class ForceLabContent(BaseModel):
         return self
 
 
+class RouteCell(BaseModel):
+    row: int = Field(ge=0, le=5)
+    col: int = Field(ge=0, le=5)
+
+
+def simulate_route(start: RouteCell, moves: list[str], rows: int, cols: int, blocked: set[tuple[int, int]]) -> tuple[int, int] | None:
+    row, col = start.row, start.col
+    deltas = {"UP": (-1, 0), "DOWN": (1, 0), "LEFT": (0, -1), "RIGHT": (0, 1)}
+    for move in moves:
+        if move not in deltas:
+            return None
+        dr, dc = deltas[move]
+        row, col = row + dr, col + dc
+        if row < 0 or row >= rows or col < 0 or col >= cols or (row, col) in blocked:
+            return None
+    return row, col
+
+
+class RouteLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    rows: int = Field(ge=3, le=6)
+    cols: int = Field(ge=3, le=6)
+    start: RouteCell
+    target: RouteCell
+    blocked: list[RouteCell] = Field(default_factory=list, max_length=16)
+    max_moves: int = Field(ge=2, le=20)
+    example_moves: list[Literal["UP", "DOWN", "LEFT", "RIGHT"]] = Field(min_length=2, max_length=20)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_route(self):
+        cells = {(cell.row, cell.col) for cell in self.blocked}
+        if len(cells) != len(self.blocked):
+            raise ValueError("Blocked route cells must be unique.")
+        if any(cell.row >= self.rows or cell.col >= self.cols for cell in [self.start, self.target, *self.blocked]):
+            raise ValueError("Every route cell must be inside the grid.")
+        if (self.start.row, self.start.col) == (self.target.row, self.target.col):
+            raise ValueError("Route start and target must differ.")
+        if (self.start.row, self.start.col) in cells or (self.target.row, self.target.col) in cells:
+            raise ValueError("Route start and target cannot be blocked.")
+        if len(self.example_moves) > self.max_moves:
+            raise ValueError("The example route exceeds the move limit.")
+        end = simulate_route(self.start, self.example_moves, self.rows, self.cols, cells)
+        if end != (self.target.row, self.target.col):
+            raise ValueError("The example route must reach the target without collisions.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -366,6 +414,7 @@ class ModuleActivity(BaseModel):
         "ORBIT_LAB",
         "MOLECULE_LAB",
         "FORCE_LAB",
+        "ROUTE_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -403,4 +452,6 @@ class ModuleActivity(BaseModel):
             MoleculeLabContent.model_validate(self.content)
         elif self.type == "FORCE_LAB":
             ForceLabContent.model_validate(self.content)
+        elif self.type == "ROUTE_LAB":
+            RouteLabContent.model_validate(self.content)
         return self

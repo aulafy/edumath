@@ -18,11 +18,12 @@ EduMath keeps its editable learning-content source in `content/open_modules.v1.j
 | Primary | 5-6 | Knowledge of the Environment | The distance observatory |
 | ESO | 2 | Physics and Chemistry | The molecule workbench |
 | ESO | 2 | Physics and Chemistry | The force bench |
+| Primary | 5-6 | Mathematics | Route explorers |
 | Primary | 5 | Spanish Language and Literature | The word laboratory |
 | ESO | 1 | Geography and History | Journey through Prehistory |
 | ESO | 2 | Physics and Chemistry | Forces in motion |
 
-The hand-maintained catalog currently contains 45 activities. Model-generated Primary drafts live separately in `content/generated/primary/` and are counted by the coverage report. Closed questions, classification challenges, balance laboratories, mosaic workshops, time paths, food-web laboratories, rhythm sequencers, sentence laboratories, orbital observatories, molecule workbenches, and force benches are interactive and checked by the backend before completion is recorded. Selected modules also contain declarative WebGL scenes.
+The hand-maintained catalog currently contains 48 activities. Model-generated Primary drafts live separately in `content/generated/primary/` and are counted by the coverage report. Closed questions, classification challenges, balance laboratories, mosaic workshops, time paths, food-web laboratories, rhythm sequencers, sentence laboratories, orbital observatories, molecule workbenches, force benches, and route laboratories are interactive and checked by the backend before completion is recorded. Selected modules also contain declarative WebGL scenes.
 
 ## Model-assisted drafting
 
