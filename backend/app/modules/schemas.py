@@ -399,6 +399,36 @@ class RouteLabContent(BaseModel):
         return self
 
 
+class ClimateLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    profile_label: str = Field(min_length=2, max_length=80)
+    temperature_min: int = Field(ge=-20, le=40)
+    temperature_max: int = Field(ge=-20, le=40)
+    rainfall_min: int = Field(ge=0, le=2500)
+    rainfall_max: int = Field(ge=0, le=2500)
+    initial_temperature: int = Field(ge=-20, le=40)
+    initial_rainfall: int = Field(ge=0, le=2500)
+    example_temperature: int = Field(ge=-20, le=40)
+    example_rainfall: int = Field(ge=0, le=2500)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_climate(self):
+        if self.temperature_min > self.temperature_max or self.rainfall_min > self.rainfall_max:
+            raise ValueError("Climate target ranges must be ordered.")
+        if not self.temperature_min <= self.example_temperature <= self.temperature_max:
+            raise ValueError("The climate example temperature must be inside the target range.")
+        if not self.rainfall_min <= self.example_rainfall <= self.rainfall_max:
+            raise ValueError("The climate example rainfall must be inside the target range.")
+        initial_matches = (
+            self.temperature_min <= self.initial_temperature <= self.temperature_max
+            and self.rainfall_min <= self.initial_rainfall <= self.rainfall_max
+        )
+        if initial_matches:
+            raise ValueError("The initial climate state must require an adjustment.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -415,6 +445,7 @@ class ModuleActivity(BaseModel):
         "MOLECULE_LAB",
         "FORCE_LAB",
         "ROUTE_LAB",
+        "CLIMATE_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -454,4 +485,6 @@ class ModuleActivity(BaseModel):
             ForceLabContent.model_validate(self.content)
         elif self.type == "ROUTE_LAB":
             RouteLabContent.model_validate(self.content)
+        elif self.type == "CLIMATE_LAB":
+            ClimateLabContent.model_validate(self.content)
         return self

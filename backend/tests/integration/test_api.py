@@ -21,6 +21,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "MOLECULE_LAB": "org.edumath.tests.science-molecules",
             "FORCE_LAB": "org.edumath.tests.physics-forces",
             "ROUTE_LAB": "org.edumath.tests.math-routes",
+            "CLIMATE_LAB": "org.edumath.tests.geography-climate",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -256,6 +257,21 @@ def make_route_activity() -> dict:
             "explanation": "Several safe routes can reach the target.",
         },
         "evidence": {},
+    }
+
+
+def make_climate_activity() -> dict:
+    return {
+        "id": "tune-humid-profile", "type": "CLIMATE_LAB",
+        "title": "Tune a humid profile", "instructions": "Adjust both climate variables.",
+        "content": {
+            "prompt": "Build the target climate.", "profile_label": "Temperate and humid",
+            "temperature_min": 10, "temperature_max": 16,
+            "rainfall_min": 900, "rainfall_max": 1400,
+            "initial_temperature": 25, "initial_rainfall": 300,
+            "example_temperature": 14, "example_rainfall": 1100,
+            "explanation": "Both variables must fall inside their intervals.",
+        }, "evidence": {},
     }
 
 
@@ -790,3 +806,30 @@ def test_route_lab_accepts_an_alternative_safe_path() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": alternative})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["program-rover"]
+
+
+def test_climate_lab_accepts_inclusive_range_boundaries() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms", json={"name": "4H Geography", "stage": "PRIMARY", "grade": 4}
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import", headers=headers,
+            files={"package": ("climate.edumath", make_package(make_climate_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments", headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["tune-humid-profile"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Mar"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/tune-humid-profile/complete"
+        outside = {"temperature": 17, "rainfall": 900}
+        assert client.post(endpoint, json={"student_id": student["id"], "response": outside}).status_code == 422
+        boundary = {"temperature": 10, "rainfall": 1400}
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": boundary})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["tune-humid-profile"]

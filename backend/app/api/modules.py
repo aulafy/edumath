@@ -400,6 +400,17 @@ def complete_module_activity(
         end = simulate_route(start, response, content["rows"], content["cols"], blocked)
         if end != (content["target"]["row"], content["target"]["col"]):
             raise HTTPException(status_code=422, detail="The submitted route does not reach the target.")
+    if activity.type == "CLIMATE_LAB":
+        response = data.response
+        content = activity.content
+        if (
+            not isinstance(response, dict)
+            or set(response) != {"temperature", "rainfall"}
+            or any(type(value) is not int for value in response.values())
+            or not content["temperature_min"] <= response["temperature"] <= content["temperature_max"]
+            or not content["rainfall_min"] <= response["rainfall"] <= content["rainfall_max"]
+        ):
+            raise HTTPException(status_code=422, detail="The submitted climate profile is outside the target ranges.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

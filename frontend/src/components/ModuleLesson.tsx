@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, FlaskConical, ListChecks, Minus, Play, Plus, Undo2, Volume2, X } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronLeft, ChevronRight, CloudRain, FlaskConical, ListChecks, Minus, Play, Plus, Thermometer, Undo2, Volume2, X } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { api } from "../api/client";
 import type { ModuleAssignment, Student } from "../types/contracts";
@@ -15,6 +15,7 @@ const OrbitLab3D = lazy(() => import("./OrbitLab3D").then((module) => ({ default
 const MoleculeLab3D = lazy(() => import("./MoleculeLab3D").then((module) => ({ default: module.MoleculeLab3D })));
 const ForceLab3D = lazy(() => import("./ForceLab3D").then((module) => ({ default: module.ForceLab3D })));
 const RouteLab3D = lazy(() => import("./RouteLab3D").then((module) => ({ default: module.RouteLab3D })));
+const ClimateLab3D = lazy(() => import("./ClimateLab3D").then((module) => ({ default: module.ClimateLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -37,6 +38,7 @@ type ForceLab = { prompt: string; target_resultant: number; forces: number[]; ex
 type RouteCell = { row: number; col: number };
 type RouteMove = "UP" | "DOWN" | "LEFT" | "RIGHT";
 type RouteLab = { prompt: string; rows: number; cols: number; start: RouteCell; target: RouteCell; blocked: RouteCell[]; max_moves: number; example_moves: RouteMove[]; explanation: string };
+type ClimateLab = { prompt: string; profile_label: string; temperature_min: number; temperature_max: number; rainfall_min: number; rainfall_max: number; initial_temperature: number; initial_rainfall: number; example_temperature: number; example_rainfall: number; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -350,6 +352,28 @@ function RouteExercise({ content, onSolved }: { content: RouteLab; onSolved: (re
   </div>;
 }
 
+function ClimateExercise({ content, onSolved }: { content: ClimateLab; onSolved: (response: { temperature: number; rainfall: number }) => void }) {
+  const [temperature, setTemperature] = useState(content.initial_temperature);
+  const [rainfall, setRainfall] = useState(content.initial_rainfall);
+  const [checked, setChecked] = useState(false);
+  const temperatureReady = temperature >= content.temperature_min && temperature <= content.temperature_max;
+  const rainfallReady = rainfall >= content.rainfall_min && rainfall <= content.rainfall_max;
+  const correct = temperatureReady && rainfallReady;
+  return <div className="interactiveExercise climateExercise">
+    <strong>{content.prompt}</strong>
+    <div className="climateTargets"><span>{content.profile_label}</span><strong>{content.temperature_min}–{content.temperature_max} °C</strong><strong>{content.rainfall_min}–{content.rainfall_max} mm/año</strong></div>
+    <Suspense fallback={<div className="climateLabScene loadingScene" aria-label="Preparando estación climática 3D" />}>
+      <ClimateLab3D temperature={temperature} rainfall={rainfall} />
+    </Suspense>
+    <div className="climateControls">
+      <label className={temperatureReady ? "ready" : ""}><span><Thermometer /> Temperatura media</span><output>{temperature} °C</output><input aria-label="Temperatura media anual" type="range" min="-20" max="40" step="1" value={temperature} onInput={(event) => { setTemperature(Number(event.currentTarget.value)); setChecked(false); }} /></label>
+      <label className={rainfallReady ? "ready" : ""}><span><CloudRain /> Precipitación anual</span><output>{rainfall} mm</output><input aria-label="Precipitación anual" type="range" min="0" max="2500" step="50" value={rainfall} onInput={(event) => { setRainfall(Number(event.currentTarget.value)); setChecked(false); }} /></label>
+    </div>
+    <button onClick={() => { setChecked(true); if (correct) onSolved({ temperature, rainfall }); }}><Check /> Analizar perfil</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Perfil construido! ${content.explanation}` : `Ajusta ${!temperatureReady && !rainfallReady ? "las dos variables" : !temperatureReady ? "la temperatura" : "la precipitación"} hasta entrar en el intervalo objetivo.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -359,7 +383,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -398,6 +422,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "MOLECULE_LAB" && <MoleculeExercise key={activity.id} content={activity.content as MoleculeLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "FORCE_LAB" && <ForceExercise key={activity.id} content={activity.content as ForceLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "ROUTE_LAB" && <RouteExercise key={activity.id} content={activity.content as RouteLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "CLIMATE_LAB" && <ClimateExercise key={activity.id} content={activity.content as ClimateLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>
