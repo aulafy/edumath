@@ -21,6 +21,7 @@ const ReflectionLab3D = lazy(() => import("./ReflectionLab3D").then((module) => 
 const DiffusionLab3D = lazy(() => import("./DiffusionLab3D").then((module) => ({ default: module.DiffusionLab3D })));
 const StratigraphyLab3D = lazy(() => import("./StratigraphyLab3D").then((module) => ({ default: module.StratigraphyLab3D })));
 const DensityLab3D = lazy(() => import("./DensityLab3D").then((module) => ({ default: module.DensityLab3D })));
+const TectonicLab3D = lazy(() => import("./TectonicLab3D").then((module) => ({ default: module.TectonicLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -53,6 +54,9 @@ type StratumArtifact = { id: string; label: string; depth_rank: number; shape: "
 type StratigraphyLab = { prompt: string; site_label: string; artifacts: StratumArtifact[]; explanation: string };
 type DensityState = "FLOAT" | "SINK" | "SUSPEND";
 type DensityLab = { prompt: string; target_state: DensityState; liquid_density: 1; initial_mass: number; initial_volume: number; example_mass: number; example_volume: number; explanation: string };
+type PlateMotion = "DIVERGENT" | "CONVERGENT" | "TRANSFORM";
+type TectonicFeature = "RIDGE" | "MOUNTAIN_RANGE" | "FAULT";
+type TectonicLab = { prompt: string; target_motion: PlateMotion; target_feature: TectonicFeature; initial_motion: PlateMotion; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -518,6 +522,29 @@ function DensityExercise({ content, onSolved }: { content: DensityLab; onSolved:
   </div>;
 }
 
+const tectonicFeatureByMotion: Record<PlateMotion, TectonicFeature> = { DIVERGENT: "RIDGE", CONVERGENT: "MOUNTAIN_RANGE", TRANSFORM: "FAULT" };
+const tectonicMotionLabels: Record<PlateMotion, string> = { DIVERGENT: "Separar", CONVERGENT: "Comprimir", TRANSFORM: "Deslizar" };
+const tectonicFeatureLabels: Record<TectonicFeature, string> = { RIDGE: "Dorsal", MOUNTAIN_RANGE: "Cordillera", FAULT: "Falla" };
+
+function TectonicExercise({ content, onSolved }: { content: TectonicLab; onSolved: (response: PlateMotion) => void }) {
+  const [motion, setMotion] = useState<PlateMotion>(content.initial_motion);
+  const [checked, setChecked] = useState(false);
+  const feature = tectonicFeatureByMotion[motion];
+  const correct = motion === content.target_motion && feature === content.target_feature;
+  return <div className="interactiveExercise tectonicExercise">
+    <strong>{content.prompt}</strong>
+    <div className="tectonicTarget"><span>Relieve objetivo</span><strong>{tectonicFeatureLabels[content.target_feature]}</strong></div>
+    <Suspense fallback={<div className="tectonicLabScene loadingScene" aria-label="Preparando mesa tectónica 3D" />}><TectonicLab3D motion={motion} /></Suspense>
+    <div className="tectonicReadout" aria-live="polite"><span>Movimiento: <strong>{tectonicMotionLabels[motion]}</strong></span><span>Resultado: <strong>{tectonicFeatureLabels[feature]}</strong></span></div>
+    <div className="tectonicControls" role="group" aria-label="Movimiento relativo de las placas">
+      {(Object.keys(tectonicMotionLabels) as PlateMotion[]).map((option) => <button key={option} className={motion === option ? "selected" : "secondary"} aria-pressed={motion === option} onClick={() => { setMotion(option); setChecked(false); }}><ArrowLeftRight />{tectonicMotionLabels[option]}</button>)}
+    </div>
+    <p className="modelBoundary">Modelo conceptual, no simulación geofísica: las placas reales son enormes y se mueven muy lentamente. Aquí mostramos un proceso dominante; existen límites convergentes con subducción y casos mixtos.</p>
+    <button onClick={() => { setChecked(true); if (correct) onSolved(motion); }}><Check /> Observar el relieve</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Causa y relieve conectados! ${content.explanation}` : `Al ${tectonicMotionLabels[motion].toLowerCase()} las placas, la mesa crea una ${tectonicFeatureLabels[feature].toLowerCase()}. Prueba otro movimiento para formar una ${tectonicFeatureLabels[content.target_feature].toLowerCase()}.`}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -527,7 +554,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -572,6 +599,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "DIFFUSION_LAB" && <DiffusionExercise key={activity.id} content={activity.content as DiffusionLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "STRATIGRAPHY_LAB" && <StratigraphyExercise key={activity.id} content={activity.content as StratigraphyLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "DENSITY_LAB" && <DensityExercise key={activity.id} content={activity.content as DensityLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "TECTONIC_LAB" && <TectonicExercise key={activity.id} content={activity.content as TectonicLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

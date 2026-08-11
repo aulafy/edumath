@@ -539,6 +539,30 @@ class DensityLabContent(BaseModel):
         return self
 
 
+class TectonicLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    target_motion: Literal["DIVERGENT", "CONVERGENT", "TRANSFORM"]
+    target_feature: Literal["RIDGE", "MOUNTAIN_RANGE", "FAULT"]
+    initial_motion: Literal["DIVERGENT", "CONVERGENT", "TRANSFORM"]
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @staticmethod
+    def feature(motion: str) -> str:
+        return {
+            "DIVERGENT": "RIDGE",
+            "CONVERGENT": "MOUNTAIN_RANGE",
+            "TRANSFORM": "FAULT",
+        }[motion]
+
+    @model_validator(mode="after")
+    def validate_tectonics(self):
+        if self.feature(self.target_motion) != self.target_feature:
+            raise ValueError("The tectonic target motion must create the target feature.")
+        if self.initial_motion == self.target_motion:
+            raise ValueError("The initial tectonic motion must require a change.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -561,6 +585,7 @@ class ModuleActivity(BaseModel):
         "DIFFUSION_LAB",
         "STRATIGRAPHY_LAB",
         "DENSITY_LAB",
+        "TECTONIC_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -612,4 +637,6 @@ class ModuleActivity(BaseModel):
             StratigraphyLabContent.model_validate(self.content)
         elif self.type == "DENSITY_LAB":
             DensityLabContent.model_validate(self.content)
+        elif self.type == "TECTONIC_LAB":
+            TectonicLabContent.model_validate(self.content)
         return self

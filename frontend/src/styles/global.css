@@ -1106,6 +1106,22 @@ select {
 .relativeTimeline i { display: grid; place-items: center; border: 1px dashed #b7c4be; color: #6b7c75; font-style: normal; }
 .densityLabScene { width: 100%; height: clamp(290px, 43vh, 400px); overflow: hidden; border: 1px solid #c5d2cc; border-radius: 8px; background: #eaf3f1; }
 .densityLabScene canvas { display: block; width: 100% !important; height: 100% !important; }
+
+.tectonicLabScene { width: 100%; height: clamp(290px, 43vh, 400px); overflow: hidden; border: 1px solid #c5d2cc; border-radius: 8px; background: #e7f0ee; }
+.tectonicLabScene canvas { display: block; width: 100% !important; height: 100% !important; }
+.tectonicTarget { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 2px solid #85633f; border-radius: 8px; background: #fff4d4; padding: 10px 14px; color: #523c26; }
+.tectonicTarget span { font-weight: 700; }
+.tectonicTarget strong { font-size: 1.15rem; }
+.tectonicReadout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.tectonicReadout span { border: 1px solid #c6d3cd; border-radius: 8px; background: #f7faf8; padding: 10px 12px; }
+.tectonicControls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.tectonicControls button { min-width: 0; }
+.tectonicControls button.selected { background: #246f5a; color: white; }
+
+@media (max-width: 560px) {
+  .tectonicReadout,
+  .tectonicControls { grid-template-columns: 1fr; }
+}
 .densityTarget { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 2px 12px; padding: 10px 14px; border: 1px solid #c8d6cf; border-radius: 8px; background: #f7faf8; }
 .densityTarget strong { color: #21614e; font-size: 1.15rem; }
 .densityTarget small { grid-column: 1 / -1; color: #607269; }

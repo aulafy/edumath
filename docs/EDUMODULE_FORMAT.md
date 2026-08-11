@@ -152,6 +152,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 
 `DENSITY_LAB` declares a target behavior, a fixed liquid density of 1.0 g/cm³, and initial and witness integer mass and volume values from one to twenty. The trusted runner compares mass and volume exactly: lower mass than volume floats, higher mass sinks, and equal values suspend. The interface must preserve units, show the live quotient, describe the scene as a static simplified model, and state that density alone does not identify a material.
 
+`TECTONIC_LAB` declares one target and one initial relative plate motion (`DIVERGENT`, `CONVERGENT`, or `TRANSFORM`) plus the corresponding target feature (`RIDGE`, `MOUNTAIN_RANGE`, or `FAULT`). The schema rejects inconsistent cause-and-feature pairs and already-solved initial states. The trusted 3D runner visualises only the dominant conceptual relationship; copy must state that real plates move slowly, convergent boundaries can include subduction, and real boundaries may combine processes.
+
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.

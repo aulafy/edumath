@@ -493,3 +493,24 @@ def test_density_lab_rejects_a_witness_with_the_wrong_state() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_tectonic_lab_rejects_an_inconsistent_motion_and_feature() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "TECTONIC_LAB",
+        "content": {
+            "prompt": "Create a ridge.", "target_motion": "CONVERGENT",
+            "target_feature": "RIDGE", "initial_motion": "TRANSFORM",
+            "explanation": "This pair is scientifically inconsistent.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

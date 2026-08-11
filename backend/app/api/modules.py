@@ -461,6 +461,12 @@ def complete_module_activity(
         state = "FLOAT" if response["mass"] < response["volume"] else "SINK" if response["mass"] > response["volume"] else "SUSPEND"
         if state != activity.content["target_state"]:
             raise HTTPException(status_code=422, detail="The submitted density does not create the target state.")
+    if activity.type == "TECTONIC_LAB":
+        response = data.response
+        if not isinstance(response, str) or response not in {"DIVERGENT", "CONVERGENT", "TRANSFORM"}:
+            raise HTTPException(status_code=422, detail="The submitted plate motion is invalid.")
+        if response != activity.content["target_motion"]:
+            raise HTTPException(status_code=422, detail="The submitted plate motion does not create the target feature.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

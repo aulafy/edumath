@@ -27,6 +27,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "DIFFUSION_LAB": "org.edumath.tests.biology-diffusion",
             "STRATIGRAPHY_LAB": "org.edumath.tests.history-stratigraphy",
             "DENSITY_LAB": "org.edumath.tests.physics-density",
+            "TECTONIC_LAB": "org.edumath.tests.geology-tectonics",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -346,6 +347,18 @@ def make_density_activity() -> dict:
             "initial_mass": 12, "initial_volume": 6,
             "example_mass": 5, "example_volume": 10,
             "explanation": "A block less dense than the liquid floats in this model.",
+        }, "evidence": {},
+    }
+
+
+def make_tectonic_activity() -> dict:
+    return {
+        "id": "build-a-ridge", "type": "TECTONIC_LAB",
+        "title": "Build a ridge", "instructions": "Choose the relative plate motion.",
+        "content": {
+            "prompt": "Create a ridge.", "target_motion": "DIVERGENT",
+            "target_feature": "RIDGE", "initial_motion": "CONVERGENT",
+            "explanation": "Diverging plates create new lithosphere at a ridge.",
         }, "evidence": {},
     }
 
@@ -1039,3 +1052,29 @@ def test_density_lab_requires_the_target_relative_density() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": {"mass": 5, "volume": 10}})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["float-the-block"]
+
+
+def test_tectonic_lab_requires_the_target_plate_motion() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms", json={"name": "1A Geology", "stage": "PRIMARY", "grade": 4}
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import", headers=headers,
+            files={"package": ("tectonics.edumath", make_package(make_tectonic_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments", headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["build-a-ridge"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Noa"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/build-a-ridge/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": "CONVERGENT"}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"motion": "DIVERGENT"}}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": "DIVERGENT"})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["build-a-ridge"]
