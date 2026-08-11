@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Float, Integer, String, Text
+from sqlalchemy import Boolean, Float, Integer, LargeBinary, String, Text, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -115,3 +115,23 @@ class SessionPlanRow(Base):
     assignment_id: Mapped[str] = mapped_column(String, nullable=False)
     skill_ids_json: Mapped[str] = mapped_column(Text, nullable=False)
     problem_count: Mapped[int] = mapped_column(Integer, nullable=False)
+
+
+class EducationalModuleRow(Base):
+    __tablename__ = "educational_modules"
+    __table_args__ = (UniqueConstraint("module_id", "version", name="uq_module_version"),)
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    module_id: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    version: Mapped[str] = mapped_column(String, nullable=False)
+    title: Mapped[str] = mapped_column(String, nullable=False)
+    summary: Mapped[str] = mapped_column(Text, nullable=False)
+    subject: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    stage: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    grades_json: Mapped[str] = mapped_column(Text, nullable=False)
+    license: Mapped[str] = mapped_column(String, nullable=False)
+    authors_json: Mapped[str] = mapped_column(Text, nullable=False)
+    manifest_json: Mapped[str] = mapped_column(Text, nullable=False)
+    package_sha256: Mapped[str] = mapped_column(String, nullable=False)
+    package_bytes: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
+    status: Mapped[str] = mapped_column(String, default="VALIDATED")
+    imported_at: Mapped[str] = mapped_column(String, nullable=False)

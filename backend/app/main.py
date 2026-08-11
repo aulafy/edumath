@@ -1,6 +1,16 @@
 from contextlib import asynccontextmanager
 
-from app.api import classrooms, curriculum, debug, health, progress, sessions, students, voice
+from app.api import (
+    classrooms,
+    curriculum,
+    debug,
+    health,
+    modules,
+    progress,
+    sessions,
+    students,
+    voice,
+)
 from app.config import settings
 from app.db.session import init_db
 from fastapi import FastAPI
@@ -31,3 +41,4 @@ app.include_router(debug.router, prefix="/api")
 app.include_router(voice.router, prefix="/api")
 app.include_router(curriculum.router, prefix="/api")
 app.include_router(classrooms.router, prefix="/api")
+app.include_router(modules.router, prefix="/api")

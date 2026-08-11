@@ -353,6 +353,67 @@ select {
   font-size: 0.9rem;
 }
 
+.moduleLibraryHeader,
+.moduleItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.moduleLibraryHeader {
+  justify-content: space-between;
+}
+
+.importModuleButton {
+  display: inline-flex !important;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 8px !important;
+  min-height: 46px;
+  padding: 0 16px;
+  border: 2px solid #1d5f4c;
+  border-bottom-width: 5px;
+  border-radius: 8px;
+  background: #287b63;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.moduleList {
+  display: grid;
+}
+
+.moduleItem {
+  min-width: 0;
+  padding: 14px 0;
+  border-bottom: 1px solid #d5ddd8;
+}
+
+.moduleItem:first-child {
+  border-top: 1px solid #d5ddd8;
+}
+
+.moduleItem > div {
+  display: grid;
+  min-width: 0;
+  margin-right: auto;
+}
+
+.moduleItem > div span,
+.emptyLibrary {
+  color: #60736a;
+  font-size: 0.85rem;
+}
+
+.licenseBadge {
+  padding: 5px 8px;
+  border: 1px solid #aebdb5;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
 .session {
   display: grid;
   grid-template-rows: auto 1fr;
@@ -658,6 +719,16 @@ pre {
   .assignmentCode {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .moduleLibraryHeader,
+  .moduleItem {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .moduleItem .iconButton {
+    width: 100%;
   }
 
   .brand {

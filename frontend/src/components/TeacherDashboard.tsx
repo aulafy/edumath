@@ -1,7 +1,7 @@
-import { ArrowLeft, BookOpen, Check, Copy, School, Send } from "lucide-react";
+import { ArrowLeft, BookOpen, Check, Copy, Download, Library, School, Send, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
-import type { Assignment, Classroom, CurriculumUnit } from "../types/contracts";
+import type { Assignment, Classroom, CurriculumUnit, EducationalModule } from "../types/contracts";
 
 export function TeacherDashboard({ onClose }: { onClose: () => void }) {
   const [classroom, setClassroom] = useState<Classroom | null>(() => {
@@ -17,6 +17,7 @@ export function TeacherDashboard({ onClose }: { onClose: () => void }) {
   const [theme, setTheme] = useState("DINOSAURS");
   const [assignment, setAssignment] = useState<Assignment | null>(null);
   const [error, setError] = useState("");
+  const [modules, setModules] = useState<EducationalModule[]>([]);
 
   useEffect(() => {
     api.curriculum(classroom?.stage ?? stage, classroom?.grade ?? grade)
@@ -27,6 +28,10 @@ export function TeacherDashboard({ onClose }: { onClose: () => void }) {
       })
       .catch(() => setUnits([]));
   }, [classroom, stage, grade]);
+
+  useEffect(() => {
+    if (classroom) api.modules().then(setModules).catch(() => setModules([]));
+  }, [classroom]);
 
   async function createClassroom() {
     try {
@@ -58,6 +63,27 @@ export function TeacherDashboard({ onClose }: { onClose: () => void }) {
     }
   }
 
+  async function importModule(file: File) {
+    if (!classroom) return;
+    try {
+      const imported = await api.importModule(classroom, file);
+      setModules((current) => [imported, ...current.filter((item) => item.id !== imported.id)]);
+      setError("");
+    } catch {
+      setError("El paquete no cumple el formato seguro EduModule.");
+    }
+  }
+
+  async function exportModule(module: EducationalModule) {
+    const blob = await api.exportModule(module.id);
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `${module.module_id}-${module.version}.edumath`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <main className="teacherShell">
       <header className="teacherTopbar">
@@ -86,6 +112,22 @@ export function TeacherDashboard({ onClose }: { onClose: () => void }) {
               <button onClick={publish} disabled={!unitId}><Send /> Publicar para la clase</button>
             </div>
             {assignment && <div className="assignmentCode"><span>Código de la lección</span><strong>{assignment.join_code}</strong><button className="secondary" onClick={() => navigator.clipboard.writeText(assignment.join_code)}><Copy /> Copiar</button></div>}
+            <div className="teacherSection moduleLibrary">
+              <div className="moduleLibraryHeader">
+                <h1><Library /> Biblioteca abierta</h1>
+                <label className="importModuleButton"><Upload /> Importar<input className="srOnly" type="file" accept=".edumath,application/zip" onChange={(event) => { const file = event.target.files?.[0]; if (file) void importModule(file); event.target.value = ""; }} /></label>
+              </div>
+              <div className="moduleList">
+                {modules.map((module) => (
+                  <article className="moduleItem" key={module.id}>
+                    <div><strong>{module.title}</strong><span>{module.subject.replaceAll("_", " ")} · {module.stage === "PRIMARY" ? "Primaria" : "ESO"} · v{module.version}</span></div>
+                    <span className="licenseBadge">{module.license}</span>
+                    <button className="iconButton secondary" aria-label={`Exportar ${module.title}`} title="Exportar módulo" onClick={() => void exportModule(module)}><Download /></button>
+                  </article>
+                ))}
+                {modules.length === 0 && <p className="emptyLibrary">No hay módulos importados.</p>}
+              </div>
+            </div>
           </>
         )}
         {error && <p className="error">{error}</p>}

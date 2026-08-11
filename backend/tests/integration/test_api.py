@@ -1,5 +1,51 @@
+import json
+from io import BytesIO
+from zipfile import ZipFile, ZipInfo
+
 from app.main import app
 from fastapi.testclient import TestClient
+
+
+def make_package() -> bytes:
+    manifest = {
+        "format": "EDUMODULE",
+        "format_version": "1.0",
+        "id": "org.edumath.tests.science-plants",
+        "version": "1.0.0",
+        "title": "How plants grow",
+        "summary": "A guided Primary Science investigation about plant growth.",
+        "language": "es",
+        "license": "CC-BY-SA-4.0",
+        "authors": [{"name": "Example teaching team"}],
+        "curriculum": [
+            {
+                "stage": "PRIMARY",
+                "grades": [3, 4],
+                "subject": "NATURAL_SCIENCE",
+                "competencies": ["CE2"],
+                "assessment_criteria": ["2.1"],
+                "basic_knowledge": ["A"],
+            }
+        ],
+        "activity_files": ["activities/observe.json"],
+        "created_at": "2026-08-11T10:00:00Z",
+    }
+    activity = {
+        "id": "observe-seedling",
+        "type": "GUIDED_EXPERIMENT",
+        "title": "Observe a seedling",
+        "instructions": "Record one careful observation each day.",
+    }
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        files = {
+            "manifest.json": json.dumps(manifest),
+            "LICENSE": "Creative Commons Attribution-ShareAlike 4.0",
+            "activities/observe.json": json.dumps(activity),
+        }
+        for name, content in files.items():
+            archive.writestr(ZipInfo(name, date_time=(2026, 8, 11, 0, 0, 0)), content)
+    return buffer.getvalue()
 
 
 def test_create_student_and_session() -> None:
@@ -98,3 +144,34 @@ def test_planned_curriculum_content_cannot_be_assigned() -> None:
             },
         )
         assert response.status_code == 422
+
+
+def test_teacher_can_import_list_and_export_an_edumodule() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms",
+            json={"name": "Open resources", "stage": "PRIMARY", "grade": 3},
+        ).json()
+        package = make_package()
+        imported = client.post(
+            "/api/modules/import",
+            headers={"X-Teacher-Key": classroom["teacher_key"]},
+            files={"package": ("plants.edumath", package, "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assert module["subject"] == "NATURAL_SCIENCE"
+        listed = client.get("/api/modules?subject=NATURAL_SCIENCE").json()
+        assert any(item["id"] == module["id"] for item in listed)
+        exported = client.get(f"/api/modules/{module['id']}/export")
+        assert exported.status_code == 200
+        assert exported.content == package
+
+
+def test_module_import_requires_a_teacher_key() -> None:
+    with TestClient(app) as client:
+        response = client.post(
+            "/api/modules/import",
+            files={"package": ("plants.edumath", make_package(), "application/zip")},
+        )
+        assert response.status_code == 403

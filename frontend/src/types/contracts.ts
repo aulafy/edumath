@@ -77,3 +77,18 @@ export type Lesson = {
   pacing: string;
 };
 export type Assignment = { id: string; join_code: string; status: string; lesson: Lesson };
+export type EducationalModule = {
+  id: string;
+  module_id: string;
+  version: string;
+  title: string;
+  summary: string;
+  subject: string;
+  stage: "PRIMARY" | "ESO";
+  grades: number[];
+  license: string;
+  authors: { name: string; role: string }[];
+  status: "VALIDATED";
+  package_sha256: string;
+  imported_at: string;
+};

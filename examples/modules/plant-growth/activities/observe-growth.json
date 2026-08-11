@@ -1,0 +1,15 @@
+{
+  "id": "observe-growth",
+  "type": "GUIDED_EXPERIMENT",
+  "title": "Observamos una semilla",
+  "instructions": "Coloca una semilla de judía sobre algodón húmedo. Obsérvala durante siete días con una persona adulta y registra los cambios sin probar ni ingerir ningún material.",
+  "content": {
+    "duration_days": 7,
+    "materials": ["semilla de judía", "algodón", "agua", "recipiente transparente"],
+    "daily_prompts": ["¿Ha aparecido una raíz?", "¿Cuánto mide el tallo?", "¿Qué color observas?"]
+  },
+  "evidence": {
+    "kind": "observation_log",
+    "teacher_review_required": true
+  }
+}

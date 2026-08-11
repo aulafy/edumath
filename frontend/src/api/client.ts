@@ -1,4 +1,4 @@
-import type { Assignment, Classroom, CurriculumUnit, Lesson, ProblemResponse, Student, TranscriptionResult, VoiceCapabilities } from "../types/contracts";
+import type { Assignment, Classroom, CurriculumUnit, EducationalModule, Lesson, ProblemResponse, Student, TranscriptionResult, VoiceCapabilities } from "../types/contracts";
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? "http://127.0.0.1:8000/api";
 
@@ -53,6 +53,23 @@ export const api = {
     }),
   joinAssignment: (code: string, student_id: string) =>
     request(`/assignments/${code}/join`, { method: "POST", body: JSON.stringify({ student_id }) }),
+  modules: () => request<EducationalModule[]>("/modules"),
+  importModule: async (classroom: Classroom, file: File) => {
+    const form = new FormData();
+    form.append("package", file);
+    const response = await fetch(`${API_BASE}/modules/import`, {
+      method: "POST",
+      headers: { "X-Teacher-Key": classroom.teacher_key },
+      body: form
+    });
+    if (!response.ok) throw new Error(`Module import error ${response.status}`);
+    return response.json() as Promise<EducationalModule>;
+  },
+  exportModule: async (moduleId: string) => {
+    const response = await fetch(`${API_BASE}/modules/${moduleId}/export`);
+    if (!response.ok) throw new Error(`Module export error ${response.status}`);
+    return response.blob();
+  },
   transcribe: async (audio: Blob) => {
     const form = new FormData();
     form.append("audio", audio, "answer.webm");

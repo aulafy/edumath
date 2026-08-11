@@ -52,6 +52,7 @@ For full local voice support or software development, follow the platform-specif
 - Hints, remediation, progress evidence, session recovery, and duplicate-submission protection.
 - Optional Spanish Moonshine speech-to-text and Pocket TTS speech synthesis.
 - Optional OpenAI-compatible local LLM for short, non-authoritative wording only.
+- Portable `.edumath` learning modules with secure teacher import and exact export.
 
 The recommended local model is [Qwen3.5-9B in LM Studio](https://lmstudio.ai/models/qwen/qwen3.5-9b). Start the LM Studio local server on port `1234` before starting EduMath. Docker connects to it through `host.docker.internal`; the deterministic tutor remains available when the model is stopped.
 
@@ -79,6 +80,7 @@ make validate-curriculum  # Validate curriculum files
 - [Installation for schools and families](docs/INSTALLATION.md)
 - [Administrator guide](docs/ADMINISTRATOR_GUIDE.md)
 - [Spanish curriculum and classroom assignments](docs/SPAIN_CURRICULUM.md)
+- [Open EduModule format and authoring guide](docs/EDUMODULE_FORMAT.md)
 - [Architecture and safety boundaries](ARCHITECTURE.md)
 - [Local voice architecture](docs/VOICE.md)
 - [Privacy](PRIVACY.md)
