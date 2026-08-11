@@ -1,4 +1,4 @@
-import { ArrowLeft, Check, ChevronLeft, ChevronRight, FlaskConical, ListChecks, Play, Volume2, X } from "lucide-react";
+import { ArrowLeft, Check, ChevronLeft, ChevronRight, FlaskConical, ListChecks, Minus, Play, Plus, Volume2, X } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { api } from "../api/client";
 import type { ModuleAssignment, Student } from "../types/contracts";
@@ -12,6 +12,7 @@ const FoodWebLab3D = lazy(() => import("./FoodWebLab3D").then((module) => ({ def
 const RhythmLab3D = lazy(() => import("./RhythmLab3D").then((module) => ({ default: module.RhythmLab3D })));
 const SentenceLab3D = lazy(() => import("./SentenceLab3D").then((module) => ({ default: module.SentenceLab3D })));
 const OrbitLab3D = lazy(() => import("./OrbitLab3D").then((module) => ({ default: module.OrbitLab3D })));
+const MoleculeLab3D = lazy(() => import("./MoleculeLab3D").then((module) => ({ default: module.MoleculeLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -28,6 +29,8 @@ type SentenceToken = { id: string; text: string; role: "SUBJECT" | "PREDICATE" |
 type SentenceLab = { prompt: string; tokens: SentenceToken[]; target_order: string[]; explanation: string };
 type OrbitBody = { id: string; label: string; distance_rank: number; color: string };
 type OrbitLab = { prompt: string; center_label: string; bodies: OrbitBody[]; explanation: string };
+type MoleculeAtom = { symbol: string; label: string; count: number; color: string };
+type MoleculeLab = { prompt: string; molecule_name: string; formula: string; atoms: MoleculeAtom[]; explanation: string };
 
 function tileMetrics(cells: TileCell[]) {
   const points = new Set(cells.map((cell) => `${cell.row}:${cell.col}`));
@@ -259,6 +262,29 @@ function OrbitExercise({ content, onSolved }: { content: OrbitLab; onSolved: (re
   </div>;
 }
 
+function MoleculeExercise({ content, onSolved }: { content: MoleculeLab; onSolved: (response: Record<string, number>) => void }) {
+  const [composition, setComposition] = useState<Record<string, number>>(() => Object.fromEntries(content.atoms.map((atom) => [atom.symbol, 0])));
+  const [checked, setChecked] = useState(false);
+  const correct = content.atoms.every((atom) => composition[atom.symbol] === atom.count);
+  function change(symbol: string, delta: number) {
+    setComposition((current) => ({ ...current, [symbol]: Math.max(0, Math.min(8, current[symbol] + delta)) }));
+    setChecked(false);
+  }
+  return <div className="interactiveExercise moleculeExercise">
+    <strong>{content.prompt}</strong>
+    <div className="moleculeTarget"><span>{content.molecule_name}</span><strong>{content.formula}</strong></div>
+    <Suspense fallback={<div className="moleculeLabScene loadingScene" aria-label="Preparando mesa molecular 3D" />}>
+      <MoleculeLab3D atoms={content.atoms} composition={composition} />
+    </Suspense>
+    <div className="atomWorkbench" aria-label="Mesa de átomos">{content.atoms.map((atom) => <section key={atom.symbol} className="atomControl">
+      <span className="atomSample" style={{ background: atom.color }}>{atom.symbol}</span><div><strong>{atom.label}</strong><small>Símbolo {atom.symbol}</small></div>
+      <div className="atomStepper"><button className="iconButton secondary" aria-label={`Quitar ${atom.label}`} title={`Quitar ${atom.label}`} disabled={composition[atom.symbol] === 0} onClick={() => change(atom.symbol, -1)}><Minus /></button><output aria-label={`${atom.label}: ${composition[atom.symbol]}`}>{composition[atom.symbol]}</output><button className="iconButton" aria-label={`Añadir ${atom.label}`} title={`Añadir ${atom.label}`} onClick={() => change(atom.symbol, 1)}><Plus /></button></div>
+    </section>)}</div>
+    <button disabled={Object.values(composition).every((value) => value === 0)} onClick={() => { setChecked(true); if (correct) onSolved(composition); }}><Check /> Analizar composición</button>
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Composición conseguida! ${content.explanation}` : "La composición aún no coincide con la fórmula. Lee cada subíndice y ajusta los contadores."}</p>}
+  </div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -268,7 +294,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -304,6 +330,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "RHYTHM_LAB" && <RhythmExercise key={activity.id} content={activity.content as RhythmLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "SENTENCE_LAB" && <SentenceExercise key={activity.id} content={activity.content as SentenceLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "ORBIT_LAB" && <OrbitExercise key={activity.id} content={activity.content as OrbitLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "MOLECULE_LAB" && <MoleculeExercise key={activity.id} content={activity.content as MoleculeLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

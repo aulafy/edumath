@@ -18,6 +18,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "RHYTHM_LAB": "org.edumath.tests.music-rhythm",
             "SENTENCE_LAB": "org.edumath.tests.language-sentence",
             "ORBIT_LAB": "org.edumath.tests.science-orbits",
+            "MOLECULE_LAB": "org.edumath.tests.science-molecules",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -197,6 +198,26 @@ def make_orbit_activity() -> dict:
                 {"id": "venus", "label": "Venus", "distance_rank": 2, "color": "#d9a84d"},
             ],
             "explanation": "Mercury, Venus, Earth, and Mars are ordered from the Sun.",
+        },
+        "evidence": {},
+    }
+
+
+def make_molecule_activity() -> dict:
+    return {
+        "id": "build-water",
+        "type": "MOLECULE_LAB",
+        "title": "Build water",
+        "instructions": "Add atoms to match the formula.",
+        "content": {
+            "prompt": "Build H2O.",
+            "molecule_name": "Water",
+            "formula": "H2O",
+            "atoms": [
+                {"symbol": "H", "label": "Hydrogen", "count": 2, "color": "#eeeeee"},
+                {"symbol": "O", "label": "Oxygen", "count": 1, "color": "#dd5544"},
+            ],
+            "explanation": "Water contains two hydrogen atoms and one oxygen atom.",
         },
         "evidence": {},
     }
@@ -643,3 +664,35 @@ def test_orbit_lab_requires_inside_to_outside_order() -> None:
         completed = client.post(endpoint, json={"student_id": student["id"], "response": correct})
         assert completed.status_code == 200
         assert completed.json()["completed_activity_ids"] == ["rocky-planets"]
+
+
+def test_molecule_lab_requires_exact_integer_composition() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms",
+            json={"name": "4E Science", "stage": "PRIMARY", "grade": 4},
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import",
+            headers=headers,
+            files={"package": ("molecule.edumath", make_package(make_molecule_activity()), "application/zip")},
+        )
+        assert imported.status_code == 200
+        module = imported.json()
+        assignment = client.post(
+            f"/api/modules/{module['id']}/assignments",
+            headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["build-water"]},
+        ).json()
+        student = client.post("/api/students", json={"display_name": "Leo"}).json()
+        client.post(
+            f"/api/modules/assignments/{assignment['join_code']}/join",
+            json={"student_id": student["id"]},
+        )
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/build-water/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"H": 1, "O": 2}}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": {"H": True, "O": 1}}).status_code == 422
+        completed = client.post(endpoint, json={"student_id": student["id"], "response": {"H": 2, "O": 1}})
+        assert completed.status_code == 200
+        assert completed.json()["completed_activity_ids"] == ["build-water"]

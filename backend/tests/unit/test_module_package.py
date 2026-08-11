@@ -285,3 +285,29 @@ def test_orbit_lab_rejects_a_gap_in_distance_ranks() -> None:
             archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
     with pytest.raises(ModulePackageError):
         validate_module_package(buffer.getvalue())
+
+
+def test_molecule_lab_rejects_duplicate_element_symbols() -> None:
+    package = make_package()
+    with ZipFile(BytesIO(package)) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    activity = json.loads(files["activities/observe.json"])
+    activity.update({
+        "type": "MOLECULE_LAB",
+        "content": {
+            "prompt": "Build water.",
+            "molecule_name": "Water",
+            "formula": "H2O",
+            "atoms": [
+                {"symbol": "H", "label": "Hydrogen", "count": 2, "color": "#eeeeee"},
+                {"symbol": "H", "label": "Hydrogen again", "count": 1, "color": "#ffffff"},
+            ],
+            "explanation": "Each element must be declared once.",
+        },
+    })
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        for name, content in files.items():
+            archive.writestr(name, json.dumps(activity) if name.endswith("observe.json") else content)
+    with pytest.raises(ModulePackageError):
+        validate_module_package(buffer.getvalue())

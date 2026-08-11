@@ -370,6 +370,15 @@ def complete_module_activity(
         expected = [body["id"] for body in sorted(bodies, key=lambda body: body["distance_rank"])]
         if data.response != expected:
             raise HTTPException(status_code=422, detail="The submitted orbit order is not correct.")
+    if activity.type == "MOLECULE_LAB":
+        expected = {atom["symbol"]: atom["count"] for atom in activity.content["atoms"]}
+        response = data.response
+        if (
+            not isinstance(response, dict)
+            or any(not isinstance(key, str) or type(value) is not int for key, value in response.items())
+            or response != expected
+        ):
+            raise HTTPException(status_code=422, detail="The submitted molecule is not correct.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,

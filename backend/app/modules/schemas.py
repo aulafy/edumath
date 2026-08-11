@@ -303,6 +303,30 @@ class OrbitLabContent(BaseModel):
         return self
 
 
+class MoleculeAtom(BaseModel):
+    symbol: str = Field(pattern=r"^[A-Z][a-z]?$", max_length=2)
+    label: str = Field(min_length=2, max_length=40)
+    count: int = Field(ge=1, le=8)
+    color: str = Field(pattern=r"^#[0-9a-fA-F]{6}$")
+
+
+class MoleculeLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    molecule_name: str = Field(min_length=2, max_length=80)
+    formula: str = Field(min_length=1, max_length=20)
+    atoms: list[MoleculeAtom] = Field(min_length=2, max_length=4)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_molecule(self):
+        symbols = [atom.symbol for atom in self.atoms]
+        if len(symbols) != len(set(symbols)):
+            raise ValueError("Molecule atom symbols must be unique.")
+        if sum(atom.count for atom in self.atoms) > 12:
+            raise ValueError("A molecule lab cannot require more than twelve atoms.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -316,6 +340,7 @@ class ModuleActivity(BaseModel):
         "RHYTHM_LAB",
         "SENTENCE_LAB",
         "ORBIT_LAB",
+        "MOLECULE_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -349,4 +374,6 @@ class ModuleActivity(BaseModel):
             SentenceLabContent.model_validate(self.content)
         elif self.type == "ORBIT_LAB":
             OrbitLabContent.model_validate(self.content)
+        elif self.type == "MOLECULE_LAB":
+            MoleculeLabContent.model_validate(self.content)
         return self
