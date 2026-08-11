@@ -180,6 +180,8 @@ Each activity is JSON or YAML and must provide `id`, `type`, `title`, `instructi
 
 `MOVEMENT_SEQUENCE_LAB` declares target and initial programs of four to six commands chosen from `STEP`, `CLAP`, `TURN_LEFT`, `TURN_RIGHT`, and `JUMP`. Both programs must have equal lengths and differ. The runner supports slot-by-slot debugging, animated playback, keyboard operation, and a declared seated alternative. No camera or body measurement is used; the backend validates only the exact command order.
 
+`PREPOSITION_LAB` declares one target and one different initial spatial relation among `ABOVE_A`, `LEFT_OF_A`, `BETWEEN_A_B`, `RIGHT_OF_B`, and `BELOW_A`, plus an English spoken sentence and Spanish feedback. The runner synchronises labelled references, bilingual status text, optional browser speech, controls, and a 3D drone. The backend accepts only the target relation; colour and perspective are never required.
+
 An activity may include a trusted declarative `scene` specification. EduMath currently renders `COIN_VALUE` and `FOOD_CHAIN` with React Three Fiber and WebGL. Packages provide parameters and expected answers only; they cannot provide shaders, scripts, components, or executable scene code.
 
 The `content` object contains subject material. The `evidence` object describes what a teacher can review. Rendering and grading remain controlled by trusted EduMath code; imported content cannot replace the learning engine or instruct the LLM to make authoritative decisions.

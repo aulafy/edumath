@@ -922,6 +922,24 @@ class MovementSequenceLabContent(BaseModel):
         return self
 
 
+SpatialRelation = Literal["ABOVE_A", "LEFT_OF_A", "BETWEEN_A_B", "RIGHT_OF_B", "BELOW_A"]
+
+
+class PrepositionLabContent(BaseModel):
+    prompt: str = Field(min_length=3, max_length=500)
+    target_relation: SpatialRelation
+    initial_relation: SpatialRelation
+    spoken_sentence: str = Field(min_length=3, max_length=200)
+    feedback_es: str = Field(min_length=3, max_length=300)
+    explanation: str = Field(min_length=3, max_length=500)
+
+    @model_validator(mode="after")
+    def validate_preposition(self):
+        if self.target_relation == self.initial_relation:
+            raise ValueError("The initial spatial relation must require a move.")
+        return self
+
+
 class ModuleActivity(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=100)
     type: Literal[
@@ -958,6 +976,7 @@ class ModuleActivity(BaseModel):
         "CIRCULATION_LAB",
         "TIMEZONE_LAB",
         "MOVEMENT_SEQUENCE_LAB",
+        "PREPOSITION_LAB",
         "TIMELINE",
         "MAP",
         "SIMULATION",
@@ -1037,4 +1056,6 @@ class ModuleActivity(BaseModel):
             TimezoneLabContent.model_validate(self.content)
         elif self.type == "MOVEMENT_SEQUENCE_LAB":
             MovementSequenceLabContent.model_validate(self.content)
+        elif self.type == "PREPOSITION_LAB":
+            PrepositionLabContent.model_validate(self.content)
         return self

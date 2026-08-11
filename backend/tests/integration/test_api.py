@@ -41,6 +41,7 @@ def make_package(custom_activity: dict | None = None) -> bytes:
             "CIRCULATION_LAB": "org.edumath.tests.biology-circulation",
             "TIMEZONE_LAB": "org.edumath.tests.geography-timezone",
             "MOVEMENT_SEQUENCE_LAB": "org.edumath.tests.pe-movement",
+            "PREPOSITION_LAB": "org.edumath.tests.english-preposition",
         }.get((custom_activity or {}).get("type"), "org.edumath.tests.science-plants"),
         "version": "1.0.0",
         "title": "How plants grow",
@@ -542,6 +543,10 @@ def make_timezone_activity() -> dict:
 
 def make_movement_activity() -> dict:
     return {"id":"debug-dance","type":"MOVEMENT_SEQUENCE_LAB","title":"Debug dance","instructions":"Replace the wrong command.","content":{"prompt":"Build an alternating pattern.","target_sequence":["STEP","CLAP","STEP","CLAP"],"initial_sequence":["STEP","STEP","CLAP","CLAP"],"seated_alternative":"Lift one knee for each step.","explanation":"Order changes the program."},"evidence":{}}
+
+
+def make_preposition_activity() -> dict:
+    return {"id":"fly-above","type":"PREPOSITION_LAB","title":"Fly above","instructions":"Move the drone.","content":{"prompt":"Fly above A.","target_relation":"ABOVE_A","initial_relation":"BELOW_A","spoken_sentence":"The drone is above A.","feedback_es":"Above significa encima de.","explanation":"A is the reference."},"evidence":{}}
 
 
 def test_create_student_and_session() -> None:
@@ -1522,3 +1527,17 @@ def test_movement_sequence_lab_requires_exact_order() -> None:
         endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/debug-dance/complete"
         assert client.post(endpoint, json={"student_id": student["id"], "response": ["STEP", "STEP", "CLAP", "CLAP"]}).status_code == 422
         assert client.post(endpoint, json={"student_id": student["id"], "response": ["STEP", "CLAP", "STEP", "CLAP"]}).status_code == 200
+
+
+def test_preposition_lab_requires_the_target_relation() -> None:
+    with TestClient(app) as client:
+        classroom = client.post("/api/teacher/classrooms", json={"name": "English test", "stage": "PRIMARY", "grade": 4}).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post("/api/modules/import", headers=headers, files={"package": ("prep.edumath", make_package(make_preposition_activity()), "application/zip")})
+        assert imported.status_code == 200
+        assignment = client.post(f"/api/modules/{imported.json()['id']}/assignments", headers=headers, json={"classroom_id": classroom["id"], "activity_ids": ["fly-above"]}).json()
+        student = client.post("/api/students", json={"display_name": "Alex"}).json()
+        client.post(f"/api/modules/assignments/{assignment['join_code']}/join", json={"student_id": student["id"]})
+        endpoint = f"/api/modules/assignments/{assignment['join_code']}/activities/fly-above/complete"
+        assert client.post(endpoint, json={"student_id": student["id"], "response": "BELOW_A"}).status_code == 422
+        assert client.post(endpoint, json={"student_id": student["id"], "response": "ABOVE_A"}).status_code == 200

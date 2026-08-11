@@ -35,6 +35,7 @@ const PunctuationLab3D = lazy(() => import("./PunctuationLab3D").then((module) =
 const CirculationLab3D = lazy(() => import("./CirculationLab3D").then((module) => ({ default: module.CirculationLab3D })));
 const TimezoneLab3D = lazy(() => import("./TimezoneLab3D").then((module) => ({ default: module.TimezoneLab3D })));
 const MovementSequenceLab3D = lazy(() => import("./MovementSequenceLab3D").then((module) => ({ default: module.MovementSequenceLab3D })));
+const PrepositionLab3D = lazy(() => import("./PrepositionLab3D").then((module) => ({ default: module.PrepositionLab3D })));
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
@@ -93,6 +94,8 @@ type CirculationLab = { prompt: string; circuit: "PULMONARY" | "SYSTEMIC" | "DOU
 type TimezoneLab = { prompt: string; utc_hour: number; target_local_hour: number; target_day_shift: -1 | 0 | 1; target_offset: number; initial_offset: number; destination_label: string; explanation: string };
 type MovementCommand = "STEP" | "CLAP" | "TURN_LEFT" | "TURN_RIGHT" | "JUMP";
 type MovementSequenceLab = { prompt: string; target_sequence: MovementCommand[]; initial_sequence: MovementCommand[]; seated_alternative: string; explanation: string };
+type SpatialRelation = "ABOVE_A" | "LEFT_OF_A" | "BETWEEN_A_B" | "RIGHT_OF_B" | "BELOW_A";
+type PrepositionLab = { prompt: string; target_relation: SpatialRelation; initial_relation: SpatialRelation; spoken_sentence: string; feedback_es: string; explanation: string };
 
 const routeDeltas: Record<RouteMove, [number, number]> = { UP: [-1, 0], DOWN: [1, 0], LEFT: [0, -1], RIGHT: [0, 1] };
 
@@ -943,6 +946,15 @@ function MovementSequenceExercise({ content, onSolved }: { content: MovementSequ
   </div>;
 }
 
+const relationLabels: Record<SpatialRelation, { en: string; es: string }> = { ABOVE_A: { en: "above A", es: "encima de A" }, LEFT_OF_A: { en: "left of A", es: "a la izquierda de A" }, BETWEEN_A_B: { en: "between A and B", es: "entre A y B" }, RIGHT_OF_B: { en: "right of B", es: "a la derecha de B" }, BELOW_A: { en: "below A", es: "debajo de A" } };
+
+function PrepositionExercise({ content, onSolved }: { content: PrepositionLab; onSolved: (response: SpatialRelation) => void }) {
+  const [relation, setRelation] = useState(content.initial_relation); const [checked, setChecked] = useState(false);
+  const correct = relation === content.target_relation;
+  function speak() { if (!("speechSynthesis" in window)) return; const utterance = new SpeechSynthesisUtterance(content.spoken_sentence); utterance.lang = "en-GB"; utterance.rate = 0.86; window.speechSynthesis.cancel(); window.speechSynthesis.speak(utterance); }
+  return <div className="interactiveExercise prepositionExercise"><strong lang="en">{content.prompt}</strong><div className="referenceLabels"><b>BOX A</b><span>← reference space →</span><b>BOX B</b></div><Suspense fallback={<div className="prepositionScene loadingScene" aria-label="Preparando escena espacial 3D" />}><PrepositionLab3D relation={relation} /></Suspense><div className="relationStatus" aria-live="polite"><small>Drone position</small><strong lang="en">{relationLabels[relation].en}</strong><span>{relationLabels[relation].es}</span></div><div className="relationControls" role="group" aria-label="Posiciones disponibles">{(Object.keys(relationLabels) as SpatialRelation[]).map((option) => <button key={option} className={relation === option ? "selected" : "secondary"} aria-pressed={relation === option} onClick={() => { setRelation(option); setChecked(false); }}><strong lang="en">{relationLabels[option].en}</strong><small>{relationLabels[option].es}</small></button>)}</div><button className="secondary" onClick={speak}><Volume2 /> Listen in English</button><p className="modelBoundary">Las cajas A y B y la relación actual aparecen siempre como texto. La perspectiva, profundidad y color de la escena son apoyos visuales, no requisitos para resolver la actividad.</p><button onClick={() => { setChecked(true); if (correct) onSolved(relation); }}><Check /> Check position</button>{checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `${content.feedback_es} ${content.explanation}` : `Ahora está ${relationLabels[relation].es}. Vuelve a leer la preposición inglesa y cambia la relación.`}</p>}</div>;
+}
+
 export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAssignment; student: Student; onClose: () => void }) {
   const [assignment, setAssignment] = useState(initial);
   const firstPending = Math.max(0, assignment.activities.findIndex((item) => !assignment.completed_activity_ids.includes(item.id)));
@@ -952,7 +964,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
   const [solvedResponses, setSolvedResponses] = useState<Record<string, unknown>>({});
   const activity = assignment.activities[index];
   const completed = assignment.completed_activity_ids.includes(activity.id);
-  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB" || activity.type === "CITY_BUDGET_LAB" || activity.type === "BINARY_SIGNAL_LAB" || activity.type === "PUNCTUATION_LAB" || activity.type === "CIRCULATION_LAB" || activity.type === "TIMEZONE_LAB" || activity.type === "MOVEMENT_SEQUENCE_LAB";
+  const interactive = activity.type === "CLOSED_QUESTION" || activity.type === "CLASSIFICATION" || activity.type === "BALANCE_LAB" || activity.type === "TILE_LAB" || activity.type === "TIMELINE" || activity.type === "FOOD_WEB_LAB" || activity.type === "RHYTHM_LAB" || activity.type === "SENTENCE_LAB" || activity.type === "ORBIT_LAB" || activity.type === "MOLECULE_LAB" || activity.type === "FORCE_LAB" || activity.type === "ROUTE_LAB" || activity.type === "CLIMATE_LAB" || activity.type === "PROBABILITY_LAB" || activity.type === "REFLECTION_LAB" || activity.type === "DIFFUSION_LAB" || activity.type === "STRATIGRAPHY_LAB" || activity.type === "DENSITY_LAB" || activity.type === "TECTONIC_LAB" || activity.type === "LUNAR_PHASE_LAB" || activity.type === "FUNCTION_MACHINE_LAB" || activity.type === "SOUND_WAVE_LAB" || activity.type === "ATOM_BUILDER_LAB" || activity.type === "LIGHT_MIX_LAB" || activity.type === "LEVER_LAB" || activity.type === "SHADOW_VIEW_LAB" || activity.type === "CITY_BUDGET_LAB" || activity.type === "BINARY_SIGNAL_LAB" || activity.type === "PUNCTUATION_LAB" || activity.type === "CIRCULATION_LAB" || activity.type === "TIMEZONE_LAB" || activity.type === "MOVEMENT_SEQUENCE_LAB" || activity.type === "PREPOSITION_LAB";
   const solved = completed || solvedActivityIds.includes(activity.id);
   const progress = useMemo(() => Math.round((assignment.completed_activity_ids.length / assignment.activities.length) * 100), [assignment]);
 
@@ -1011,6 +1023,7 @@ export function ModuleLesson({ initial, student, onClose }: { initial: ModuleAss
         {activity.type === "CIRCULATION_LAB" && <CirculationExercise key={activity.id} content={activity.content as CirculationLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "TIMEZONE_LAB" && <TimezoneExercise key={activity.id} content={activity.content as TimezoneLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {activity.type === "MOVEMENT_SEQUENCE_LAB" && <MovementSequenceExercise key={activity.id} content={activity.content as MovementSequenceLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
+        {activity.type === "PREPOSITION_LAB" && <PrepositionExercise key={activity.id} content={activity.content as PrepositionLab} onSolved={(response) => { setSolvedActivityIds((current) => [...new Set([...current, activity.id])]); setSolvedResponses((current) => ({ ...current, [activity.id]: response })); }} />}
         {!interactive && Object.keys(activity.content).length > 0 && <div className="activityContent"><ListChecks /> <ContentValue value={activity.content} /></div>}
         <div className="activityNavigation">
           <button className="iconButton secondary" aria-label="Actividad anterior" title="Actividad anterior" disabled={index === 0} onClick={() => setIndex(index - 1)}><ChevronLeft /></button>

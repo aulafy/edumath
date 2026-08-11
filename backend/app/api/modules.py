@@ -617,6 +617,10 @@ def complete_module_activity(
             or response != activity.content["target_sequence"]
         ):
             raise HTTPException(status_code=422, detail="The submitted movement program does not match the choreography.")
+    if activity.type == "PREPOSITION_LAB":
+        response = data.response
+        if not isinstance(response, str) or response != activity.content["target_relation"]:
+            raise HTTPException(status_code=422, detail="The submitted drone position does not match the English command.")
     existing = db.scalar(
         select(ModuleActivityProgressRow).where(
             ModuleActivityProgressRow.assignment_id == assignment.id,
