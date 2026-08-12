@@ -6,6 +6,7 @@ EduMath keeps its editable learning-content source in `content/open_modules.v1.j
 
 | Stage | Grade | Subject | Module |
 |---|---:|---|---|
+| Primary | 1 | Mathematics | The firefly balance |
 | Primary | 2 | Mathematics | The coin shop |
 | Primary | 3 | Knowledge of the Environment | Ecosystem detectives |
 | Primary | 4 | Mathematics | The fraction workshop |
@@ -44,7 +45,7 @@ EduMath keeps its editable learning-content source in `content/open_modules.v1.j
 | ESO | 1 | Geography and History | Journey through Prehistory |
 | ESO | 2 | Physics and Chemistry | Forces in motion |
 
-The hand-maintained catalog currently contains 112 activities. Model-generated Primary drafts live separately in `content/generated/primary/` and are counted by the coverage report. Closed questions, classification challenges, balance laboratories, mosaic workshops, time paths, food-web laboratories, rhythm sequencers, sentence laboratories, orbital observatories, molecule workbenches, force benches, route laboratories, climate stations, probability machines, reflection benches, diffusion membranes, stratigraphic trenches, density tanks, tectonic tables, lunar observatories, function factories, sound-wave studios, atom builders, additive-light theatres, lever laboratories, shadow-view studios, city-budget simulations, binary-signal towers, punctuation stages, circulation journeys, timezone globes, movement programs, and spatial-preposition scenes are interactive and checked by the backend before completion is recorded. Selected modules also contain declarative WebGL scenes.
+The hand-maintained catalog currently contains 115 activities. Model-generated Primary drafts live separately in `content/generated/primary/` and are counted by the coverage report. Closed questions, classification challenges, balance laboratories, mosaic workshops, time paths, food-web laboratories, rhythm sequencers, sentence laboratories, orbital observatories, molecule workbenches, force benches, route laboratories, climate stations, probability machines, reflection benches, diffusion membranes, stratigraphic trenches, density tanks, tectonic tables, lunar observatories, function factories, sound-wave studios, atom builders, additive-light theatres, lever laboratories, shadow-view studios, city-budget simulations, binary-signal towers, punctuation stages, circulation journeys, timezone globes, movement programs, and spatial-preposition scenes are interactive and checked by the backend before completion is recorded. Selected modules also contain declarative WebGL scenes.
 
 ## Model-assisted drafting
 

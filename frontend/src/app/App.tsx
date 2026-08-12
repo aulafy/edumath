@@ -10,6 +10,7 @@ import {
   Star,
   Trophy,
   School,
+  Shapes,
   UserPlus,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -19,7 +20,8 @@ import { ThemeScene } from "../components/ThemeScene";
 import { VoiceControls } from "../components/VoiceControls";
 import { TeacherDashboard } from "../components/TeacherDashboard";
 import { ModuleLesson } from "../components/ModuleLesson";
-import type { ModuleAssignment, ProblemResponse, Student } from "../types/contracts";
+import type { DiscoverableModule, ModuleAssignment, ProblemResponse, Student } from "../types/contracts";
+import { subjectLabel } from "../utils/labels";
 
 export function App() {
   const [students, setStudents] = useState<Student[]>([]);
@@ -33,9 +35,12 @@ export function App() {
   const [teacherMode, setTeacherMode] = useState(false);
   const [assignmentCode, setAssignmentCode] = useState("");
   const [moduleAssignment, setModuleAssignment] = useState<ModuleAssignment | null>(null);
+  const [discoverable, setDiscoverable] = useState<DiscoverableModule[]>([]);
+  const [selectedGrade, setSelectedGrade] = useState(1);
 
   useEffect(() => {
     api.students().then(setStudents).catch(() => setStudents([]));
+    api.discoverModules().then(setDiscoverable).catch(() => setDiscoverable([]));
     const saved = localStorage.getItem("math-ai-session");
     if (saved) api.getSession(saved).then(setSession).catch(() => localStorage.removeItem("math-ai-session"));
   }, []);
@@ -71,6 +76,19 @@ export function App() {
       setError(null);
     } catch {
       setError("No encontramos una lección abierta con ese código.");
+    }
+  }
+
+  async function openExperience(code: string) {
+    setAssignmentCode(code);
+    try {
+      const active = student ?? students[0] ?? await api.createStudent(name);
+      setStudent(active);
+      const joined = await api.joinAssignment(code, active.id);
+      if (joined.kind === "MODULE") setModuleAssignment(joined);
+      setError(null);
+    } catch {
+      setError("No pudimos abrir esta experiencia.");
     }
   }
 
@@ -186,6 +204,19 @@ export function App() {
           <div className="capsuleTitle"><Trophy aria-hidden="true" /><span>Mis logros</span></div>
           <button className="secondary" onClick={showProgress}><Trophy aria-hidden="true" />Ver progreso</button>
           {progress && <pre>{JSON.stringify(progress, null, 2)}</pre>}
+        </div>
+      </section>
+      <section className="courseExplorer" aria-labelledby="course-explorer-title">
+        <div className="courseExplorerTitle"><Shapes aria-hidden="true" /><div><h2 id="course-explorer-title">Explora por curso</h2><p>Elige una experiencia y entra directamente.</p></div></div>
+        <div className="gradeTabs" role="tablist" aria-label="Curso de Primaria">
+          {[1, 2, 3, 4, 5, 6].map((grade) => <button key={grade} role="tab" aria-selected={selectedGrade === grade} className={selectedGrade === grade ? "selected" : ""} onClick={() => setSelectedGrade(grade)}>{grade}.º</button>)}
+        </div>
+        <div className="experienceGrid">
+          {discoverable.filter((item) => item.module.stage === "PRIMARY" && item.grade === selectedGrade).map((item) => <article className="experienceItem" key={`${item.grade}-${item.module.module_id}`}>
+            <div><span>{subjectLabel(item.module.subject)}</span><strong>{item.module.title}</strong><small>{item.activity_count} actividades</small></div>
+            <button onClick={() => void openExperience(item.join_code)}><Play aria-hidden="true" />Entrar</button>
+          </article>)}
+          {!discoverable.some((item) => item.module.stage === "PRIMARY" && item.grade === selectedGrade) && <p className="emptyExperiences">Estamos preparando las experiencias de este curso.</p>}
         </div>
       </section>
     </main>

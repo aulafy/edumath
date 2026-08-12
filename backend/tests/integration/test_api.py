@@ -717,6 +717,35 @@ def test_teacher_assigns_selected_module_activities_and_student_completes_them()
         assert completed.json()["completed_activity_ids"] == [activity_id]
 
 
+def test_open_module_assignments_can_be_discovered_by_grade() -> None:
+    with TestClient(app) as client:
+        classroom = client.post(
+            "/api/teacher/classrooms",
+            json={"name": "3A Discover", "stage": "PRIMARY", "grade": 3},
+        ).json()
+        headers = {"X-Teacher-Key": classroom["teacher_key"]}
+        imported = client.post(
+            "/api/modules/import",
+            headers=headers,
+            files={"package": ("balance.edumath", make_package(make_balance_activity()), "application/zip")},
+        ).json()
+        assignment = client.post(
+            f"/api/modules/{imported['id']}/assignments",
+            headers=headers,
+            json={"classroom_id": classroom["id"], "activity_ids": ["balance-twelve"]},
+        ).json()
+
+        response = client.get("/api/modules/discover")
+
+        assert response.status_code == 200
+        assert any(
+            item["grade"] == 3
+            and item["join_code"] == assignment["join_code"]
+            and item["activity_count"] == 1
+            for item in response.json()
+        )
+
+
 def test_module_assignment_must_match_class_grade() -> None:
     with TestClient(app) as client:
         classroom = client.post(

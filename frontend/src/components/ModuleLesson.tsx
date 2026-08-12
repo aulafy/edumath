@@ -39,7 +39,7 @@ const PrepositionLab3D = lazy(() => import("./PrepositionLab3D").then((module) =
 
 type ClosedQuestion = { prompt: string; options: string[]; correct_option: string; explanation: string; scene?: { type: "COIN_VALUE"; value: string; answer: string } | { type: "FOOD_CHAIN"; answer: string } };
 type Classification = { prompt: string; categories: string[]; items: { label: string; category: string }[]; explanation: string };
-type BalanceLab = { prompt: string; left_value: number; weights: number[]; example_solution: number[]; explanation: string };
+type BalanceLab = { prompt: string; left_value: number; weights: number[]; example_solution: number[]; explanation: string; unit_label?: string };
 type TileCell = { row: number; col: number };
 type TileLab = { prompt: string; rows: number; cols: number; target_area: number; target_perimeter: number; example_cells: TileCell[]; explanation: string };
 type TimelineEvent = { id: string; label: string; year: number; date_label: string; detail: string };
@@ -158,6 +158,8 @@ function BalanceLabExercise({ content, onSolved }: { content: BalanceLab; onSolv
   const [checked, setChecked] = useState(false);
   const total = selected.reduce((sum, value) => sum + value, 0);
   const correct = total === content.left_value;
+  const unit = content.unit_label ?? "kg";
+  const selectedMatchesExample = selected.length === content.example_solution.length && selected.every((value) => content.example_solution.includes(value));
   function toggle(weight: number) {
     setSelected((current) => current.includes(weight) ? current.filter((value) => value !== weight) : [...current, weight]);
     setChecked(false);
@@ -168,9 +170,9 @@ function BalanceLabExercise({ content, onSolved }: { content: BalanceLab; onSolv
       <BalanceLab3D leftValue={content.left_value} rightValue={total} />
     </Suspense>
     <div className="balanceReadout" aria-live="polite"><span>{content.left_value}</span><strong>{correct ? "=" : total < content.left_value ? ">" : "<"}</strong><span>{total}</span></div>
-    <div className="weightTray" aria-label="Pesas disponibles">{content.weights.map((weight) => <button key={weight} className={selected.includes(weight) ? "weightButton selected" : "weightButton"} aria-pressed={selected.includes(weight)} onClick={() => toggle(weight)}><span>{weight}</span> kg</button>)}</div>
+    <div className="weightTray" aria-label="Pesas disponibles">{content.weights.map((weight) => <button key={weight} className={selected.includes(weight) ? "weightButton selected" : "weightButton"} aria-label={`Tarjeta ${weight}, ${selected.includes(weight) ? "puesta" : "disponible"}`} aria-pressed={selected.includes(weight)} onClick={() => toggle(weight)}><span>{weight}</span>{unit && ` ${unit}`}</button>)}</div>
     <button disabled={selected.length === 0} onClick={() => { setChecked(true); if (correct) onSolved(selected); }}><Check /> Comprobar equilibrio</button>
-    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Equilibrio conseguido! ${content.explanation}` : total < content.left_value ? `Faltan ${content.left_value - total}. Prueba a añadir otra pesa.` : `Sobran ${total - content.left_value}. Retira o cambia alguna pesa.`}</p>}
+    {checked && <p className={correct ? "exerciseFeedback correct" : "exerciseFeedback incorrect"}>{correct ? `¡Igual! ${selected.join(" + ")} = ${content.left_value}. ${selectedMatchesExample ? content.explanation : "Has encontrado otra solución correcta."}` : total < content.left_value ? `Faltan ${content.left_value - total}. Prueba a añadir otra tarjeta.` : `Sobran ${total - content.left_value}. Retira o cambia alguna tarjeta.`}</p>}
   </div>;
 }
 

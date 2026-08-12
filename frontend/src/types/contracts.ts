@@ -107,6 +107,13 @@ export type EducationalModuleDetail = EducationalModule & {
   manifest: Record<string, unknown>;
   activities: ModuleActivity[];
 };
+export type DiscoverableModule = {
+  join_code: string;
+  grade: number;
+  classroom_name: string;
+  activity_count: number;
+  module: EducationalModule;
+};
 export type ModuleAssignment = {
   kind: "MODULE";
   id: string;

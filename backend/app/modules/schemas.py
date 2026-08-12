@@ -108,6 +108,7 @@ class BalanceLabContent(BaseModel):
     weights: list[int] = Field(min_length=2, max_length=8)
     example_solution: list[int] = Field(min_length=1, max_length=8)
     explanation: str = Field(min_length=3, max_length=500)
+    unit_label: str = Field(default="kg", max_length=12)
 
     @model_validator(mode="after")
     def validate_balance(self):

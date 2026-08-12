@@ -253,6 +253,120 @@ select {
   letter-spacing: 0;
 }
 
+.courseExplorer {
+  position: relative;
+  z-index: 2;
+  width: min(1060px, calc(100% - 32px));
+  margin: 0 auto 52px;
+  padding: 22px;
+  border: 3px solid rgb(255 255 255 / 90%);
+  border-bottom: 7px solid rgb(45 83 60 / 22%);
+  border-radius: 24px;
+  background: rgb(248 250 245 / 96%);
+  box-shadow: 0 12px 28px rgb(25 43 31 / 17%);
+}
+
+.courseExplorerTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.courseExplorerTitle > svg {
+  width: 30px;
+  height: 30px;
+  color: #246b55;
+}
+
+.courseExplorerTitle h2,
+.courseExplorerTitle p {
+  margin: 0;
+}
+
+.courseExplorerTitle h2 {
+  font-size: 1.25rem;
+}
+
+.courseExplorerTitle p {
+  margin-top: 3px;
+  color: #526057;
+}
+
+.gradeTabs {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 7px;
+  margin: 18px 0;
+  padding: 6px;
+  border: 2px solid #d3ddd2;
+  border-radius: 18px;
+  background: #edf1eb;
+}
+
+.gradeTabs button {
+  min-height: 46px;
+  padding: 7px;
+  border: 2px solid transparent;
+  border-bottom-width: 2px;
+  border-radius: 12px;
+  background: transparent;
+  color: #526057;
+}
+
+.gradeTabs button.selected {
+  border-color: #77a895;
+  background: #fff;
+  color: #185844;
+  box-shadow: 0 3px 0 #b9cec4;
+}
+
+.experienceGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.experienceItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 14px;
+  border: 2px solid #d4dfd8;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.experienceItem > div {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.experienceItem span,
+.experienceItem small {
+  color: #526057;
+}
+
+.experienceItem strong {
+  overflow-wrap: anywhere;
+}
+
+.experienceItem button {
+  min-height: 44px;
+}
+
+.emptyExperiences {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 18px;
+  border: 2px dashed #b8c9c0;
+  border-radius: 8px;
+  color: #526057;
+  text-align: center;
+}
+
 .teacherShell {
   min-height: 100vh;
   background: #f3f5f2;
@@ -1868,6 +1982,27 @@ pre {
     grid-template-columns: 1fr;
     gap: 16px;
     width: min(100% - 24px, 480px);
+  }
+
+  .courseExplorer {
+    width: min(100% - 24px, 480px);
+    padding: 16px;
+  }
+
+  .gradeTabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .experienceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .experienceItem {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .experienceItem button {
+    width: 100%;
   }
 
   .topbar {

@@ -143,6 +143,38 @@ def list_modules(
     return [_module_payload(row) for row in rows]
 
 
+@router.get("/discover")
+def discover_module_assignments(db: Session = Depends(get_db)):
+    """Return one current open classroom experience per module and grade."""
+    rows = db.execute(
+        select(ModuleAssignmentRow, ClassroomRow, EducationalModuleRow)
+        .join(ClassroomRow, ClassroomRow.id == ModuleAssignmentRow.classroom_id)
+        .join(EducationalModuleRow, EducationalModuleRow.id == ModuleAssignmentRow.module_row_id)
+        .where(
+            ModuleAssignmentRow.status == "OPEN",
+            EducationalModuleRow.status == "VALIDATED",
+        )
+        .order_by(ModuleAssignmentRow.created_at.desc())
+    ).all()
+    discovered: list[dict] = []
+    seen: set[tuple[int, str]] = set()
+    for assignment, classroom, module in rows:
+        key = (classroom.grade, module.module_id)
+        if key in seen:
+            continue
+        seen.add(key)
+        discovered.append(
+            {
+                "join_code": assignment.join_code,
+                "grade": classroom.grade,
+                "classroom_name": classroom.name,
+                "activity_count": len(json.loads(assignment.activity_ids_json)),
+                "module": _module_payload(module),
+            }
+        )
+    return discovered
+
+
 @router.get("/{module_row_id}")
 def get_module(module_row_id: str, db: Session = Depends(get_db)):
     row = db.get(EducationalModuleRow, module_row_id)

@@ -1,4 +1,4 @@
-import type { Assignment, Classroom, CurriculumUnit, EducationalModule, EducationalModuleDetail, JoinedAssignment, Lesson, ModuleAssignment, ProblemResponse, Student, TranscriptionResult, VoiceCapabilities } from "../types/contracts";
+import type { Assignment, Classroom, CurriculumUnit, DiscoverableModule, EducationalModule, EducationalModuleDetail, JoinedAssignment, Lesson, ModuleAssignment, ProblemResponse, Student, TranscriptionResult, VoiceCapabilities } from "../types/contracts";
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? "http://127.0.0.1:8000/api";
 
@@ -62,6 +62,7 @@ export const api = {
     return request<ModuleAssignment>(`/modules/assignments/${code}/join`, options);
   },
   modules: () => request<EducationalModule[]>("/modules"),
+  discoverModules: () => request<DiscoverableModule[]>("/modules/discover"),
   module: (moduleId: string) => request<EducationalModuleDetail>(`/modules/${moduleId}`),
   importModule: async (classroom: Classroom, file: File) => {
     const form = new FormData();

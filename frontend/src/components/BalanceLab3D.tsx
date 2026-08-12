@@ -16,8 +16,8 @@ function Scale({ leftValue, rightValue }: { leftValue: number; rightValue: numbe
       <mesh><boxGeometry args={[5.4, 0.18, 0.28]} /><meshStandardMaterial color="#e9b949" metalness={0.25} roughness={0.42} /></mesh>
       <mesh position={[-2.15, -0.55, 0]}><cylinderGeometry args={[0.72, 0.9, 0.18, 32]} /><meshStandardMaterial color="#5ab19a" /></mesh>
       <mesh position={[2.15, -0.55, 0]}><cylinderGeometry args={[0.72, 0.9, 0.18, 32]} /><meshStandardMaterial color="#e86f51" /></mesh>
-      <mesh position={[-2.15, -0.25, 0]}><boxGeometry args={[0.75, 0.55, 0.6]} /><meshStandardMaterial color="#ecf7f1" /></mesh>
-      {Array.from({ length: Math.min(6, rightValue) }, (_, index) => <mesh key={index} position={[1.75 + (index % 3) * 0.38, -0.22 + Math.floor(index / 3) * 0.28, 0]}><boxGeometry args={[0.3, 0.3, 0.42]} /><meshStandardMaterial color="#ffd166" /></mesh>)}
+      {Array.from({ length: Math.min(25, leftValue) }, (_, index) => <mesh key={`left-${index}`} position={[-2.55 + (index % 5) * 0.2, -0.39 + Math.floor(index / 5) * 0.17, 0]}><boxGeometry args={[0.15, 0.15, 0.28]} /><meshStandardMaterial color="#ecf7f1" /></mesh>)}
+      {Array.from({ length: Math.min(25, rightValue) }, (_, index) => <mesh key={`right-${index}`} position={[1.75 + (index % 5) * 0.2, -0.39 + Math.floor(index / 5) * 0.17, 0]}><boxGeometry args={[0.15, 0.15, 0.28]} /><meshStandardMaterial color="#ffd166" /></mesh>)}
     </group>
   </group>;
 }
